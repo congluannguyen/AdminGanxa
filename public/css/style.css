@@ -1,0 +1,237 @@
+
+a:hover{
+    color: #E9573F;
+}
+/*nav bar*/
+.img-softer{
+    max-width: 45px;
+    margin-top: -14px;
+}
+.i-softer{
+    color: #3498db !important;
+}
+.i-menu{
+    border-right: 1px #ffffff groove;
+}
+.row-home{
+    /*margin-top: 3em;*/
+    padding-top: 3em;
+    /*height: 800px;*/
+    width: 200px;
+    float: left;
+    margin-left: 50px;
+}
+.row-container{
+    margin-left: 3%;
+}
+.img-store{
+    /*max-height: 337px;*/
+    height: 70px;
+    /*max-width: 337px;*/
+}
+.img-logo{
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    border-radius: 30px ;
+    margin-top: -30px;
+    margin-left: 70px;
+
+}
+.col-search{
+    margin-top: 3em;
+}
+.insert_container{
+    padding-top: 2em;
+}
+.input_insertstore{
+    margin-top: 2%;
+}
+.lblInsertstore{
+    float: left;
+    margin-top: 2%;
+    font-size: 16px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+.size-selcter{
+    font-size: 15px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+.img-thumbnil{
+    height: 100%;
+    width: 100%;
+}
+.thumbnail{
+    height: 300px;
+}
+.btn_index{
+    padding-bottom: 10px;
+    bottom: -10px;
+    position: relative;
+}
+.p-index{
+    height: 60px;
+}
+.h4_index{
+    margin-top: 40px;
+    height: 50px;
+}
+.label-index{
+    margin-top: 40px;
+    width: 100%;
+}
+.dropdown-menu {
+    left: -69px;
+    padding: 25px 0;
+    margin: 2px 0 0;
+    background-color: #434a54;
+    border: none;
+    font-family: FontAwesome;
+    color: #ffffff;
+}
+
+/*store details*/
+.col-storedetails {
+    /*height: 50%;*/
+    /*margin-top: 20px;*/
+    /*position: absolute;*/
+    /*background-image: url("../images/template/a.jpg");*/
+    /*opacity: 0.5;*/
+    /*height: 254px;*/
+}
+.p-details{
+    margin-top: 10px;
+    font-family: FontAwesome;
+    font-size: 20px;
+    height: 40px;
+
+}
+.avt-store {
+    width: 30%;
+
+    /*height: 40%;*/
+    /*border-radius: 150px;*/
+
+    /*Bo hình */
+    display: inline-block;
+    border: none;
+    overflow: hidden;
+    -webkit-border-radius: 200px;
+    -moz-border-radius: 200px;
+    border-radius: 200px;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+
+    top: 75%;
+    left: 35%;
+    position: absolute;
+
+}
+
+.store-details {
+    margin-top: 15%;
+    font-size: 18px;
+    font-family: FontAwesome;
+}
+.label-store{
+    font-size: 25px;
+}
+.row-storedetails {
+    margin-top: 5%;
+    border: 1px;
+}
+
+.prod-show {
+
+    display: block;
+    padding: 10px;
+
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border-radius: 4px;
+    -webkit-transition: border .2s ease-in-out;
+    -o-transition: border .2s ease-in-out;
+    transition: border .2s ease-in-out;
+    height: 200px;
+    margin-top: 10%;
+}
+
+.i-prod {
+    margin-top: 45%;
+    margin-left: 34%;
+
+}
+
+.bg-prod {
+    background-color: #37BC9B;
+    /*opacity: 0.5;*/
+}
+
+.item {
+
+    display: inline-block;
+    /*padding:  1em;*/
+    width: 100%;
+}
+
+.items-div {
+    margin: 10% 5% 10% 5%;
+    float: left;
+    width: 220px;
+    height: 315px;
+    background-color: #E6E9ED;
+    border: 2px #bbb;
+
+}
+
+/*.items{*/
+/*margin: 14px 7px 0 10%;*/
+/*float: left;*/
+/*width: 220px;*/
+/*height: 300px;*/
+/*background-color: rgba(0, 0, 0, 0.20);*/
+/*border-radius: 6px;*/
+/*box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);*/
+/*background: #fff;*/
+
+/*}*/
+
+.img-prod {
+    width: 4em;
+    height: 4em;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.img-up {
+    width: 12em;
+    height: 12em;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+/*Trang search*/
+.row-search{
+    margin-top: 20px;
+}
+.quan-search{
+    margin-top: 20px;
+}
+.dropdown-industry{
+    margin-top: 20px;
+}
+.dropdown-menu-industry{
+    left: 0px;
+    padding: 25px 0;
+    margin: 2px 0 0;
+    background-color: #434a54;
+    border: none;
+    font-family: FontAwesome;
+    color: #ffffff;
+    width: 100%;
+}
+.form-control-industry{
+    width: 50%;
+}

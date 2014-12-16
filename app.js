@@ -5,9 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
+//Session:
+var session = require('express-session');
+var multer = require('multer');
+//Connect database:
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/GanXa');
+//Routes
+var controllers = require('./routes/controllers');
 var app = express();
 
 // view engine setup
@@ -21,9 +26,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: 'ganxa', resave: true, saveUninitialized: true, maxAge: new Date(Date.now() + 3600000), expires: new Date(Date.now() + 3600000)}));
+app.use(multer({dest: './public/img/'}));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/', controllers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
