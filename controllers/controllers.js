@@ -171,7 +171,7 @@ var controllers = {
         var hours_of_work = req.body.txtHoursOfWork;
         var website = req.body.txtWebsite;
         var fanpage = req.body.txtFanpage;
-
+        var im = require('imagemagick');
         //Lấy hình, resize và chỉnh path:
         //Path upload:
         var cover_upload_path = req.files.ulfCover.path;
@@ -354,8 +354,9 @@ var controllers = {
                 quality: 1,
                 gravity: "Center"
             };
+            console.log(option);
             im.crop(option, function (err, stdout, stderr) {
-                /*if (err) throw err;*/
+                if (err) throw err;
                 console.log('Resized cover successful.');
             });
             cover_save_path = ".." + req.files.ulfCover.path.replace("public", "");
