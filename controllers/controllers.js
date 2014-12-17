@@ -339,25 +339,12 @@ var controllers = {
         var hours_of_work = req.body.txtHoursOfWork;
         var website = req.body.txtWebsite;
         var fanpage = req.body.txtFanpage;
-
-        /*var gm = require('gm');
-         var im = gm.subClass({ imageMagick: true });*/
         var im = require('imagemagick');
         //Cover:
         var cover_new = cover;
         if (typeof req.files.ulfCover != 'undefined') {
             var cover_upload_path = req.files.ulfCover.path;
             var cover_save_path = "public/images/" + req.files.ulfCover.name;
-            /*var fs = require('fs');
-             var gm = require('gm');
-             gm(cover_upload_path)
-             .resize(240, 240)
-             .noProfile()
-             .write(cover_save_path, function (err) {
-             if (!err) {
-             console.log('ok đó')
-             } else console.log("lỗi nghen");
-             });*/
             console.log("cover");
             var option = {
                 srcPath: cover_upload_path,
