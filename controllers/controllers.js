@@ -954,10 +954,15 @@ var controllers = {
                 })
             }
         });
+    },
+    get_comming : function(req,res){
+        res.render('comming', {notifications : " Chua lam sao co!"});
     }
 };
 
 module.exports = function (router) {
+    //comming
+    router.get('/comming',controllers.get_comming);
     //index
     router.get('/', controllers.get_index);
     //store detail

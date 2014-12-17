@@ -260,171 +260,173 @@
                 <div class="row">
 
 
-
                     <!--VIET TRONG NAY  -->
-                    <div class="col-md-12 col-search">
-                    </div>
-                    <div class="container">
-                        <% store_array.forEach(function (store) { %>
-                        <div class="row row-storedetails">
-                            <div class="col-md-12 col-storedetails">
-                                <img style="width: 100%;" src="<%= store.cover %>">
-                                <img class="avt-store" src="<%= store.logo %>">
-                            </div>
-                            <div class="col-md-12 store-details">
-                                <center>
-                                    <label class="label-store" style="margin-bottom: 30px;"><%= store.store_name %></label>
+                    <!--<div class="col-md-12 col-search">-->
+                    <!--</div>-->
+                    <% store_array.forEach(function (store) { %>
+                    <div class="row-storedetails">
+                        <div class="col-md-12 col-storedetails">
+                            <img style="width: 100%;" src="<%= store.cover %>">
+                            <img class="avt-store" src="<%= store.logo %>">
+                        </div>
+                        <div class="col-md-12 store-details">
+                            <center>
+                                <label class="label-store" style="margin-bottom: 30px;"><%= store.store_name %></label>
 
-                                    <p class="label-store">Số điện thoại </p>
+                                <p class="label-store">Số điện thoại </p>
 
-                                    <p><%= store.phone %></p>
+                                <p><%= store.phone %></p>
 
-                                    <p class="label-store">Địa chỉ </p>
-                                    <a href="#" data-toggle="modal" data-target="#myModal">
-                                        <p>
-                                            <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
-                                            <% if(store.address[0].room){ %>
-                                            <%= store.address[0].room %>
-                                            <% } %>
-                                        </p>
-                                    </a>
+                                <p class="label-store">Địa chỉ </p>
+                                <a href="#" data-toggle="modal" data-target="#myModal">
+                                    <p>
+                                        <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
+                                        <% if(store.address[0].room){ %>
+                                        <%= store.address[0].room %>
+                                        <% } %>
+                                    </p>
+                                </a>
 
-                                    <!--popup-->
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                                         aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span
-                                                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h3 class="modal-title" id="myModalLabel">Map</h3>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div id="map-canvas" class="map"></div>
-                                                        </div>
+                                <!--popup-->
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span
+                                                            aria-hidden="true">&times;</span><span
+                                                            class="sr-only">Close</span></button>
+                                                <h3 class="modal-title" id="myModalLabel">Map</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div id="map-canvas" class="map"></div>
                                                     </div>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div class="col-md-6 input_insertstore">
-                                                        <input type="hidden" id="a" name="txtLatitude"
-                                                               class="form-control">
-                                                    </div>
-                                                    <div class="col-md-6 input_insertstore">
-                                                        <input type="hidden" id="o" name="txtLongitude"
-                                                               class="form-control  ">
-                                                    </div>
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                 </div>
 
                                             </div>
+                                            <div class="modal-footer">
+                                                <div class="col-md-6 input_insertstore">
+                                                    <input type="hidden" id="a" name="txtLatitude"
+                                                           class="form-control">
+                                                </div>
+                                                <div class="col-md-6 input_insertstore">
+                                                    <input type="hidden" id="o" name="txtLongitude"
+                                                           class="form-control  ">
+                                                </div>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+
                                         </div>
                                     </div>
-                                    <!--end popup-->
-                                    <p class="label-store">Website </p>
-
-                                    <p><%= store.website %></p>
-
-                                    <p class="label-store">Mô tả </p>
-
-                                    <p><%= store.description %></p>
-
-                                    <p class="label-store">Thời gian mở cửa </p>
-
-                                    <p><%= store.hours_of_work %></p>
-
-                                    <p class="label-store">Industry </p>
-
-                                    <p><a href="industry?type=<%= store.industry %>"><%= store.industry %></a></p>
-                                </center>
-                            </div>
-                        </div>
-                        <% }) %>
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <div class="col-md-3 ">
-                                    <a href="#" style="height: 300px;width: 220px;" data-toggle="modal" data-target=".bs-example-modal-lg">
-                                        <div class="items-div">
-                                            <a href="insert_product">
-                                                <i style="padding-top: 55%;padding-left: 43%"
-                                                   class="fa fa-plus-square fa-4x"></i>
-                                            </a>
-                                        </div>
-                                    </a>
                                 </div>
-                                <% product_array.forEach(function (product) { %>
-                                <div class="col-md-3 ">
-                                    <center>
-                                        <div class="items-div">
-                                            <table>
-                                                <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <center>
-                                                            <p class="p-details"><a href="product_detail?id=<%= product._id %>"><%=
-                                                                        product.product_name.substring(0, 30) %>
-                                                                    <%
-                                                                    if(product.product_name.length > 30){ %>
-                                                                    ...
-                                                                    <% } %>
-                                                                </a></p>
-                                                        </center>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <center>
-                                                            <a href="product_detail?id=<%= product._id %>"></a>
-                                                            <img src="<%= product.product_image %>" class="img-up">
-                                                        </center>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <center>
-                                                            Tag :
-                                                            <a href="tags?tag=<%= product.tags[0] %>"><p class="label label-primary ">
-                                                                    <%= product.tags[0] %></p></a>
-                                                            <a href="tags?tag=<%= product.tags[1] %>"><p class="label label-primary ">
-                                                                    <%= product.tags[1] %></p></a>
-                                                        </center>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <center>
-                                                            <a href="edit_product?id=<%= product._id %>" class="btn btn-primary"
-                                                               style="width: 95% ; margin-top: 10px;">Edit
-                                                                Product
-                                                            </a>
-                                                        </center>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </center>
-                                </div>
-                                <% }) %>
-                            </div>
+                                <!--end popup-->
+                                <p class="label-store">Website </p>
+
+                                <p><%= store.website %></p>
+
+                                <p class="label-store">Mô tả </p>
+
+                                <p><%= store.description %></p>
+
+                                <p class="label-store">Thời gian mở cửa </p>
+
+                                <p><%= store.hours_of_work %></p>
+
+                                <p class="label-store">Industry </p>
+
+                                <p><a href="industry?type=<%= store.industry %>"><%= store.industry %></a></p>
+                            </center>
                         </div>
                     </div>
+                    <% }) %>
+                        <div class="col-md-12">
+
+                            <div class="col-md-3 ">
+                                <a href="#" style="height: 300px;width: 220px;" data-toggle="modal"
+                                   data-target=".bs-example-modal-lg">
+                                    <div class="items-div">
+                                        <a href="insert_product">
+                                            <i style="padding-top: 55%;padding-left: 43%"
+                                               class="fa fa-plus-square fa-4x"></i>
+                                        </a>
+                                    </div>
+                                </a>
+                            </div>
+                            <% product_array.forEach(function (product) { %>
+                            <div class="col-md-3 ">
+                                <center>
+                                    <div class="items-div">
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <center>
+                                                        <p class="p-details"><a
+                                                                    href="product_detail?id=<%= product._id %>"><%=
+                                                                    product.product_name.substring(0, 30) %>
+                                                                <%
+                                                                if(product.product_name.length > 30){ %>
+                                                                ...
+                                                                <% } %>
+                                                            </a></p>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <center>
+                                                        <a href="product_detail?id=<%= product._id %>"></a>
+                                                        <img src="<%= product.product_image %>" class="img-up">
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <center>
+                                                        Tag :
+                                                        <a href="tags?tag=<%= product.tags[0] %>"><p
+                                                                    class="label label-primary ">
+                                                                <%= product.tags[0] %></p></a>
+                                                        <a href="tags?tag=<%= product.tags[1] %>"><p
+                                                                    class="label label-primary ">
+                                                                <%= product.tags[1] %></p></a>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <center>
+                                                        <a href="edit_product?id=<%= product._id %>"
+                                                           class="btn btn-primary"
+                                                           style="width: 95% ; margin-top: 10px;">Edit
+                                                            Product
+                                                        </a>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </center>
+                            </div>
+                            <% }) %>
+                        </div>
 
 
-
-
-                </div>
-                <!--END ROW-->
             </div>
-            <!-- END Page Content -->
-            <% include ./partial/footer %>
+            <!--END ROW-->
         </div>
-        <!-- Page content -->
-
+        <!-- END Page Content -->
+        <% include ./partial/footer %>
     </div>
+    <!-- Page content -->
+
+</div>
 
 </div>
 <!--END PAGE WRAPPER-->

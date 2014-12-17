@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ganxa Home Page</title>
+    <% include ./partial/head %>
+</head>
+<body>
+<div id="page-wrapper">
+    <!-- Preloader -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+
+    <!-- Page Container -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <!-- Alternative Sidebar -->
+        <% include ./partial/slidebar %>
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- Page content -->
+            <div id="page-content">
+                <!--ROW-->
+                <div class="row">
+
+
+
+                    <!--VIET TRONG NAY  -->
+
+                    <a href="insert_media">Thêm Media</a>
+                    <br>
+                    <% product_array.forEach(function(product){ %>
+                    <%= product.product_name %>
+                    <%= product.price %>
+                    <% }) %>
+                    <br><br>Media nè:<br>
+                    <% media_array.forEach(function(media){ %>
+                    Tên: <%= media.media_name %>
+                    <br>
+                    URL: <%= media.media_url %>
+                    <br>
+                    <a href="edit_media?id=<%= media._id %>">Edit</a>
+                    <br>
+                    <% }) %>
+
+
+
+                </div>
+                <!--END ROW-->
+            </div>
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
+        </div>
+        <!-- Page content -->
+
+    </div>
+
+</div>
+<!--END PAGE WRAPPER-->
+<% include ./partial/settings %>
+
+</body>
+</html>

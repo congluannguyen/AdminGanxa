@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ganxa Home Page</title>
+    <% include ./partial/head %>
+</head>
+<body>
+<div id="page-wrapper">
+    <!-- Preloader -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+
+    <!-- Page Container -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <!-- Alternative Sidebar -->
+        <% include ./partial/slidebar %>
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- Page content -->
+            <div id="page-content">
+                <!--ROW-->
+                <div class="row">
+
+
+
+                    <!--VIET TRONG NAY  -->
+
+
+                    <center>
+                        <div class="col-md-12">
+                            <div class="row authors-list">
+                                <form action="" method="post" enctype="multipart/form-data">
+
+                                    <% product_array.forEach(function (product) { %>
+                                    <div class="col-md-12 input_insertstore">
+                                        <input type="text" id="a" name="txtProductName" placeholder="Tên sản phẩm"
+                                               class="form-control" value="<%=product.product_name%>">
+                                    </div>
+                                    <div class="col-md-12 input_insertstore">
+                                        <input type="text" id="o" name="txtPrice" placeholder="Giá"
+                                               class="form-control" value="<%=product.price%>">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <input type="text" required name="txtTags" placeholder="Tags"
+                                               class="form-control  input_insertstore" value="<%=product.tags%>">
+                                    </div>
+
+
+
+                                    <div class="col-md-6 input_insertstore">
+                                        <!--Phần này cho description-->
+                                        <label class="col-md-1 control-label ">
+                                            Description
+                                        </label>
+                                        <div class="col-md-12 input_insertstore">
+                                            <textarea name="txtDescription" rows="6" class="form-control"><%=product.description%></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 input_insertstore">
+                                        <label class="col-md-1 control-label  ">
+                                            Product Image
+                                        </label>
+                                        <div class="col-md-5 input_insertstore">
+                                            <input type="file"  name="ulfProductImage" placeholder=""
+                                                   accept="image/*" alt="Product Image"
+                                                   class="form-control  input_insertstore">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="submit" value="Thêm" class="btn btn-primary btn-block input_insertstore">
+                                    </div>
+                                    <% }) %>
+                                </form>
+                            </div>
+                        </div>
+                    </center>
+
+
+
+                </div>
+                <!--END ROW-->
+            </div>
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
+        </div>
+        <!-- Page content -->
+
+    </div>
+
+</div>
+<!--END PAGE WRAPPER-->
+<% include ./partial/settings %>
+
+</body>
+</html>
