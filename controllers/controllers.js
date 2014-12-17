@@ -105,9 +105,20 @@ var controllers = {
                 query_product.exec(function (product_error, product_array) {
                     if (product_array && product_array.length > 0) {
                         req.session.product_array_recent = product_array;
-                        res.render('store_detail', {store_id_recent: store_id, store_array: store_array, industry_array: req.session.industry_array, product_array: product_array});
+                        res.render('store_detail', {
+                            store_id_recent: store_id,
+                            store_array: store_array,
+                            industry_array: req.session.industry_array,
+                            product_array: product_array
+                        });
                     } else {
-                        res.render("store_detail", {store_id_recent: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Không có sản phẩm tồn tại."});
+                        res.render("store_detail", {
+                            store_id_recent: store_id,
+                            industry_array: req.session.industry_array,
+                            store_array: store_array,
+                            product_array: product_array,
+                            product_notification: "Không có sản phẩm tồn tại."
+                        });
                     }
                 });
             });
@@ -125,7 +136,10 @@ var controllers = {
                 location_schema.location.find(function (location_error, location_array) {
                     if (!location_error && location_array.length > 0) {
                         req.session.location_array = location_array;
-                        res.render('insert_store', {industry_array: req.session.industry_array, location_array: location_array});
+                        res.render('insert_store', {
+                            industry_array: req.session.industry_array,
+                            location_array: location_array
+                        });
                     }
                 });
             } else {
@@ -184,11 +198,11 @@ var controllers = {
         });
         console.log("xong crop");
         /*gm(cover_upload_path)
-            .resize(353, 257)
-            .autoOrient()
-            .write(cover_save_path, function (err) {
-                if (err) console.log(err);
-            });*/
+         .resize(353, 257)
+         .autoOrient()
+         .write(cover_save_path, function (err) {
+         if (err) console.log(err);
+         });*/
         /*gm(cover_upload_path)
          .resize(500, 500)
          .autoOrient()
@@ -214,23 +228,23 @@ var controllers = {
          }
          });*/
         im.resize({
-         srcPath: logo_upload_path,
-         dstPath: logo_save_path,
-         width: 500
-         }, function (err, stdout, stderr) {
-         if (err) throw err;
-         console.log('Resized logo successful.');
-         });
+            srcPath: logo_upload_path,
+            dstPath: logo_save_path,
+            width: 500
+        }, function (err, stdout, stderr) {
+            if (err) throw err;
+            console.log('Resized logo successful.');
+        });
         /*gm(logo_upload_path)
-            .resize(500, 500)
-            .noProfile()
-            .write(logo_save_path, function (err) {
-                if (!err) {
-                    console.log('resize logo ok')
-                } else {
-                    console.log(err)
-                }
-            });*/
+         .resize(500, 500)
+         .noProfile()
+         .write(logo_save_path, function (err) {
+         if (!err) {
+         console.log('resize logo ok')
+         } else {
+         console.log(err)
+         }
+         });*/
         //Xử lý path save:
         cover_save_path = ".." + cover_save_path.replace("public", "");
         logo_save_path = ".." + logo_save_path.replace("public", "");
@@ -289,7 +303,12 @@ var controllers = {
                         location_schema.location.find(function (location_error, location_array) {
                             if (!location_error && location_array.length > 0) {
                                 req.session.location_array = location_array;
-                                res.render('edit_store', {store_array: store_array, product_array: product_array, industry_array: req.session.industry_array, location_array: location_array});
+                                res.render('edit_store', {
+                                    store_array: store_array,
+                                    product_array: product_array,
+                                    industry_array: req.session.industry_array,
+                                    location_array: location_array
+                                });
                             }
                         });
                     });
@@ -329,28 +348,29 @@ var controllers = {
         if (typeof req.files.ulfCover != 'undefined') {
             var cover_upload_path = req.files.ulfCover.path;
             var cover_save_path = "public/images/" + req.files.ulfCover.name;
-            var fs = require('fs');
-            var gm = require('gm');
-            gm(cover_upload_path)
-                .resize(240, 240)
-                .noProfile()
-                .write(cover_save_path, function (err) {
-                    if (!err) {
-                        console.log('ok đó')
-                    } else console.log("lỗi nghen");
-                });
-            /*var option = {
-             srcPath: cover_upload_path,
-             dstPath: cover_save_path,
-             width: 1100,
-             height: 400,
-             quality: 1,
-             gravity: "Center"
-             };asd
-             im.crop(option, function (err, stdout, stderr) {
-             if (err) throw err;
-             console.log('Resized cover successful.');
+            /*var fs = require('fs');
+             var gm = require('gm');
+             gm(cover_upload_path)
+             .resize(240, 240)
+             .noProfile()
+             .write(cover_save_path, function (err) {
+             if (!err) {
+             console.log('ok đó')
+             } else console.log("lỗi nghen");
              });*/
+            console.log("cover");
+            var option = {
+                srcPath: cover_upload_path,
+                dstPath: cover_save_path,
+                width: 1100,
+                height: 400,
+                quality: 1,
+                gravity: "Center"
+            };
+            im.crop(option, function (err, stdout, stderr) {
+                /*if (err) throw err;*/
+                console.log('Resized cover successful.');
+            });
             cover_save_path = ".." + req.files.ulfCover.path.replace("public", "");
             cover_new = cover_save_path;
         }
@@ -359,19 +379,36 @@ var controllers = {
         if (typeof req.files.ulfLogo != 'undefined') {
             var logo_upload_path = req.files.ulfLogo.path;
             var logo_save_path = "public/images/" + req.files.ulfLogo.name;
+            console.log("cover");
             im.resize({
                 srcPath: logo_upload_path,
                 dstPath: logo_save_path,
                 width: 500
             }, function (err, stdout, stderr) {
-                if (err) throw err;
+                /*if (err) throw err;*/
                 console.log('Resized logo successful.');
             });
             logo_save_path = ".." + req.files.ulfLogo.path.replace("public", "");
             logo_new = logo_save_path;
         }
 
-        store_schema.store.update({_id: store_id}, {$set: {store_name: store_name, store_name_non_accented: store_name_non_accented, address: address, latitude: latitude, longitude: longitude, phone: phone, description: description, industry: industry, hours_of_work: hours_of_work, cover: cover_new, logo: logo_new, website: website, fanpage: fanpage}}, function (error, result) {
+        store_schema.store.update({_id: store_id}, {
+            $set: {
+                store_name: store_name,
+                store_name_non_accented: store_name_non_accented,
+                address: address,
+                latitude: latitude,
+                longitude: longitude,
+                phone: phone,
+                description: description,
+                industry: industry,
+                hours_of_work: hours_of_work,
+                cover: cover_new,
+                logo: logo_new,
+                website: website,
+                fanpage: fanpage
+            }
+        }, function (error, result) {
             if (!error && result) {
                 var query_store = store_schema.store.find({"_id": store_id});
                 query_store.limit(8);
@@ -383,9 +420,20 @@ var controllers = {
                         query_product.sort({date: -1});
                         query_product.exec(function (product_error, product_array) {
                             if (product_array && product_array.length > 0) {
-                                res.render('store_detail', {store_id: store_id, store_array: store_array, industry_array: req.session.industry_array, product_array: product_array});
+                                res.render('store_detail', {
+                                    store_id: store_id,
+                                    store_array: store_array,
+                                    industry_array: req.session.industry_array,
+                                    product_array: product_array
+                                });
                             } else {
-                                res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Không có sản phẩm tồn tại."});
+                                res.render("store_detail", {
+                                    store_id: store_id,
+                                    industry_array: req.session.industry_array,
+                                    store_array: store_array,
+                                    product_array: product_array,
+                                    product_notification: "Không có sản phẩm tồn tại."
+                                });
                             }
                         });
                     } else {
@@ -410,13 +458,21 @@ var controllers = {
                 query_media.exec(function (media_error, media_array) {
                     if (media_array && media_array.length > 0) {
                         req.session.media_array = media_array;
-                        res.render('product_detail', {product_array: product_array, industry_array: req.session.industry_array, media_array: media_array});
+                        res.render('product_detail', {
+                            product_array: product_array,
+                            industry_array: req.session.industry_array,
+                            media_array: media_array
+                        });
                     } else {
                         console.log(media_error);
                     }
                 });
             } else {
-                res.render('store_detail', {store_array: req.session.store_array_recent, product_array: req.session.product_array_recent, industry_array: req.session.industry_array});
+                res.render('store_detail', {
+                    store_array: req.session.store_array_recent,
+                    product_array: req.session.product_array_recent,
+                    industry_array: req.session.industry_array
+                });
             }
         })
     },
@@ -434,7 +490,12 @@ var controllers = {
         if (store_id) {
             req.session.store_id_recent = store_id;
             product_schema.product.find({id_store: store_id}, function (product_error, product_array) {
-                res.render('insert_product', {product_array: product_array, industry_array: req.session.industry_array, store_id: store_id, insert_product_notification: "Thêm sản phẩm thành công."});
+                res.render('insert_product', {
+                    product_array: product_array,
+                    industry_array: req.session.industry_array,
+                    store_id: store_id,
+                    insert_product_notification: "Thêm sản phẩm thành công."
+                });
             });
         } else {
             res.render('index', {industry_array: req.session.industry_array});
@@ -462,26 +523,26 @@ var controllers = {
         var media = [];
         //for (var i = 1; i <= count_media; i++) {
         /*var media_name = req.body.txtMediaName;
-        var media_url;
-        var mongoose = require('mongoose');
-        var id = new mongoose.Types.ObjectId;
-        if (req.body.txtMediaUrl != "" && typeof req.files.ulfMediaUrl == "undefined") {
-            media_url = req.body.txtMediaUrl;
-            media.push({"media_id": id, "media_name": media_name, "media_url": media_url, "media_type": req.body.grpType});
-        } else {
-            var media_upload_path = req.files.ulfMediaUrl.path;
-            var media_save_path = "public/images/" + req.files.ulfMediaUrl.name;
-            var im = require('imagemagick');
-            im.resize({
-                srcPath: media_upload_path,
-                dstPath: media_save_path,
-                width: 600
-            }, function (err, stdout, stderr) {
-                if (err) throw err;
-                console.log('Resized media successful.');
-            });
-            media.push({"media_id": id, "media_name": media_name, "media_url": ".." + media_save_path.replace("public", ""), "media_type": req.body.grpType});
-        }*/
+         var media_url;
+         var mongoose = require('mongoose');
+         var id = new mongoose.Types.ObjectId;
+         if (req.body.txtMediaUrl != "" && typeof req.files.ulfMediaUrl == "undefined") {
+         media_url = req.body.txtMediaUrl;
+         media.push({"media_id": id, "media_name": media_name, "media_url": media_url, "media_type": req.body.grpType});
+         } else {
+         var media_upload_path = req.files.ulfMediaUrl.path;
+         var media_save_path = "public/images/" + req.files.ulfMediaUrl.name;
+         var im = require('imagemagick');
+         im.resize({
+         srcPath: media_upload_path,
+         dstPath: media_save_path,
+         width: 600
+         }, function (err, stdout, stderr) {
+         if (err) throw err;
+         console.log('Resized media successful.');
+         });
+         media.push({"media_id": id, "media_name": media_name, "media_url": ".." + media_save_path.replace("public", ""), "media_type": req.body.grpType});
+         }*/
         var product_image_upload_path = req.files.ulfProductImage.path;
         var product_image_save_path = "public/images/" + req.files.ulfProductImage.name;
         product_image_save_path = ".." + product_image_save_path.replace("public", "");
@@ -504,7 +565,12 @@ var controllers = {
         }).save(function (save_error) {
                 if (!save_error) {
                     product_schema.product.find({id_store: store_id}, function (product_error, product_array) {
-                        res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, product_array: product_array, store_array: req.session.store_array_recent});
+                        res.render("store_detail", {
+                            store_id: store_id,
+                            industry_array: req.session.industry_array,
+                            product_array: product_array,
+                            store_array: req.session.store_array_recent
+                        });
                     });
                 } else {
                     console.log(save_error);
@@ -517,7 +583,10 @@ var controllers = {
             var id = req.param('id');
             product_schema.product.find({_id: id}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
-                    res.render('edit_product', {product_array: product_array, industry_array: req.session.industry_array});
+                    res.render('edit_product', {
+                        product_array: product_array,
+                        industry_array: req.session.industry_array
+                    });
                     product_array.forEach(function (p) {
                         media = product_array.media;
                     });
@@ -568,10 +637,23 @@ var controllers = {
         }
 
 
-        product_schema.product.update({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, tags: tags, description: description}}, function (err, result) {
+        product_schema.product.update({_id: product_id}, {
+            $set: {
+                product_name: product_name,
+                product_name_non_accented: product_name_non_accented,
+                price: price,
+                tags: tags,
+                description: description
+            }
+        }, function (err, result) {
             if (!err && result) {
                 product_schema.product.find({id_store: req.session.store_id_recent}, function (product_error, product_array) {
-                    res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_recent, store_array: req.session.store_array_recent});
+                    res.render('store_detail', {
+                        product_array: product_array,
+                        industry_array: req.session.industry_array,
+                        store_id: req.session.store_id_recent,
+                        store_array: req.session.store_array_recent
+                    });
                 });
             } else {
                 console.log(err);
@@ -629,7 +711,14 @@ var controllers = {
                             query_media.exec(function (media_error, media_array) {
                                 if (media_array && media_array.length > 0) {
                                     req.session.media_array = media_array;
-                                    res.render('product_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_recent, store_array: req.session.store_array_recent, product_id: req.session.product_id_recent, media_array: media_array});
+                                    res.render('product_detail', {
+                                        product_array: product_array,
+                                        industry_array: req.session.industry_array,
+                                        store_id: req.session.store_id_recent,
+                                        store_array: req.session.store_array_recent,
+                                        product_id: req.session.product_id_recent,
+                                        media_array: media_array
+                                    });
                                 } else {
                                     console.log(media_error);
                                 }
@@ -714,12 +803,20 @@ var controllers = {
             media_url = ".." + media_save_path.replace("public", "")
         }
         var media_type = req.body.grpType;
-        media_schema.media.findByIdAndUpdate(id, {media_name: media_name, media_type: media_type, media_url: media_url}, function (error, result) {
+        media_schema.media.findByIdAndUpdate(id, {
+            media_name: media_name,
+            media_type: media_type,
+            media_url: media_url
+        }, function (error, result) {
             if (result) {
                 product_schema.product.find({_id: req.session.product_id_recent}, function (product_error, product_array) {
                     if (product_array.length > 0) {
                         media_schema.media.find({product_id: req.session.product_id_recent}, function (media_error, media_array) {
-                            res.render('product_detail', {product_array: product_array, media_array: media_array, industry_array: req.session.industry_array});
+                            res.render('product_detail', {
+                                product_array: product_array,
+                                media_array: media_array,
+                                industry_array: req.session.industry_array
+                            });
                         });
                     } else {
                         console.log(product_array);
@@ -793,37 +890,63 @@ var controllers = {
         var disrtict = req.body.optDistrict;
         //chọn store, có chọn quận (quận khác cái mặc định)
         if (type == "store" && key) {
-            store_schema.store.find({$or: [
-                {store_name: {$regex: key, $options: 'xi'}},
-                {store_name_non_accented: {$regex: key, $options: 'xi'}}
-            ]}, function (store_error, store_array) {
-                res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+            store_schema.store.find({
+                $or: [
+                    {store_name: {$regex: key, $options: 'xi'}},
+                    {store_name_non_accented: {$regex: key, $options: 'xi'}}
+                ]
+            }, function (store_error, store_array) {
+                res.render('search', {
+                    store_array: store_array,
+                    industry_array: req.session.industry_array,
+                    location_array: req.session.location_array
+                });
             });
         } else if (type == "store" && disrtict != '-- Chọn Quận --' && key != "") { //tìm không dấu
             console.log("2");
-            store_schema.store.find({$or: [
-                {store_name: {$regex: key, $options: 'xi'}},
-                {store_name_non_accented: {$regex: key, $options: 'xi'}},
-                {address: {$elemMatch: {district: disrtict}}}
-            ]}, function (store_error, store_array) {
-                res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+            store_schema.store.find({
+                $or: [
+                    {store_name: {$regex: key, $options: 'xi'}},
+                    {store_name_non_accented: {$regex: key, $options: 'xi'}},
+                    {address: {$elemMatch: {district: disrtict}}}
+                ]
+            }, function (store_error, store_array) {
+                res.render('search', {
+                    store_array: store_array,
+                    industry_array: req.session.industry_array,
+                    location_array: req.session.location_array
+                });
             });
         } else if (key == "" && disrtict && disrtict != '-- Chọn Quận --') {
             console.log("3");
             store_schema.store.find({address: {$elemMatch: {district: disrtict}}}, function (store_error, store_array) {
-                res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                res.render('search', {
+                    store_array: store_array,
+                    industry_array: req.session.industry_array,
+                    location_array: req.session.location_array
+                });
             });
         } else if (type == "product") {
-            product_schema.product.find({$or: [
-                {product_name: {$regex: key, $options: 'xi'}},
-                {product_name_non_accented: {$regex: key, $options: 'xi'}}
-            ]}, function (product_error, product_array) {
-                res.render('search', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+            product_schema.product.find({
+                $or: [
+                    {product_name: {$regex: key, $options: 'xi'}},
+                    {product_name_non_accented: {$regex: key, $options: 'xi'}}
+                ]
+            }, function (product_error, product_array) {
+                res.render('search', {
+                    product_array: product_array,
+                    industry_array: req.session.industry_array,
+                    location_array: req.session.location_array
+                });
             });
-        } else if(type = "store" && key == "" && disrtict == "-- Chọn Quận --") {
+        } else if (type = "store" && key == "" && disrtict == "-- Chọn Quận --") {
             console.log("3");
             store_schema.store.find({address: {$elemMatch: {district: disrtict}}}, function (store_error, store_array) {
-                res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                res.render('search', {
+                    store_array: store_array,
+                    industry_array: req.session.industry_array,
+                    location_array: req.session.location_array
+                });
             });
         }
         /*else if(key == '' && disrtict != '-- Chọn Quận --'){

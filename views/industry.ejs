@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ganxa Home Page</title>
+    <% include ./partial/head %>
+</head>
+<body>
+<div id="page-wrapper">
+    <!-- Preloader -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+
+    <!-- Page Container -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <!-- Alternative Sidebar -->
+        <% include ./partial/slidebar %>
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- Page content -->
+            <div id="page-content">
+                <!--ROW-->
+                <div class="row">
+
+
+
+                    <!--VIET TRONG NAY  -->
+
+                    <div class="dropdown-industry">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="input-group-btn ">
+                                <button type="button" class="btn btn-primary dropdown-toggle form-control" data-toggle="dropdown"
+                                        tabindex="-1">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-industry">
+                                    <% industry_array.forEach(function(industry){ %>
+                                    <center>
+                                        <P><a href="industry?type=<%= industry.industry_name %>"
+                                              class="form-control form-control-industry"><%=
+                                                    industry.industry_name %></a></P>
+                                    </center>
+
+                                    <% }) %>
+                                    <hr>
+                                    <center><P><a href="#" class="form-control form-control-industry" data-toggle="modal" data-target="#myModal">
+                                                Thêm industry</a></P></center>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h3 class="modal-title" id="myModalLabel">Thêm industry</h3>
+                                </div>
+
+                                <form method="post">
+                                    <div class="modal-body">
+                                        <input type="text" class="form-control" name="txtIndustryName">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <input type="submit" class="btn btn-primary"></button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <% if(typeof store_array != 'undefined'){ %>
+                        <% store_array.forEach(function (s) { %>
+                        <center>
+                            <div class="col-md-3">
+                                <div class="row-home">
+                                    <div class="thumbnail">
+                                        <img class="img-store" src="<%= s.cover %>" alt=" ">
+                                        <img class="img-logo" src="<%= s.logo %>">
+                                        <center><a href="store_detail?id=<%= s._id %>"><h4 class="h4_index"><%= s.store_name %></h4></a>
+                                        </center>
+                                        <p class="p-index">
+                                            <% s.address.forEach(function (a) { %>
+                                            <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 50) %>... <a
+                                                    href="store_detail?id=<%= s._id %>">xem thêm</a>
+                                            <% }) %>
+                                        </p>
+                                        <a href="edit_store?id=<%= s._id %>" class="btn btn-primary btn-block btn_index">Edit store</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% })%>
+
+                            <% } %>
+                        </center>
+
+
+                    </div>
+
+
+
+                </div>
+                <!--END ROW-->
+            </div>
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
+        </div>
+        <!-- Page content -->
+
+    </div>
+
+</div>
+<!--END PAGE WRAPPER-->
+<% include ./partial/settings %>
+
+</body>
+</html>

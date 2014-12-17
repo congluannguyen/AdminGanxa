@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ganxa Home Page</title>
+    <% include ./partial/head %>
+    <script src="./js/map.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script>
+        var geocoder;
+        var map;
+        var lat;
+        var long;
+        var marker;
+        function initialize() {
+            geocoder = new google.maps.Geocoder();
+            var mapOptions = {
+                zoom: 20
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    <% store_array.forEach(function(s){ %>
+                    var pos = new google.maps.LatLng(<%=s.latitude%>, <%=s.longitude%>);
+
+                    //Set vào 2 biến này.
+                    lat = <%=s.latitude%>;
+                    long = <%=s.longitude%>;
+                    var elem = document.getElementById("a");
+                    elem.value = lat.toFixed(7);
+                    var elem = document.getElementById("o");
+                    elem.value = long.toFixed(7);
+                    <%})%>
+                    marker = new google.maps.Marker({
+                        draggable: true,
+                        position: pos,
+                        map: map,
+                        title: 'Bạn đang ở đây?',
+                        animation: google.maps.Animation.DROP,
+                        anchor: new google.maps.Point(0, 49)
+
+                    });
+                    google.maps.event.addListener(marker, 'drag', function (a) {
+                        var elem = document.getElementById("a");
+                        elem.value = a.latLng.lat().toFixed(7);
+                        var elem = document.getElementById("o");
+                        elem.value = a.latLng.lng().toFixed(7);
+                    });
+
+                    map.setCenter(pos);
+                }, function () {
+                    handleNoGeolocation(true);
+                });
+            } else {
+                handleNoGeolocation(false);
+            }
+            getLatLong();
+
+            google.maps.event.addListener(map, "click", function (event) {
+                var lat = event.latLng.lat();
+                var lng = event.latLng.lng();
+
+                marker.setMap(null);
+
+                var pos = new google.maps.LatLng(lat, lng);
+
+                marker = new google.maps.Marker({
+                    draggable: true,
+                    position: pos,
+                    map: map,
+                    title: "Bạn ở đây?",
+                    raiseOnDrag: false,
+                    animation: google.maps.Animation.DROP
+                });
+
+                google.maps.event.addListener(marker, 'drag', function (a) {
+                    var elem = document.getElementById("a");
+                    elem.value = a.latLng.lat().toFixed(7);
+                    var elem = document.getElementById("o");
+                    elem.value = a.latLng.lng().toFixed(7);
+                });
+
+                var elem = document.getElementById("a");
+                elem.value = lat.toFixed(7);
+                var elem = document.getElementById("o");
+                elem.value = lng.toFixed(7);
+            });
+
+            var input = (document.getElementById('pac-input'));
+            var click = (document.getElementById('search'));
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(click);
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+            var infowindow = new google.maps.InfoWindow();
+            marker = new google.maps.Marker({
+                map: map,
+                /*anchorPoint: new google.maps.Point(0, -29),*/
+                draggable: true,
+                position: pos,
+                title: "Bạn ở đây?",
+                raiseOnDrag: false,
+                animation: google.maps.Animation.DROP
+            });
+
+            //Event place_changed cho textbox autocomplete
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                alert("her");
+                infowindow.close();
+                marker.setVisible(false);
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    return;
+                }
+
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(20);  // Why 17? Because it looks good.
+                }
+
+                marker = new google.maps.Marker({
+                    draggable: true,
+                    position: pos,
+                    map: map,
+                    title: "Bạn ở đây?",
+                    raiseOnDrag: false,
+                    animation: google.maps.Animation.DROP
+                });
+
+                /*google.maps.event.addListener(marker, 'drag', function(a) {
+                 var elem = document.getElementById("a");
+                 elem.value = a.latLng.lat().toFixed(7);
+                 var elem = document.getElementById("o");
+                 elem.value = a.latLng.lng().toFixed(7);
+                 });*/
+
+                marker.setPosition(place.geometry.location);
+                var elem = document.getElementById("a");
+                elem.value = place.geometry.location.lat().toFixed(7);
+                var elem = document.getElementById("o");
+                elem.value = place.geometry.location.lng().toFixed(7);
+                marker.setVisible(true);
+
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+
+                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                infowindow.open(map, marker);
+            });
+        } //Hết init
+        function toggleBounce() {
+
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        }
+        //Kiểm tra xem trình duyệt có hỗ trợ geolocation không?
+        function handleNoGeolocation(errorFlag) {
+            if (errorFlag) {
+                var content = 'Error: The Geolocation service failed.';
+            } else {
+                var content = 'Error: Your browser doesn\'t support geolocation.';
+            }
+            var options = {
+                map: map,
+                position: new google.maps.LatLng(60, 105),
+                content: content
+            };
+            map.setCenter(options.position);
+        }
+
+        //Lấy lat, lng.
+        function getLatLong() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            //Set lat và long xuống textbox.
+            /*var elem = document.getElementById("a");
+             elem.value = position.coords.latitude;
+             var elem = document.getElementById("o");
+             elem.value = position.coords.longitude;*/
+        }
+
+        function codeAddress() {
+            var address = document.getElementById('pac-input').value;
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var elem = document.getElementById("a");
+                    elem.value = results[0].geometry.location.lat().toFixed(7);
+                    var elem = document.getElementById("o");
+                    elem.value = results[0].geometry.location.lng().toFixed(7);
+
+                    pos = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+
+                    map.setCenter(results[0].geometry.location);
+                    marker.setVisible(false);
+                    marker = new google.maps.Marker({
+                        draggable: true,
+                        position: pos,
+                        map: map,
+                        title: "Bạn ở đây?",
+                        raiseOnDrag: false,
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    google.maps.event.addListener(marker, 'drag', function (a) {
+                        var elem = document.getElementById("a");
+                        elem.value = a.latLng.lat().toFixed(7);
+                        var elem = document.getElementById("o");
+                        elem.value = a.latLng.lng().toFixed(7);
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</head>
+<body>
+<div id="page-wrapper">
+    <!-- Preloader -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+
+    <!-- Page Container -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <!-- Alternative Sidebar -->
+        <% include ./partial/slidebar %>
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- Page content -->
+            <div id="page-content">
+                <!--ROW-->
+                <div class="row">
+
+
+
+                    <!--VIET TRONG NAY  -->
+                    <div class="col-md-12 col-search">
+                    </div>
+                    <div class="container">
+                        <% store_array.forEach(function (store) { %>
+                        <div class="row row-storedetails">
+                            <div class="col-md-12 col-storedetails">
+                                <img style="width: 100%;" src="<%= store.cover %>">
+                                <img class="avt-store" src="<%= store.logo %>">
+                            </div>
+                            <div class="col-md-12 store-details">
+                                <center>
+                                    <label class="label-store" style="margin-bottom: 30px;"><%= store.store_name %></label>
+
+                                    <p class="label-store">Số điện thoại </p>
+
+                                    <p><%= store.phone %></p>
+
+                                    <p class="label-store">Địa chỉ </p>
+                                    <a href="#" data-toggle="modal" data-target="#myModal">
+                                        <p>
+                                            <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
+                                            <% if(store.address[0].room){ %>
+                                            <%= store.address[0].room %>
+                                            <% } %>
+                                        </p>
+                                    </a>
+
+                                    <!--popup-->
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span
+                                                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                    <h3 class="modal-title" id="myModalLabel">Map</h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div id="map-canvas" class="map"></div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="col-md-6 input_insertstore">
+                                                        <input type="hidden" id="a" name="txtLatitude"
+                                                               class="form-control">
+                                                    </div>
+                                                    <div class="col-md-6 input_insertstore">
+                                                        <input type="hidden" id="o" name="txtLongitude"
+                                                               class="form-control  ">
+                                                    </div>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end popup-->
+                                    <p class="label-store">Website </p>
+
+                                    <p><%= store.website %></p>
+
+                                    <p class="label-store">Mô tả </p>
+
+                                    <p><%= store.description %></p>
+
+                                    <p class="label-store">Thời gian mở cửa </p>
+
+                                    <p><%= store.hours_of_work %></p>
+
+                                    <p class="label-store">Industry </p>
+
+                                    <p><a href="industry?type=<%= store.industry %>"><%= store.industry %></a></p>
+                                </center>
+                            </div>
+                        </div>
+                        <% }) %>
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="col-md-3 ">
+                                    <a href="#" style="height: 300px;width: 220px;" data-toggle="modal" data-target=".bs-example-modal-lg">
+                                        <div class="items-div">
+                                            <a href="insert_product">
+                                                <i style="padding-top: 55%;padding-left: 43%"
+                                                   class="fa fa-plus-square fa-4x"></i>
+                                            </a>
+                                        </div>
+                                    </a>
+                                </div>
+                                <% product_array.forEach(function (product) { %>
+                                <div class="col-md-3 ">
+                                    <center>
+                                        <div class="items-div">
+                                            <table>
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <center>
+                                                            <p class="p-details"><a href="product_detail?id=<%= product._id %>"><%=
+                                                                        product.product_name.substring(0, 30) %>
+                                                                    <%
+                                                                    if(product.product_name.length > 30){ %>
+                                                                    ...
+                                                                    <% } %>
+                                                                </a></p>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <center>
+                                                            <a href="product_detail?id=<%= product._id %>"></a>
+                                                            <img src="<%= product.product_image %>" class="img-up">
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <center>
+                                                            Tag :
+                                                            <a href="tags?tag=<%= product.tags[0] %>"><p class="label label-primary ">
+                                                                    <%= product.tags[0] %></p></a>
+                                                            <a href="tags?tag=<%= product.tags[1] %>"><p class="label label-primary ">
+                                                                    <%= product.tags[1] %></p></a>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <center>
+                                                            <a href="edit_product?id=<%= product._id %>" class="btn btn-primary"
+                                                               style="width: 95% ; margin-top: 10px;">Edit
+                                                                Product
+                                                            </a>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </center>
+                                </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <!--END ROW-->
+            </div>
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
+        </div>
+        <!-- Page content -->
+
+    </div>
+
+</div>
+<!--END PAGE WRAPPER-->
+<% include ./partial/settings %>
+
+</body>
+</html>
