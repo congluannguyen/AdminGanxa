@@ -27,42 +27,52 @@
             <!-- Page content -->
             <div id="page-content">
                 <!--ROW-->
-                <div class="row">
+                <ul class="breadcrumb breadcrumb-top">
+                    <li><a href="">Home</a></li>
+                </ul>
+                <!-- END Table Responsive Header -->
 
-
-                    <!--VIET TRONG NAY  -->
-
-                    <!--<div class="col-md-12 col-xs-12 col-sm-12">-->
-                        <span class="label label-primary label-index col-md-12 col-xs-12 col-sm-12">
-                            <h2>New Store</h2>
-                        </span>
-                    <!--</div>-->
-                    <% store_array.forEach(function(store){ %>
-                    <div class="row-home">
-
-                        <div class="thumbnail">
-                            <img class="img-store" src="<%= store.cover %>" alt=" ">
-                            <img class="img-logo" src="<%= store.logo %>">
-                            <center><a href="store_detail?id=<%= store._id %>"><h4
-                                            class="h4_index"><%= store.store_name.substring(0, 40) %>
-                                        <% if (store.store_name.length > 40){ %>
-                                        ...
-                                        <% } %>
-                                    </h4></a></center>
-                            <p class="p-index">
-                                <% store.address.forEach(function (a) { %>
-                                <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 50) %>... <a
-                                        href="store_detail?id=<%= store._id %>">xem thêm</a>
-                                <% }) %>
-                            </p>
-                            <a href="edit_store?id=<%= store._id %>" class="btn btn-primary btn-block btn_index">Edit
-                                store</a>
-                        </div>
+                <!-- Responsive Full Block -->
+                <div class="block">
+                    <!-- Responsive Full Title -->
+                    <div class="block-title">
+                        <h2><strong>Full Store</strong> </h2>
                     </div>
-                    <% }) %>
+                    <!-- END Responsive Full Title -->
+ <div class="table-responsive">
+                        <table class="table table-vcenter table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 150px;" class="text-center"><i class="gi gi-user"></i></th>
+                                <th>Store Name</th>
+                                <th>Address</th>
+                                <th style="width: 150px;" class="text-center">Actions</th>
+                            </tr>
+                            </thead>
+                            <% store_array.forEach(function(store){ %>
+                            <tbody>
+                            <tr>
+                                <td class="text-center"><img src="<%= store.logo %>" alt="avatar" class="img-circle img-store"></td>
+                                <td><a href=""><%= store.store_name.substring(0, 40) %><%if (store.store_name.length>20){%>...<%} %></a></td>
+                                <td><% store.address.forEach(function (a) { %>
+                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a href="store_detail?id=<%= store._id %>">more</a>
+                                    <% }) %></td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit" class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Delete" class="btn btn-danger"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
 
+                            </tbody>
+                            <% }) %>
+                        </table>
+                    </div>
+                    <!-- END Responsive Full Content -->
                 </div>
-                <!--END ROW-->
+                <!-- END Responsive Full Block -->
+
             </div>
             <!-- END Page Content -->
             <% include ./partial/footer %>
