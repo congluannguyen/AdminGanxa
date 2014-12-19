@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ganxa Home Page</title>
+    <% include ./partial/head %>
+    <script src="./js/map.js"></script>
+    <link rel="stylesheet" href="./css/map.css"/>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+</head>
+<body>
+<div id="page-wrapper">
+    <!-- Preloader -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+
+    <!-- Page Container -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <!-- Alternative Sidebar -->
+        <% include ./partial/slidebar %>
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- Page content -->
+            <div id="page-content">
+                <!-- Validation Header -->
+                <div class="content-header">
+                    <div class="header-section">
+                        <h1>
+                            <i class="gi gi-warning_sign"></i>Create new store<br>
+                            <small>You can create new store!</small>
+                        </h1>
+                    </div>
+                </div>
+                <ul class="breadcrumb breadcrumb-top">
+                    <li>Store</li>
+                    <li><a href="">Add store</a></li>
+                </ul>
+                <!-- END Validation Header -->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Form Validation Example Block -->
+                        <div class="block">
+                            <!-- Form Validation Example Title -->
+                            <div class="block-title">
+                                <h2><strong>Add Store</strong></h2>
+                            </div>
+                            <!-- END Form Validation Example Title -->
+
+                            <!-- Form Validation Example Content -->
+                            <form id="form-validation" action="" method="post" enctype="multipart/form-data"
+                                  class="form-horizontal form-bordered">
+                                <fieldset>
+                                    <legend><i class="fa fa-angle-right"></i> Location</legend>
+                                    <div class="col-md-12">
+                                        <div id="map-canvas" class="map"></div>
+                                        <input id="pac-input" type="text" value="Ho Chi Minh City, Ho Chi Minh, Vietnam"
+                                               placeholder="Enter a location">
+
+                                        <!--<div class="col-md-4">-->
+                                            <!--<input type="button" value="Location" onclick="codeAddress()"-->
+                                                   <!--class="btn btn-primary btn-block ">-->
+                                        <!--</div>-->
+                                    </div>
+                                    <legend><i class="fa fa-angle-right"></i> Profile</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_storename">Store name <span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_storename" name="txtStoreName"
+                                                       class="form-control" placeholder="Your store name..">
+                                                <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_description">Description <span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <textarea id="val_bio" name="txtDescription" rows="6" class="form-control"
+                                                      placeholder="Tell us your store story.."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_website">Website <span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_website" name="txtWebsite"
+                                                       class="form-control" placeholder="Website...">
+                                                <span class="input-group-addon"><i class="gi gi-globe"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_fanpage">Fanpage facebook<span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_fanpage"
+                                                       name="txtFanpage" class="form-control"
+                                                       placeholder="This is fan page of your store!!">
+                                                <span class="input-group-addon"><i
+                                                            class="gi gi-address_book"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Phone number<span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_phonenumber" name="txtPhone"
+                                                       class="form-control" placeholder="Your store phone number..">
+                                                <span class="input-group-addon"><i class="gi gi-phone_alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Address<span
+                                                    class="text-danger">*</span></label>
+                                        <div class="col-md-3">
+                                            <select name="optDistrict" class="form-control">
+                                                <option>-- Chọn Quận --</option>
+                                                <% location_array.forEach(function(location){ %>
+                                                <optgroup label="<%= location.city %>">
+                                                    <% location.district.forEach(function(district){ %>
+                                                    <option value="<%=district%>"><%=district%></option>
+                                                    <% }) %>
+                                                </optgroup>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input type="text" id="txtCity" name="txtCity"
+                                                       class="form-control" placeholder="Room number..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 "></label>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input type="text" id="txtRoom" name="txtRoom"
+                                                       class="form-control" placeholder="Room number..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input type="text" id="txtStreet" name="txtStreet"
+                                                       class="form-control" placeholder="Street..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_light"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Time of
+                                            work<span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtHoursOfWork" name="txtHoursOfWork"
+                                                       class="form-control" placeholder="Time of work..">
+                                                <span class="input-group-addon"><i class="gi gi-alarm"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Industry
+                                                   <span class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <select name="slcIndustry"  class="size-selcter form-control size-selcter ">
+                                                <% if(typeof industry_array != "undefined"){
+                                                        industry_array.forEach(function(industry){ %>
+                                                <option  value="<%= industry.industry_name %>"><%= industry.industry_name %></option>
+                                                <% })} %>
+                                            </select>
+                                        </div>
+                                    </div>                                </fieldset>
+
+                                <div class="form-group form-actions">
+                                    <div class="col-md-8 col-md-offset-4">
+                                        <input type="submit" class="btn btn-sm btn-primary" value="Submit">
+
+                                        <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+                            <!-- END Form Validation Example Content -->
+
+
+                        </div>
+                        <!-- END Validation Block -->
+                    </div>
+
+                </div>
+            </div>
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
+        </div>
+        <!-- Page content -->
+
+    </div>
+
+</div>
+<!--END PAGE WRAPPER-->
+<% include ./partial/settings %>
+
+</body>
+</html>

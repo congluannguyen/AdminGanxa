@@ -36,10 +36,10 @@
                 <div class="block">
                     <!-- Responsive Full Title -->
                     <div class="block-title">
-                        <h2><strong>Full Store</strong> </h2>
+                        <h2><strong>Full Store</strong></h2>
                     </div>
                     <!-- END Responsive Full Title -->
- <div class="table-responsive">
+                    <div class="table-responsive">
                         <table class="table table-vcenter table-striped">
                             <thead>
                             <tr>
@@ -52,15 +52,25 @@
                             <% store_array.forEach(function(store){ %>
                             <tbody>
                             <tr>
-                                <td class="text-center"><img src="<%= store.logo %>" alt="avatar" class="img-circle img-store"></td>
-                                <td><a href=""><%= store.store_name.substring(0, 40) %><%if (store.store_name.length>20){%>...<%} %></a></td>
-                                <td><% store.address.forEach(function (a) { %>
-                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a href="store_detail?id=<%= store._id %>">more</a>
-                                    <% }) %></td>
+                                <td class="text-center"><img src="<%= store.logo %>" alt="avatar"
+                                                             class="img-circle img-store"></td>
+                                <td><a href="store_detail?id=<%= store._id %>"><%= store.store_name.substring(0, 40) %>
+                                        <% if (store.store_name.length > 20){ %>
+                                        ...
+                                        <% } %>
+                                    </a></td>
+                                <td>
+                                    <% store.address.forEach(function (a) { %>
+                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
+                                            href="store_detail?id=<%= store._id %>">more</a>
+                                    <% }) %>
+                                </td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-xs">
-                                        <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit" class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Delete" class="btn btn-danger"><i class="fa fa-times"></i></a>
+                                        <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
+                                           class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                        <a href="javascript:void(0)" data-toggle="tooltip" title="Delete"
+                                           class="btn btn-danger"><i class="fa fa-times"></i></a>
                                     </div>
                                 </td>
                             </tr>
