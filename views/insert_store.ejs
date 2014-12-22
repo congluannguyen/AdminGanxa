@@ -162,13 +162,77 @@
                                     </div>
 
 
-                                   </fieldset>
+                                </fieldset>
 
                                 <!-- END Form Validation Example Content -->
 
 
                             </div>
 
+                            <!-- END Validation Block -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+
+                                <!-- Form Validation Example Content -->
+                                <legend><i class="fa fa-angle-right"></i> Media</legend>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="val_ImageCover">Image Cover<span
+                                                class="text-danger">*</span></label>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input type="file" required name="ulfCover" ONCHANGE="show_cover(this)" accept="image/*"
+                                                   alt="Cover image"
+                                                   class="form-control">
+                                            <span class="input-group-addon"><i class="gi gi-picture"></i></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-8 ">
+                                        <a href="#" data-toggle="modal" data-target="#myModal"><img class="cover-addstore" id="thumbnil" src="" alt="Cover image"></a>
+                                    </div>
+                                </div>
+                                <!--Model-->
+
+                                <!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+                                <!--<div class="modal-dialog">-->
+                                <!--<div class="modal-body">-->
+                                <!--<img class="img-thumbnil" id="thumbnil" src="" alt="Cover image">-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="val_Avatar">Avatar<span
+                                                class="text-danger">*</span></label>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input type="file" required name="ulfLogo" ONCHANGE="show_logo(this)" accept="image/*"
+                                                   alt="Cover image"
+                                                   class="form-control">
+                                            <span class="input-group-addon"><i class="gi gi-picture"></i></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <img class="img-thumbnil img-addstore" id="thumbnil2" src="" alt="Logo image">
+                                    </div>
+                                </div>
+                                </fieldset>
+
+
+
+
+                                <!-- END Form Validation Example Content -->
+
+
+                            </div>
                             <!-- END Validation Block -->
                         </div>
                         <div class="col-md-6">
@@ -200,7 +264,7 @@
                                     <input id="pac-button" type="button" value="Location"  onclick="codeAddress()">
                                     <!--<input type="button" value="Location"  onclick="codeAddress()">-->
 
-                                    </fieldset>
+                                </fieldset>
                                 <fieldset>
 
                                     <div class="form-group">
@@ -257,6 +321,7 @@
                                         </div>
                                     </div>
                                 </fieldset>
+
 
 
                                 <!-- END Form Validation Example Content -->
