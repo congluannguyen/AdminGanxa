@@ -43,32 +43,22 @@
                     <li><a href="">Add store</a></li>
                 </ul>
                 <!-- END Validation Header -->
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+                                <!-- Form Validation Example Title -->
+                                <div class="block-title">
+                                    <h2><strong>Add Store</strong></h2>
+                                </div>
+                                <!-- END Form Validation Example Title -->
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Form Validation Example Block -->
-                        <div class="block">
-                            <!-- Form Validation Example Title -->
-                            <div class="block-title">
-                                <h2><strong>Add Store</strong></h2>
-                            </div>
-                            <!-- END Form Validation Example Title -->
+                                <!-- Form Validation Example Content -->
 
-                            <!-- Form Validation Example Content -->
-                            <form id="form-validation" action="" method="post" enctype="multipart/form-data"
-                                  class="form-horizontal form-bordered">
+
                                 <fieldset>
-                                    <legend><i class="fa fa-angle-right"></i> Location</legend>
-                                    <div class="col-md-12">
-                                        <div id="map-canvas" class="map"></div>
-                                        <input id="pac-input" type="text" value="Ho Chi Minh City, Ho Chi Minh, Vietnam"
-                                               placeholder="Enter a location">
 
-                                        <!--<div class="col-md-4">-->
-                                            <!--<input type="button" value="Location" onclick="codeAddress()"-->
-                                                   <!--class="btn btn-primary btn-block ">-->
-                                        <!--</div>-->
-                                    </div>
                                     <legend><i class="fa fa-angle-right"></i> Profile</legend>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="val_storename">Store name <span
@@ -129,46 +119,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label" for="val_phonenumber">Address<span
-                                                    class="text-danger">*</span></label>
-                                        <div class="col-md-3">
-                                            <select name="optDistrict" class="form-control">
-                                                <option>-- Chọn Quận --</option>
-                                                <% location_array.forEach(function(location){ %>
-                                                <optgroup label="<%= location.city %>">
-                                                    <% location.district.forEach(function(district){ %>
-                                                    <option value="<%=district%>"><%=district%></option>
-                                                    <% }) %>
-                                                </optgroup>
-                                                <% }) %>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <input type="text" id="txtCity" name="txtCity"
-                                                       class="form-control" placeholder="Room number..">
-                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 "></label>
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <input type="text" id="txtRoom" name="txtRoom"
-                                                       class="form-control" placeholder="Room number..">
-                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <input type="text" id="txtStreet" name="txtStreet"
-                                                       class="form-control" placeholder="Street..">
-                                                <span class="input-group-addon"><i class="gi gi-kiosk_light"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="val_phonenumber">Time of
                                             work<span
@@ -184,7 +135,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="val_phonenumber">Industry
-                                                   <span class="text-danger">*</span></label>
+                                            <span class="text-danger">*</span></label>
 
                                         <div class="col-md-6">
                                             <select name="slcIndustry"  class="size-selcter form-control size-selcter ">
@@ -194,27 +145,113 @@
                                                 <% })} %>
                                             </select>
                                         </div>
-                                    </div>                                </fieldset>
-
-                                <div class="form-group form-actions">
-                                    <div class="col-md-8 col-md-offset-4">
-                                        <input type="submit" class="btn btn-sm btn-primary" value="Submit">
-
-                                        <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i>
-                                            Reset
-                                        </button>
                                     </div>
-                                </div>
+                                   </fieldset>
 
-                            </form>
-                            <!-- END Form Validation Example Content -->
+                                <!-- END Form Validation Example Content -->
 
 
+                            </div>
+
+                            <!-- END Validation Block -->
                         </div>
-                        <!-- END Validation Block -->
-                    </div>
+                        <div class="col-md-6">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
 
-                </div>
+                                <!-- Form Validation Example Content -->
+                                <fieldset>
+                                    <legend><i class="fa fa-angle-right"></i> Location</legend>
+                                    <div class="col-md-12">
+                                        <div id="map-canvas" class="map"></div>
+                                        <input id="pac-input" type="text" value="Ho Chi Minh City, Ho Chi Minh, Vietnam"
+                                               placeholder="Enter a location"
+                                               onfocus="codeAddress()">
+
+                                        <!--<div class="col-md-4">-->
+                                        <!--<input type="button" value="Location" onclick="codeAddress()"-->
+                                        <!--class="btn btn-primary btn-block ">-->
+                                        <!--</div>-->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="hidden" id="a" name="txtLatitude"
+                                               class="form-control">
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <input type="hidden" id="o" name="txtLongitude"
+                                               class="form-control  ">
+                                    </div>
+                                    <input id="pac-button" type="button" value="Location"  onclick="codeAddress()">
+                                    <!--<input type="button" value="Location"  onclick="codeAddress()">-->
+
+                                    </fieldset>
+                                <fieldset>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Address<span
+                                                    class="text-danger">*</span></label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtRoom" name="txtRoom"
+                                                       class="form-control" placeholder="Room number..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 "></label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtStreet" name="txtStreet"
+                                                       class="form-control" placeholder="Street..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_light"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label"></label>
+                                        <div class="col-md-6">
+                                            <select name="optDistrict" class="form-control">
+                                                <option>-- Chọn Quận --</option>
+                                                <% location_array.forEach(function(location){ %>
+                                                <optgroup label="<%= location.city %>">
+                                                    <% location.district.forEach(function(district){ %>
+                                                    <option value="<%=district%>"><%=district%></option>
+                                                    <% }) %>
+                                                </optgroup>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 "></label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtCity" name="txtCity"
+                                                       class="form-control" placeholder="City..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-actions">
+                                        <div class="col-md-9 col-md-offset-3">
+                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
+                                            <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+
+                                <!-- END Form Validation Example Content -->
+
+
+                            </div>
+                            <!-- END Validation Block -->
+                        </div>
+
+                    </div>
+                </form>
             </div>
             <!-- END Page Content -->
             <% include ./partial/footer %>

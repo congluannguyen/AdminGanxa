@@ -15,6 +15,11 @@ function initialize() {
     };
     //Tạo google map tại map-canvas cùng với option.
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    google.maps.event.addDomListener(window, "resize", function() {
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center);
+    });
     // Try HTML5 geolocation
     if (navigator.geolocation) {
         //Lấy tọa độ hiện tại:
@@ -78,8 +83,10 @@ function initialize() {
     });
 
     var input = (document.getElementById('pac-input'));
+    var button = (document.getElementById('pac-button'));
     var click = (document.getElementById('search'));
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(click);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(button);
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
     var autocomplete = new google.maps.places.Autocomplete(input);
     autocomplete.bindTo('bounds', map);
