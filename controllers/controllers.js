@@ -7,26 +7,12 @@ var media_schema = require('../models/media_schema');
 var S = require('string');
 var im = require('imagemagick');
 var controllers = {
-    get_industry_array: function (req, res) {
-        var query_industry = industry_schema.industry.find({});
-        query_industry.sort({industry_name: 1});
-        query_industry.exec(function (industry_error, industry_array) {
-            if (industry_array && industry_array.length > 0) {
-                req.session.industry_array = industry_array;
-                console.log("get all" + req.session.industry_array);
-            } else {
-                console.log(industry_error);
-            }
-        });
-    },
-
     get_all: function (req, res) {
         var query_industry = industry_schema.industry.find({});
         query_industry.sort({industry_name: 1});
         query_industry.exec(function (industry_error, industry_array) {
             if (industry_array && industry_array.length > 0) {
                 req.session.industry_array = industry_array;
-                console.log("get all" + req.session.industry_array);
             } else {
                 console.log(industry_error);
             }
@@ -47,47 +33,27 @@ var controllers = {
         query_product.sort({date: -1});
         query_product.exec(function (product_error, product_array) {
             if (product_array && product_array.length > 0) {
-                req.session.industry_array = product_array;
+                req.session.product_array = product_array;
             } else {
                 console.log(product_error);
             }
         });
 
-        var query_media = media_schema.media.find({});
-        query_media.exec(function (media_error, media_array) {
-            if (media_array && media_array.length > 0) {
-                req.session.media_array = media_array;
+        var query_location = location_schema.location.find({});
+        query_location.exec(function (location_error, location_array) {
+            if (location_array && location_array.length > 0) {
+                req.session.location_array = location_array;
             } else {
-                console.log(media_array);
+                console.log(location_error);
             }
         });
-
-        console.log("end get all");
     },
 
     get_index: function (req, res) {
-        //controllers.get_all(req, res);
-        //setTimeout(function(){console.log("hi");}, 10000);
-        var query_store = store_schema.store.find({});
-        query_store.limit(8);
-        query_store.sort({date: -1});
-        query_store.exec(function (store_error, store_array) {
-            if (store_array && store_array.length > 0) {
-                req.session.store_array = store_array;
-                var query_industry = industry_schema.industry.find({});
-                query_industry.sort({industry_name: 1});
-                query_industry.exec(function (industry_error, industry_array) {
-                    if (industry_array && industry_array.length > 0) {
-                        req.session.industry_array = industry_array;
-                        res.render('index', {store_array: store_array, industry_array: industry_array});
-                    } else {
-                        console.log(industry_error);
-                    }
-                });
-            } else {
-                console.log(store_error);
-            }
-        })
+        controllers.get_all(req, res);
+        setTimeout(function () {
+            res.render('index', {store_array: req.session.store_array, industry_array: req.session.industry_array});
+        }, 20);
     },
 
     get_store_detail: function (req, res) {
