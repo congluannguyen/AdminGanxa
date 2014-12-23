@@ -28,11 +28,7 @@
             <div id="page-content">
                 <!--ROW-->
                 <div class="row">
-
-
-
                     <!--VIET TRONG NAY  -->
-
                     <div class="dropdown-industry">
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
@@ -88,7 +84,7 @@
                                     <div class="thumbnail">
                                         <img class="img-store" src="<%= s.cover %>" alt=" ">
                                         <img class="img-logo" src="<%= s.logo %>">
-                                        <center><a href="store_detail?id=<%= s._id %>"><h4 class="h4_index"><%= s.store_name %></h4></a>
+                                        <center><a href="store_detail?id=<%= s._id %>"><h4 class="h4_index"><%= s.store_name.substring(0, 40) %><%if (s.store_name.length>40){%>...<%} %></h4></a>
                                         </center>
                                         <p class="p-index">
                                             <% s.address.forEach(function (a) { %>

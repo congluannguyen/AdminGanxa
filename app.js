@@ -41,31 +41,29 @@ app.use(function (req, res, next) {
     if (req.url === '/trangchu') {
         req.url = '/';
     }
-    /*if (url.match("/store+")) {
-     url = url.replace('/store+','');
-     req.session.store_id_recent = url;
-     req.url = '/store_detail';
-     console.log("1");
-     res.render('store_detail');
-     }
-     console.log("2");*/
+    /*if (url.match("^/store/")) {
+        console.log("chuẩn");
+        req.url = "/store_detail?id=5491423870c4abcc12516ad0";
+    }*/
     next();
 });
 
 app.use('/', controllers);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+//đây
+app.use(function (req, res, next) {
+    res.render('404', { url: req.url });
+    /*var err = new Error('Not Found');
     err.status = 404;
-    next(err);
+    next(err);*/
 });
 
 // error handlers
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
+    app.use(function (err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -76,8 +74,9 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     res.status(err.status || 500);
+    /*res.get('/index');*/
     res.render('error', {
         message: err.message,
         error: {}

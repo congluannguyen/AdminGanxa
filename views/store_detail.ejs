@@ -372,12 +372,13 @@
                                      <div class="gallery gallery-widget" data-toggle="lightbox-gallery">
                                         <div class="row">
                                             <% media_array.forEach(function (medias) { %>
-                                            <div class="col-xs-6 col-sm-3">
-                                                <a href="<%= medias.media_url %>" class="gallery-link" title="Image Info">
-                                                    <img src="<%= medias.media_url %>" alt="image">
-                                                </a>
-                                            </div>
-                                            <% }) %>
+                                            <% if(medias.product_id == product._id){%>
+                                                <div class="col-xs-6 col-sm-3">
+                                                    <a href="<%= medias.media_url %>" class="gallery-link" title="Image Info">
+                                                        <img src="<%= medias.media_url %>" alt="image">
+                                                    </a>
+                                                </div>
+                                            <% }}) %>
                                         </div>
                                     </div>
                                 </div>

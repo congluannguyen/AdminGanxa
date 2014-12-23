@@ -17,7 +17,6 @@
         </div>
     </div>
     <!-- END Preloader -->
-
     <!-- Page Container -->
     <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
         <!-- Alternative Sidebar -->
@@ -28,11 +27,7 @@
             <div id="page-content">
                 <!--ROW-->
                 <div class="row">
-
-
-
                     <!--VIET TRONG NAY  -->
-
                     <a href="insert_media">Thêm Media</a>
                     <br>
                     <% product_array.forEach(function(product){ %>
@@ -40,17 +35,17 @@
                     <%= product.price %>
                     <% }) %>
                     <br><br>Media nè:<br>
-                    <% media_array.forEach(function(media){ %>
-                    Tên: <%= media.media_name %>
-                    <br>
-                    URL: <%= media.media_url %>
-                    <br>
-                    <a href="edit_media?id=<%= media._id %>">Edit</a>
-                    <br>
-                    <% }) %>
-
-
-
+                    <% if(typeof media_array != 'undefined'){%>
+                        <% media_array.forEach(function(media){ %>
+                        Tên: <%= media.media_name %>
+                        <br>
+                        URL: <%= media.media_url %>
+                        <br>
+                        <a href="edit_media?id=<%= media._id %>">Edit</a>
+                        <br>
+                        <% })}else{ %>
+                    <a>Không có</a>
+                        <% } %>
                 </div>
                 <!--END ROW-->
             </div>
@@ -58,12 +53,9 @@
             <% include ./partial/footer %>
         </div>
         <!-- Page content -->
-
     </div>
-
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
-
 </body>
 </html>
