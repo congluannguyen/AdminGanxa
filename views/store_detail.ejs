@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Ganxa Home Page</title>
+    <title>Store Detail</title>
     <% include ./partial/head %>
     <script src="./js/map.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -259,178 +259,155 @@
                 <!--ROW-->
                 <div class="row">
 
-
-                    <!--VIET TRONG NAY  -->
-                    <!--<div class="col-md-12 col-search">-->
-                    <!--</div>-->
-                    <% store_array.forEach(function (store) { %>
-                    <div class="row-storedetails">
-                        <div class="col-md-12 col-storedetails">
-                            <img style="width: 100%;" src="<%= store.cover %>">
-                            <img class="avt-store" src="<%= store.logo %>">
+                    <!--popup-->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="map-canvas" class="map"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-12 store-details">
-                            <center>
-                                <label class="label-store" style="margin-bottom: 30px;"><%= store.store_name %></label>
+                    </div>
+                    <!--end popup-->
+                    <% store_array.forEach(function (store) { %>
+                    <div class="col-md-12">
+                        <!-- Advanced Active Theme Color Widget -->
+                        <div class="widget">
+                            <div class="widget-advanced">
+                                <!-- Widget Header -->
+                                <div class="widget-header text-center themed-background-dark" style="background-image: url('<%= store.cover %>') ">
 
-                                <p class="label-store">Số điện thoại </p>
+                                    <h3 class="widget-content-light">
+                                        <strong><%= store.store_name %></strong><br>
+                                        <small><a href="#" data-toggle="modal" data-target="#myModal">
+                                                <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
+                                                <% if(store.address[0].room){ %>
+                                                <%= store.address[0].room %>
+                                                <% } %>
+                                            </a></small>
+                                    </h3>
+                                </div>
+                                <!-- END Widget Header -->
 
-                                <p><%= store.phone %></p>
+                                <!-- Widget Main -->
+                                <div class="widget-main">
+                                    <a href="javascript:void(0)" class="widget-image-container animation-bigEntrance">
+                                        <span class="widget-store"><img
+                                                    src="<%= store.logo %>"
+                                                    class="img-circle logo-storedetails2"></span>
+                                    </a>
+                                    <table class="table table-borderless table-striped table-vcenter">
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-right"><strong>Website</strong></td>
+                                            <td><%= store.website %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Fan page</strong></td>
+                                            <td><%= store.fanpage %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Description</strong></td>
+                                            <td><%= store.description %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Time of work</strong></td>
+                                            <td><%= store.hours_of_work %></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Industry</strong></td>
+                                            <td><a href="industry?type=<%= store.industry %>"><%= store.industry %></a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Status</strong></td>
+                                            <td><span class="label label-success"><i
+                                                            class="fa fa-check"></i> Active</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <center>
+                                                <a href="edit_store?id=<%= store._id %>" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Edit store</a>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
 
-                                <p class="label-store">Địa chỉ </p>
-                                <a href="#" data-toggle="modal" data-target="#myModal">
-                                    <p>
-                                        <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
-                                        <% if(store.address[0].room){ %>
-                                        <%= store.address[0].room %>
-                                        <% } %>
-                                    </p>
-                                </a>
+                                </div>
+                                <!-- END Widget Main -->
+                            </div>
+                        </div>
+                        <!-- END Advanced Active Theme Color Widget -->
+                    </div>
+                    <% }) %>
+                    <% product_array.forEach(function (product) { %>
+                    <div class="col-md-6">
+                        <!-- Advanced Animated Gallery Widget -->
+                        <div class="widget">
+                            <div class="widget-advanced widget-advanced-alt">
+                                <!-- Widget Header -->
+                                <div class="widget-header text-left">
+                                    <!-- For best results use an image with at least 150 pixels in height (with the width relative to how big your widget will be!) - Here I'm using a 1200x150 pixels image -->
+                                    <img src="<%= product.product_image%>" alt="background" class="widget-background animation-pulseSlow">
+                                    <h3 class="widget-content widget-content-image widget-content-light clearfix">
+                                        <a href="javascript:void(0)" class="widget-icon pull-right">
+                                            <i class="fa fa-picture-o"></i>
+                                        </a>
+                                        <a href="javascript:void(0)" class="themed-color-default"> <strong><%= product.product_name%></strong></a><br>
+                                        Tag :<small> <a href="tags?tag=<%= product.tags[0] %>"><p class="label label-primary ">
+                                                    <%= product.tags[0] %></p></a></small>
+                                    </h3>
+                                </div>
+                                <!-- END Widget Header -->
 
-                                <!--popup-->
-                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="myModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"><span
-                                                            aria-hidden="true">&times;</span><span
-                                                            class="sr-only">Close</span></button>
-                                                <h3 class="modal-title" id="myModalLabel">Map</h3>
+                                <!-- Widget Main -->
+                                <div class="widget-main">
+                                    <p><%= product.description%></p>
+                                     <div class="gallery gallery-widget" data-toggle="lightbox-gallery">
+                                        <div class="row">
+                                            <% media_array.forEach(function (medias) { %>
+                                            <div class="col-xs-6 col-sm-3">
+                                                <a href="<%= medias.media_url %>" class="gallery-link" title="Image Info">
+                                                    <img src="<%= medias.media_url %>" alt="image">
+                                                </a>
                                             </div>
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div id="map-canvas" class="map"></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <div class="col-md-6 input_insertstore">
-                                                    <input type="hidden" id="a" name="txtLatitude"
-                                                           class="form-control">
-                                                </div>
-                                                <div class="col-md-6 input_insertstore">
-                                                    <input type="hidden" id="o" name="txtLongitude"
-                                                           class="form-control  ">
-                                                </div>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                    Close
-                                                </button>
-                                            </div>
-
+                                            <% }) %>
                                         </div>
                                     </div>
                                 </div>
-                                <!--end popup-->
-                                <p class="label-store">Website </p>
-
-                                <p><%= store.website %></p>
-
-                                <p class="label-store">Mô tả </p>
-
-                                <p><%- store.description %></p>
-
-                                <p class="label-store">Thời gian mở cửa </p>
-
-                                <p><%= store.hours_of_work %></p>
-
-                                <p class="label-store">Industry </p>
-
-                                <p><a href="industry?type=<%= store.industry %>"><%= store.industry %></a></p>
-                            </center>
+                                <!-- END Widget Main -->
+                            </div>
                         </div>
+                        <!-- END Advanced Animated Gallery Widget -->
                     </div>
                     <% }) %>
-                        <div class="col-md-12">
-
-                            <div class="col-md-3 ">
-                                <a href="#" style="height: 300px;width: 220px;" data-toggle="modal"
-                                   data-target=".bs-example-modal-lg">
-                                    <div class="items-div">
-                                        <a href="insert_product">
-                                            <i style="padding-top: 55%;padding-left: 43%"
-                                               class="fa fa-plus-square fa-4x"></i>
-                                        </a>
-                                    </div>
-                                </a>
-                            </div>
-                            <% product_array.forEach(function (product) { %>
-                            <div class="col-md-3 ">
-                                <center>
-                                    <div class="items-div">
-                                        <table>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <center>
-                                                        <p class="p-details"><a
-                                                                    href="product_detail?id=<%= product._id %>"><%=
-                                                                    product.product_name.substring(0, 30) %>
-                                                                <%
-                                                                if(product.product_name.length > 30){ %>
-                                                                ...
-                                                                <% } %>
-                                                            </a></p>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <center>
-                                                        <a href="product_detail?id=<%= product._id %>"></a>
-                                                        <img src="<%= product.product_image %>" class="img-up">
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <center>
-                                                        Tag :
-                                                        <a href="tags?tag=<%= product.tags[0] %>"><p
-                                                                    class="label label-primary ">
-                                                                <%= product.tags[0] %></p></a>
-                                                        <a href="tags?tag=<%= product.tags[1] %>"><p
-                                                                    class="label label-primary ">
-                                                                <%= product.tags[1] %></p></a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3">
-                                                    <center>
-                                                        <a href="edit_product?id=<%= product._id %>"
-                                                           class="btn btn-primary"
-                                                           style="width: 95% ; margin-top: 10px;">Edit
-                                                            Product
-                                                        </a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </center>
-                            </div>
-                            <% }) %>
-                        </div>
 
 
+                </div>
+                <!--END ROW-->
             </div>
-            <!--END ROW-->
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
         </div>
-        <!-- END Page Content -->
-        <% include ./partial/footer %>
-    </div>
-    <!-- Page content -->
+        <!-- Page content -->
 
-</div>
+    </div>
 
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
 
+<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

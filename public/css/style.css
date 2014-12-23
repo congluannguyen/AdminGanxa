@@ -2,6 +2,14 @@
     height: 30px;
     width: 30px;
 }
+.widget-store{
+    display: inline-block;
+    line-height: 57px;
+    text-align: center;
+    font-size: 28px;
+    color: #ffffff;
+    border-radius: 32px;
+}
 .img-addstore{
     height: 50%;
     width: 50%;
@@ -13,4 +21,24 @@
 .img-thumbnil{
     height: 50%;
     width: 50%;
+}
+.logo-storedetails{
+    height: 100px;
+    width: 100px;
+}
+.logo-storedetails2{
+    height: 65px;
+    width: 65px;
+}
+a:link {
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:active {
+    text-decoration: none;
 }
