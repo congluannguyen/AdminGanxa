@@ -115,7 +115,6 @@ var controllers = {
     },
 
     post_insert_store: function (req, res) {
-        console.log("vào post insert store");
         var id_user_facebook = "id_user_facebook";
         var store_name = req.body.txtStoreName;
         var store_name_non_accented = S(store_name).latinise().s;
@@ -137,7 +136,6 @@ var controllers = {
         var hours_of_work = req.body.txtHoursOfWork;
         var website = req.body.txtWebsite;
         var fanpage = req.body.txtFanpage;
-        var im = require('imagemagick');
         //Lấy hình, resize và chỉnh path:
         //Path upload:
         var cover_upload_path = req.files.ulfCover.path;
@@ -146,7 +144,6 @@ var controllers = {
         var cover_save_path = "public/images/" + req.files.ulfCover.name;
         var logo_save_path = "public/images/" + req.files.ulfLogo.name;
         //Crop
-        console.log("crop nè");
         var option = {
             srcPath: cover_upload_path,
             dstPath: cover_save_path,
@@ -162,59 +159,24 @@ var controllers = {
                 console.log('Resized cover successful.')
             }
         });
-        console.log("xong crop");
-        /*gm(cover_upload_path)
-         .resize(353, 257)
-         .autoOrient()
-         .write(cover_save_path, function (err) {
-         if (err) console.log(err);
-         });*/
-        /*gm(cover_upload_path)
-         .resize(500, 500)
-         .autoOrient()
-         .write(cover_save_path, function (err) {
-         if (!err) {
-         console.log('resize cover ok')
-         } else {
-         console.log(err)
-         }
-         });*/
-        /*gm(cover_upload_path)
-         .flip()
-         .magnify()
-         .rotate('green', 45)
-         .blur(7, 3)
-         .crop(300, 300, 150, 130)
-         .edge(3)
-         .write(cover_save_path, function (err) {
-         if (!err) {
-         console.log('crazytown has arrived')
-         } else {
-         console.log(err)
-         }
-         });*/
-        im.resize({
+        var option = {
             srcPath: logo_upload_path,
             dstPath: logo_save_path,
-            width: 500
-        }, function (err, stdout, stderr) {
-            if (err) throw err;
-            console.log('Resized logo successful.');
+            width: 650,
+            height: 500,
+            quality: 1,
+            gravity: "Center"
+        };
+        im.crop(option, function (err, stdout, stderr){
+            if (err) {
+                throw err
+            } else {
+                console.log('Resized logo successful.')
+            }
         });
-        /*gm(logo_upload_path)
-         .resize(500, 500)
-         .noProfile()
-         .write(logo_save_path, function (err) {
-         if (!err) {
-         console.log('resize logo ok')
-         } else {
-         console.log(err)
-         }
-         });*/
         //Xử lý path save:
         cover_save_path = ".." + cover_save_path.replace("public", "");
         logo_save_path = ".." + logo_save_path.replace("public", "");
-
         var date = new Date();
         new store_schema.store({
             _id: null,
@@ -236,16 +198,18 @@ var controllers = {
         }).save(function (error) {
                 var query_store = store_schema.store.find({});
                 query_store.limit(8);
-                query_store.sort({date: 1});
+                query_store.sort({date: -1});
                 query_store.exec(function (store_error, store_array) {
                     if (store_array && store_array.length > 0) {
                         req.session.store_array = store_array;
-
                         industry_schema.industry.find(function (industry_error, industry_array) {
                             if (industry_array && industry_array.length > 0) {
                                 req.session.store_array = store_array;
                                 req.session.industry_array = industry_array;
-                                res.render('index', {store_array: store_array, industry_array: industry_array});
+                                //Chờ resize xong:
+                                setTimeout(function () {
+                                    res.render('index', {store_array: store_array, industry_array: industry_array});
+                                }, 300)
                             } else {
                                 console.log(industry_error);
                             }
@@ -396,6 +360,16 @@ var controllers = {
                 });
             } else {
                 console.log(error);
+            }
+        });
+    },
+
+    delete_store: function (req, res) {
+        store_schema.store.findByIdAndRemove(req.params.id, function (remove_error) {
+            if (!remove_error) {
+                return res.send('');
+            } else {
+                console.log(remove_error);
             }
         });
     },
@@ -939,6 +913,8 @@ module.exports = function (router) {
     //edit store
     router.get('/edit_store', controllers.get_edit_store);
     router.post('/edit_store', controllers.post_edit_store);
+    //delete store
+    router.delete('/delete/store/:id', controllers.delete_store);
     //product detail
     router.get('/product_detail', controllers.get_product_detail);
     router.post('/product_detail', controllers.post_product_detail);
