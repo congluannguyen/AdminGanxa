@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ./partial/head %>
+</head>
+<body>
+<header>
+    <% include ./partial/header %>
+    <script>
+        $(function () {
+            $("#rdb1").click(function () {
+                $(".button_ss").attr("name", "1");
+            });
+            $("#rdb2").click(function () {
+                $(".button_ss").attr("name", "2");
+            });
+            $(".button_ss").click(function () {
+                $('.toHide').hide();
+                $("#blk-" + $(this).attr("name")).show('slow');
+            });
+        });
+    </script>
+<!--    <script>
+        $(document).ready(function(){
+            $("#hehe").click(function(){
+                $.ajax(function(result){
+                    $.session.set('key', 'trí');
+                    $("#div1").html($.session.get('key'));
+                });
+            });
+        });
+    </script>-->
+</header>
+
+<div class="container row-search">
+    <form action="" method="post">
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
+            <input name="txtTextSearch" type="text" placeholder="Bạn muốn tìm gì?" autofocus class="form-control">
+        </div>
+
+        <div class="col-md-2 ">
+            <div class="col-md-12 form-control">
+                <label style="margin-right: 12px;"><input type="radio" id="rdb1" class="store" name="type" value="store" checked>Store</label>
+                <label><input id="rdb2" class="product " type="radio" name="type" value="product"/>Product</label>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="input-group-btn">
+                <!--<button type="button" class="btn btn-primary" tabindex="-1">Search</button>-->
+                <input type="submit" name="button_s" class="button_ss btn btn-primary" tabindex="-1" value="Search">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <% industry_array.forEach(function(i){ %>
+                    <li><a href="industry?type=<%=i.industry_name%>"><%=i.industry_name%></a></li>
+                    <%})%>
+                    <li class="divider"></li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-12 quan-search">
+            <div class="col-md-1"><label></label></div>
+            <div class="col-md-2 "><label class="form-control">Tìm theo quận:</label></div>
+            <div class="col-md-8 ">
+
+                <select name="optDistrict" class="form-control  ">
+                    <option>Tất Cả Các Quận</option>
+                    <% location_array.forEach(function(location){ %>
+                    <optgroup label="<%= location.city %>">
+                        <% location.district.forEach(function(district){ %>
+                        <option value="<%=district%>"><%=district%></option>
+                        <% }) %>
+                    </optgroup>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+
+
+    </form>
+    <% if(typeof store_array != 'undefined'){ %>
+    <% store_array.forEach(function(s){ %>
+    <!--<p><a href="edit_store?id=<%= s._id %>"><%= s.store_name %></a></p>-->
+
+
+    <div class="col-md-3">
+        <div class="row-home">
+            <div class="thumbnail">
+                <img class="img-store" src="<%= s.cover %>" alt=" ">
+                <img class="img-logo" src="<%= s.logo %>">
+                <center><a href="store_detail?id=<%= s._id %>"><h4 class="h4_index"><%= s.store_name %></h4></a>
+                </center>
+                <p class="p-index">
+                    <% s.address.forEach(function (a) { %>
+                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 50) %>... <a
+                        href="store_detail?id=<%= s._id %>">xem thêm</a>
+                    <% }) %>
+                </p>
+                <a href="edit_store?id=<%= s._id %>" class="btn btn-primary btn-block btn_index">Edit store</a>
+            </div>
+        </div>
+    </div>
+
+    <% })}else if(typeof product_array != 'undefined'){ %>
+    <% product_array.forEach(function(p){ %>
+    <!--<p><a href="edit_product?id=<%= p._id %>"><%= p.product_name %></a></p>-->
+
+    <div class="col-md-3 ">
+        <center>
+            <div class="items-div">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <center>
+                                <p class="p-details"><a href="product_detail?id=<%= p._id %>"><%= p.product_name %></a></p>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <center>
+                                <img src="<%= p.product_image %>" class="img-up">
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <center>
+                                Tag :
+                                <a href="tags?tag=<%= p.tags[0] %>"><p class="label label-primary "><%= p.tags[0] %></p>
+                                </a>
+                                <a href="tags?tag=<%= p.tags[1] %>"><p class="label label-primary "><%= p.tags[1] %></p>
+                                </a>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <center>
+                                <a href="edit_product?id=<%= p._id %>" class="btn btn-primary"
+                                   style="width: 95% ; margin-top: 10px;">Edit
+                                    Product
+                                </a>
+                            </center>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </center>
+    </div>
+    <% })} %>
+
+</div>
+</body>
+</html>

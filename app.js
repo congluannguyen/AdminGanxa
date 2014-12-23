@@ -1,10 +1,8 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 //Session:
 var session = require('express-session');
 var multer = require('multer');
@@ -14,11 +12,9 @@ mongoose.connect('mongodb://localhost/GanXa');
 //Routes
 var controllers = require('./routes/controllers');
 var app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -28,6 +24,33 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'ganxa', resave: true, saveUninitialized: true, maxAge: new Date(Date.now() + 3600000), expires: new Date(Date.now() + 3600000)}));
 app.use(multer({dest: './public/images/'}));
+
+//rewrite
+app.use(function (req, res, next) {
+    var url = req.url;
+    if (req.url.substr(-1) == '/' && req.url.length > 1) {
+        console.log("vào");
+        res.redirect(301, req.url.slice(0, -1));
+    }
+    if (req.url === '/diadiem') {
+        req.url = '/location';
+    }
+    if (req.url === '/timkiem') {
+        req.url = '/search';
+    }
+    if (req.url === '/trangchu') {
+        req.url = '/';
+    }
+    /*if (url.match("/store+")) {
+     url = url.replace('/store+','');
+     req.session.store_id_recent = url;
+     req.url = '/store_detail';
+     console.log("1");
+     res.render('store_detail');
+     }
+     console.log("2");*/
+    next();
+});
 
 app.use('/', controllers);
 
@@ -39,7 +62,6 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -61,6 +83,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;

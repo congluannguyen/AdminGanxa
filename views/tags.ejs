@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+<% if(typeof product_array != 'undefined'){ %>
+<% product_array.forEach(function(product){ %>
+<ul>
+    <li><p><a href="edit_product?id=<%=product._id%>"><%= product.product_name %></a></p></li>
+    <li><p><%= product.price %></p></li>
+</ul>
+<br>
+<% })}else{ %>
+<p><%= tags_notification %></p>
+<% } %>
+</body>
+</html>

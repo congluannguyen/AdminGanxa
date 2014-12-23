@@ -11,12 +11,10 @@
                     url: "/delete/store/"+$(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
-                        alert("xóa xong, refresh");
-                        window.location.href = "/";
-                        /*var element = document.getElementById("div" + $(this).val());
-                         $(this).parents("div" + $(this).val()).remove();
-                         alert("phèo");*/
-                        //$('#div' + $(this).val()).remove();
+                        /*var x = document.cookie;
+                        alert(x + " nha");
+                        document.cookie = "login=ok";
+                        window.location.href = "/";*/
                     }
                 });
             });
@@ -87,11 +85,9 @@
                                         <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
                                            class="btn btn-default"><i class="fa fa-pencil"></i></a>
                                         <button value="<%= store._id %>" class="btn btn-danger deletebutton"><i class="fa fa-times"></i></button>
-
                                     </div>
                                 </td>
                             </tr>
-
                             </tbody>
                             <% }) %>
                         </table>
