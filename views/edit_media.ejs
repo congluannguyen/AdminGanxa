@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<% media_array.forEach(function(media){ %>
+<form method="post" enctype="multipart/form-data">
+    <input type="text" placeholder="Media Name" name=txtMediaName value="<%=media.media_name%>">
+    <br>
+    <input type="radio" name="grpType" value="Image" <% if (media.media_type == "Image"){ %> checked <% } %>
+           class="form-control input_insertstore"> Image
+    <input type="radio" name="grpType" value="Video" <% if (media.media_type == "Video"){ %> checked <% } %>
+           class="form-control  "> Video
+    <br>
+    <input type="text" placeholder="Media Url" name="txtMediaUrl" value="<%=media.media_url%>">
+    <br>
+    <input type="file" name="ulfMediaUrl" placeholder="E"
+           accept="image/*" alt="Product Image"
+           class="form-control  input_insertstore">
+    <br>
+    <input type="submit" value="Lưu">
+</form>
+<% }) %>
+</body>
+</html>
