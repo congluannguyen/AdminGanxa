@@ -233,7 +233,16 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
+    <script>
+        var container = document.querySelector('#page-content');
+        var msnry = new Masonry(page - content, {
+            // options...
+            itemSelector: '.item',
+            columnWidth: 200
+        });
+    </script>
 </head>
+
 <body>
 <div id="page-wrapper">
     <!-- Preloader -->
@@ -266,9 +275,8 @@
                         <div class="modal-dialog">
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="map-canvas" class="map"></div>
-                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div id="map-canvas" class="map"></div>
                                 </div>
                             </div>
                         </div>
@@ -280,17 +288,16 @@
                         <div class="widget">
                             <div class="widget-advanced">
                                 <!-- Widget Header -->
-                                <div class="widget-header text-center themed-background-dark" style="background-image: url('<%= store.cover %>') ">
+                                <div class="widget-header-store text-center themed-background-dark"
+                                     style="background-image: url('<%= store.cover %>') ">
 
-                                    <h3 class="widget-content-light">
+                                    <h2 class="widget-content-light position-store">
                                         <strong><%= store.store_name %></strong><br>
-                                        <small><a href="#" data-toggle="modal" data-target="#myModal">
-                                                <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
-                                                <% if(store.address[0].room){ %>
-                                                <%= store.address[0].room %>
-                                                <% } %>
-                                            </a></small>
-                                    </h3>
+                                    </h2>
+
+<img style="width: 100%;height: 100%;" src="<%= store.cover %>">
+
+
                                 </div>
                                 <!-- END Widget Header -->
 
@@ -312,6 +319,16 @@
                                             <td><%= store.fanpage %></td>
                                         </tr>
                                         <tr>
+                                            <td class="text-right"><strong>Address</strong></td>
+                                            <td><a href="#" data-toggle="modal" data-target="#myModal">
+                                                    <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
+                                                    <% if(store.address[0].room){ %>
+                                                    <%= store.address[0].room %>
+                                                    <% } %>
+                                                </a></td>
+                                        </tr>
+
+                                        <tr>
                                             <td class="text-right"><strong>Description</strong></td>
                                             <td><%= store.description %></td>
                                         </tr>
@@ -332,8 +349,13 @@
                                         <tr>
                                             <td colspan="2">
                                                 <center>
-                                                <a href="edit_store?id=<%= store._id %>" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Edit store</a>
-                                                    <a href="insert_product?id=<%= store._id %>" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Add Product</a>
+                                                    <a href="edit_store?id=<%= store._id %>"
+                                                       class="btn btn-sm btn-primary"><i
+                                                                class="fa fa-angle-right"></i> Edit store</a>
+                                                    <a href="insert_product?id=<%= store._id %>"
+                                                       class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i>
+                                                        Add
+                                                        Product</a>
                                                 </center>
                                             </td>
                                         </tr>
@@ -348,49 +370,38 @@
                     </div>
                     <% }) %>
                     <% product_array.forEach(function (product) { %>
-                    <div class="col-md-6">
-                        <!-- Advanced Animated Gallery Widget -->
+                    <div class="col-md-4">
                         <div class="widget">
-                            <div class="widget-advanced widget-advanced-alt">
-                                <!-- Widget Header -->
-                                <div class="widget-header text-left">
-                                    <!-- For best results use an image with at least 150 pixels in height (with the width relative to how big your widget will be!) - Here I'm using a 1200x150 pixels image -->
-                                    <img src="<%= product.product_image%>" alt="background" class="widget-background animation-pulseSlow">
-                                    <h3 class="widget-content widget-content-image widget-content-light clearfix">
-                                        <a href="javascript:void(0)" class="widget-icon pull-right">
-                                            <i class="fa fa-picture-o"></i>
-                                        </a>
-                                        <a href="javascript:void(0)" class="themed-color-default"> <strong><%= product.product_name%></strong></a><br>
-                                        Tag :<small> <a href="tags?tag=<%= product.tags[0] %>"><p class="label label-primary ">
-                                                    <%= product.tags[0] %></p></a></small>
-                                    </h3>
-                                </div>
-                                <!-- END Widget Header -->
-
-                                <!-- Widget Main -->
-                                <div class="widget-main">
-                                    <p><%= product.description%></p>
-                                     <div class="gallery gallery-widget" data-toggle="lightbox-gallery">
-                                        <div class="row">
-                                            <% media_array.forEach(function (medias) { %>
-                                            <% if(medias.product_id == product._id){%>
-                                                <div class="col-xs-6 col-sm-3">
-                                                    <a href="<%= medias.media_url %>" class="gallery-link" title="Image Info">
-                                                        <img src="<%= medias.media_url %>" alt="image">
-                                                    </a>
-                                                </div>
-                                            <% }}) %>
+                            <div class="widget-simple">
+                                <a href="edit_product?id=<%= product._id%>" title="Edit product" class="btn btn-xs btn-default pull-right themed-background">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="insert_media?id=<%= product._id%>" title="Add media" class="btn btn-xs btn-default  pull-right themed-background">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                                <h4 class="widget-content">
+                                    <a href="javascript:void(0)"><strong><%= product.product_name %></strong></a>
+                                    <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
+                                                    class="label label-primary ">
+                                                <%= product.tags[0] %></p></a></small>
+                                </h4>
+                            </div>
+                            <div class="widget-extra-full themed-background-dark">
+                                <!-- Carousel -->
+                                <div id="widget-carousel1" class="carousel slide remove-margin">
+                                    <!-- Wrapper for slides -->
+                                    <div class="carousel-inner">
+                                        <div class="active item">
+                                                <img src="images/croptop.jpg" alt="image">
                                         </div>
                                     </div>
+                                    <!-- END Wrapper for slides -->
                                 </div>
-                                <!-- END Widget Main -->
+                                <!-- END Carousel -->
                             </div>
                         </div>
-                        <!-- END Advanced Animated Gallery Widget -->
                     </div>
                     <% }) %>
-
-
                 </div>
                 <!--END ROW-->
             </div>
@@ -404,12 +415,8 @@
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
-
 <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
 <script src="js/vendor/bootstrap.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/app.js"></script>
 </body>
 </html>
