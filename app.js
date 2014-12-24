@@ -53,10 +53,10 @@ app.use('/', controllers);
 // catch 404 and forward to error handler
 //đây
 app.use(function (req, res, next) {
-    res.render('404', { url: req.url });
-    /*var err = new Error('Not Found');
+    //res.render('404', { url: req.url });
+    var err = new Error('Not Found');
     err.status = 404;
-    next(err);*/
+    next(err);
 });
 
 // error handlers

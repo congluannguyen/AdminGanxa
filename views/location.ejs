@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>EJS</title>
+</head>
+<body>
+<a href="insert_location">Thêm</a>
+<br>
+<% location_array.forEach(function (location) { %>
+<br>
+<b><a href="edit_location?id=<%= location._id%>"><%= location.city %></a></b>
+<br>
+<% location.district.forEach(function (district) { %>
+<i><%= district %> - </i>
+<% }) %>
+<% }) %>
+</body>
+</html>

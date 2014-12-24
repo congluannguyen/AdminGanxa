@@ -8,11 +8,13 @@ var S = require('string');
 var im = require('imagemagick');
 var controllers = {
     get_all: function (req, res) {
+        req.session.setup = 0;
         var query_industry = industry_schema.industry.find({});
         query_industry.sort({industry_name: 1});
         query_industry.exec(function (industry_error, industry_array) {
             if (industry_array && industry_array.length > 0) {
                 req.session.industry_array = industry_array;
+                req.session.setup++;
             } else {
                 console.log(industry_error);
             }
@@ -24,6 +26,7 @@ var controllers = {
         query_store.exec(function (store_error, store_array) {
             if (store_array && store_array.length > 0) {
                 req.session.store_array = store_array;
+                req.session.setup++;
             } else {
                 console.log(store_error);
             }
@@ -34,6 +37,7 @@ var controllers = {
         query_product.exec(function (product_error, product_array) {
             if (product_array && product_array.length > 0) {
                 req.session.product_array = product_array;
+                req.session.setup++;
             } else {
                 console.log(product_error);
             }
@@ -43,10 +47,23 @@ var controllers = {
         query_location.exec(function (location_error, location_array) {
             if (location_array && location_array.length > 0) {
                 req.session.location_array = location_array;
+                req.session.setup++;
             } else {
                 console.log(location_error);
             }
         });
+
+        var query_media = media_schema.media.find({});
+        query_media.exec(function (media_error, media_array) {
+            if (media_array && media_array.length > 0) {
+                req.session.media_array_all = media_array;
+                req.session.setup++;
+            } else {
+                console.log(media_error);
+            }
+        });
+
+
     },
 
     get_index: function (req, res) {
@@ -82,12 +99,11 @@ var controllers = {
                                 req.session.product_array_recent = product_array;
                                 res.render('store_detail', {store_id_recent: store_id, store_array: store_array, industry_array: req.session.industry_array, product_array: product_array, media_array: media_array});
                             } else {
-                                res.render("store_detail", {store_id_recent: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Không có sản phẩm tồn tại."});
+                                res.render("store_detail", {store_id_recent: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
                             }
                         });
-
                     } else {
-                        res.render("store_detail", {store_id_recent: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Không có sản phẩm tồn tại."});
+                        res.render("store_detail", {store_id_recent: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
                     }
                 });
             });
@@ -268,16 +284,6 @@ var controllers = {
         if (typeof req.files.ulfCover != 'undefined') {
             var cover_upload_path = req.files.ulfCover.path;
             var cover_save_path = "public/images/" + req.files.ulfCover.name;
-            /*var fs = require('fs');
-             var gm = require('gm');
-             gm(cover_upload_path)
-             .resize(240, 240)
-             .noProfile()
-             .write(cover_save_path, function (err) {
-             if (!err) {
-             console.log('ok đó')
-             } else console.log("lỗi nghen");
-             });*/
             var option = {
                 srcPath: cover_upload_path,
                 dstPath: cover_save_path,
@@ -288,7 +294,6 @@ var controllers = {
             };
             im.crop(option, function (err, stdout, stderr) {
                 if (err) throw err;
-                console.log('Resized cover successful.');
             });
             cover_save_path = ".." + req.files.ulfCover.path.replace("public", "");
             cover_new = cover_save_path;
@@ -304,7 +309,6 @@ var controllers = {
                 width: 500
             }, function (err, stdout, stderr) {
                 if (err) throw err;
-                console.log('Resized logo successful.');
             });
             logo_save_path = ".." + req.files.ulfLogo.path.replace("public", "");
             logo_new = logo_save_path;
@@ -336,7 +340,7 @@ var controllers = {
                         query_product.sort({date: -1});
                         query_product.exec(function (product_error, product_array) {
                             if (product_array && product_array.length > 0) {
-                                res.render('store_detail', {store_id: store_id, store_array: store_array, industry_array: req.session.industry_array, product_array: product_array});
+                                res.render('store_detail', {store_id: store_id, store_array: store_array, industry_array: req.session.industry_array, product_array: product_array, media_array: req.session.media_array_all});
                             } else {
                                 res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, store_array: store_array, product_array: product_array, product_notification: "Không có sản phẩm tồn tại."});
                             }
@@ -388,7 +392,7 @@ var controllers = {
 
     get_insert_product: function (req, res) {
         controllers.get_all(req, res);
-        var store_id;
+        var store_id = req.param("id");
         if (!req.param("id")) {
             store_id = req.session.store_id_recent;
         }
@@ -442,8 +446,14 @@ var controllers = {
             date: date
         }).save(function (save_error) {
                 if (!save_error) {
-                    product_schema.product.find({id_store: store_id}, function (product_error, product_array) {
-                        res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, product_array: product_array, store_array: req.session.store_array_recent});
+                    var query_product = product_schema.product.find({id_store: store_id});
+                    query_product.sort({date: -1});
+                    query_product.exec(function (product_error, product_array) {
+                        if (product_array && product_array.length > 0) {
+                            res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, product_array: product_array, store_array: req.session.store_array_recent, media_array: req.session.media_array_all});
+                        } else {
+                            console.log(product_error);
+                        }
                     });
                 } else {
                     console.log(save_error);
@@ -677,6 +687,7 @@ var controllers = {
         if (!req.param('type')) {
             store_schema.store.find(function (store_error, store_array) {
                 industry_schema.industry.find(function (industry_error, industry_array) {
+
                     req.session.store_array = store_array;
                     req.session.industry_array = industry_array;
                     res.render('industry', {store_array: store_array, industry_array: req.session.industry_array});
@@ -684,7 +695,7 @@ var controllers = {
             });
         } else {
             store_schema.store.find({industry: {$in: [req.param("type")]}}, function (store_error, store_array) {
-                res.render('industry', {industry_array: req.session.industry_array, store_array: store_array});
+                res.render('industry', {industry_array: req.session.industry_array, store_array: store_array, industry_notification: "Không có store nào."});
             });
         }
     },
@@ -805,9 +816,9 @@ var controllers = {
                         query_product.sort({date: -1});
                         query_product.exec(function (product_error, product_array) {
                             console.log(product_array);
-                            if(pa == null){
+                            if (pa == null) {
                                 pa = product_array;
-                            }else{
+                            } else {
                                 pa = pa.concat(product_array);
                             }
                         });
@@ -824,6 +835,26 @@ var controllers = {
                 });
             }
         }
+    },
+
+    header_search: function (req, res) {
+        console.log(req.session.keyword);
+        var key = req.params.keyword;
+        var query_store = store_schema.store.find({$or: [
+            {store_name: {$regex: key, $options: 'xi'}},
+            {store_name_non_accented: {$regex: key, $options: 'xi'}}
+        ]});
+        query_store.sort({date: -1});
+        query_store.exec(function (store_error, store_array) {
+            if (store_array && store_array.length > 0) {
+                req.session.store_array = store_array;
+                console.log(store_array);
+                res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+            } else {
+                console.log("Không có.");
+                res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+            }
+        });
     },
 
     get_tag: function (req, res) {
@@ -935,14 +966,18 @@ var controllers = {
         });
     },
 
-    get_comming : function(req,res){
-        res.render('comming', {notifications : " Chua lam sao co!"});
+    get_test: function (req, res) {
+        res.render('test')
+    },
+
+    get_comming: function (req, res) {
+        res.render('comming', {notifications: " Chua lam sao co!"});
     }
 };
 
 module.exports = function (router) {
     //comming
-    router.get('/comming',controllers.get_comming);
+    router.get('/comming', controllers.get_comming);
     //index
     router.get('/', controllers.get_index);
     //store detail
@@ -969,18 +1004,28 @@ module.exports = function (router) {
     //edit media in product
     router.get('/edit_media', controllers.get_edit_media);
     router.post('/edit_media', controllers.post_edit_media);
-    //insert industry
-    router.get('/insert_industry', controllers.get_insert_industry);
-    router.post('/insert_industry', controllers.post_insert_industry);
     //industry
     router.get('/industry', controllers.get_industry);
+    //insert industry
+    //router.get('/insert_industry', controllers.get_insert_industry);
+    router.post('/industry', controllers.post_insert_industry);
     //search
     router.get('/search', controllers.get_search);
     router.post('/search', controllers.post_search);
+    router.post('/header/search/:keyword', controllers.header_search);
     //tags
     router.get('/tags', controllers.get_tag);
+    //location
+    router.get('/location', controllers.get_location);
+    //router.post('/location', controllers.post_location);
+    //insert_location
+    router.get('/insert_location', controllers.get_insert_location);
+    router.post('/insert_location', controllers.post_insert_location);
+    //edit_location
+    router.get('/edit_location', controllers.get_edit_location);
+    router.post('/edit_location', controllers.post_edit_location);
     //test
-    /*router.get('/test', controllers.get_test);
-     router.post('/test', controllers.post_test);*/
+    router.get('/test', controllers.get_test);
+    router.delete('/delete/products/:id', controllers.delete_product);
     return router;
 };
