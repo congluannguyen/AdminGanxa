@@ -32,21 +32,18 @@
 
 
                     <!--VIET TRONG NAY  -->
-
-
                     <center>
                         <div class="col-md-12">
                             <div class="row authors-list">
                                 <form action="" method="post" enctype="multipart/form-data">
-
                                     <% product_array.forEach(function (product) { %>
                                     <div class="col-md-12 input_insertstore">
-                                        <input type="text" id="a" name="txtProductName" placeholder="Tên sản phẩm"
-                                               class="form-control" value="<%=product.product_name%>">
+                                        <input type="text" id="a" name="txtProductName"  value="<%=product.product_name%>" placeholder="Tên sản phẩm"
+                                               class="form-control">
                                     </div>
                                     <div class="col-md-12 input_insertstore">
                                         <input type="text" id="o" name="txtPrice" placeholder="Giá"
-                                               class="form-control" value="<%=product.price%>">
+                                               class="form-control  " value="<%=product.price%>" pattern="^[0-9]+([\,|\.]{0,1}[0-9]{2}){0,1}$">
                                     </div>
 
                                     <div class="col-md-12">
@@ -84,7 +81,6 @@
                             </div>
                         </div>
                     </center>
-
 
 
                 </div>
