@@ -1095,7 +1095,6 @@ a.sidebar-title:focus {
 /* Widgets */
 .widget {
     background-color: #ffffff;
-    margin-bottom: 10px;
 }
 
 .widget .widget-extra-full,
