@@ -26,27 +26,6 @@
             <!-- Page content -->
             <div id="page-content">
                 <!--ROW-->
-                <div class="row">
-                    <!--VIET TRONG NAY  -->
-                    <a href="insert_media">Thêm Media</a>
-                    <br>
-                    <% product_array.forEach(function(product){ %>
-                    <%= product.product_name %>
-                    <%= product.price %>
-                    <% }) %>
-                    <br><br>Media nè:<br>
-                    <% if(typeof media_array != 'undefined'){%>
-                        <% media_array.forEach(function(media){ %>
-                        Tên: <%= media.media_name %>
-                        <br>
-                        URL: <%= media.media_url %>
-                        <br>
-                        <a href="edit_media?id=<%= media._id %>">Edit</a>
-                        <br>
-                        <% })}else{ %>
-                    <a>Không có</a>
-                        <% } %>
-                </div>
 
 
 
@@ -55,94 +34,43 @@
                     <div class="block">
                         <!-- Lightbox Gallery with Options Title -->
                         <div class="block-title">
-                            <h2><strong>Lightbox Gallery</strong> with Hover Options</h2>
+                            <% product_array.forEach(function(product){ %>
+                            <a href="" title="Edit product"
+                               class="btn btn-lg btn-default pull-right themed-background" style="margin-top: 10px;margin-right: 10px;">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a href="insert_media" title="Add media"
+                               class="btn btn-lg btn-default  pull-right themed-background" style="margin-top: 10px;margin-right: 10px;">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            <h2><strong>Media </strong>in  <%= product.product_name %></h2>
+                            <br>
+                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
+                            <% }) %>
+
+
                         </div>
                         <!-- END Lightbox Gallery with Options Title -->
 
                         <!-- Lightbox Gallery with Options Content -->
                         <div class="gallery" data-toggle="lightbox-gallery">
                             <div class="row">
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="" alt="image">
+
+                                <% if(typeof media_array != 'undefined'){%>
+                                <% media_array.forEach(function(media){ %>
+                                <div class="col-sm-6 col-xs-12 col-md-4 gallery-image">
+
+                                    <div style="height: 300px;overflow-y: hidden;">
+                                        <img src="<%= media.media_url %>"  alt="image"></div>
                                     <div class="gallery-image-options text-center">
                                         <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo10.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <a href="<%= media.media_url %>" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
+                                            <a href="edit_media?id=<%= media._id %>" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo11.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo11.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo12.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo12.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo13.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo13.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo14.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo14.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo15.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo15.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo16.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo16.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo17.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo17.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 gallery-image">
-                                    <img src="img/placeholders/photos/photo18.jpg" alt="image">
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="img/placeholders/photos/photo18.jpg" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="javascript:void(0)" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <% })};%>
+
                             </div>
                         </div>
                         <!-- END Lightbox Gallery with Options Content -->
