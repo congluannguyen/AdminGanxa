@@ -35,17 +35,20 @@
                         <div class="block-title">
 
                             <a href="" title="Edit product"
-                               class="btn btn-lg btn-default pull-right themed-background" style="margin-top: 10px;margin-right: 10px;">
+                               class="btn btn-lg btn-default pull-right themed-background"
+                               style="margin-top: 10px;margin-right: 10px;">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a href="insert_media" title="Add media"
-                               class="btn btn-lg btn-default  pull-right themed-background" style="margin-top: 10px;margin-right: 10px;">
+                               class="btn btn-lg btn-default  pull-right themed-background"
+                               style="margin-top: 10px;margin-right: 10px;">
                                 <i class="fa fa-plus"></i>
                             </a>
+
                             <h2><strong>Media </strong>in  <%= product.product_name %></h2>
                             <br>
-                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
 
+                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
 
 
                         </div>
@@ -55,35 +58,44 @@
                         <div class="gallery" data-toggle="lightbox-gallery">
                             <div class="row">
 
-                                <% if(typeof media_array != 'undefined'){%>
+                                <% if(typeof media_array != 'undefined'){ %>
                                 <% media_array.forEach(function(media){ %>
                                 <div class="col-sm-6 col-xs-12 col-md-4 gallery-image">
 
+                                    <% if (media.media_type == 'Image'){ %>
                                     <div style="height: 200px;overflow-y: hidden;">
-                                        <img src="<%= media.media_url %>"  alt="image"></div>
-                                    <div class="gallery-image-options text-center">
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="<%= media.media_url %>" class="gallery-link btn btn-sm btn-alt btn-default" title="Image Info">View</a>
-                                            <a href="edit_media?id=<%= media._id %>" class="btn btn-sm btn-alt btn-default" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        </div>
+                                        <img src="<%= media.media_url %>" alt="image">
+                                    </div>
+                                    <% }else{ %>
+                                    <div style="height: 200px;overflow-y: hidden;">
+                                        <iframe height="200" src="<%= media.media_url %>" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                     <% } %>
+                                <div class="gallery-image-options text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="<%= media.media_url %>"
+                                           class="gallery-link btn btn-sm btn-alt btn-default"
+                                           title="Image Info">View</a>
+                                        <a href="edit_media?id=<%= media._id %>" class="btn btn-sm btn-alt btn-default"
+                                           data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
                                     </div>
                                 </div>
-                                <% })};%>
-
                             </div>
+                            <% })} %>
                         </div>
-                        <!-- END Lightbox Gallery with Options Content -->
                     </div>
-                    <!-- END Lightbox Gallery with Options Block -->
+                    <!-- END Lightbox Gallery with Options Content -->
                 </div>
-                <% }) %>
-                <!--END ROW-->
+                <!-- END Lightbox Gallery with Options Block -->
             </div>
-            <!-- END Page Content -->
-            <% include ./partial/footer %>
+            <% }) %>
+            <!--END ROW-->
         </div>
-        <!-- Page content -->
+        <!-- END Page Content -->
+        <% include ./partial/footer %>
     </div>
+    <!-- Page content -->
+</div>
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
