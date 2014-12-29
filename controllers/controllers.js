@@ -50,7 +50,7 @@ var controllers = {
 
         get_industry_array: function (req, res) {
             var query_industry = industry_schema.industry.find({});
-            query_industry.sort({industry_name: 1});
+            query_industry.sort({industry_name: -1});
             query_industry.exec(function (industry_error, industry_array) {
                 if (industry_array && industry_array.length > 0) {
                     req.session.industry_array_all = industry_array;
@@ -79,6 +79,18 @@ var controllers = {
             controllers.get_location_array(req, res);
         },
 
+        get_store_by_id: function (req, res, id_store) {
+            var query_store = store_schema.store.find({_id: id_store});
+            query_store.sort({date: -1});
+            query_store.exec(function (store_error, store) {
+                if (store && store.length > 0) {
+                    req.session.store = store;
+                } else {
+                    console.log(store_error);
+                }
+            });
+        },
+
         get_index: function (req, res) {
             controllers.get_all(req, res);
             setTimeout(function () {
@@ -92,9 +104,9 @@ var controllers = {
             if (req.param("id")) {
                 id_store = req.param("id");
             } else {
-                id_store = req.session.store_id_recent;
+                id_store = req.session.store_id_current;
             }
-            req.session.store_id_recent = id_store;
+            req.session.store_id_current = id_store;
             if (id_store) {
                 store_schema.store.find({_id: id_store}, function (store_error, store_current) {
                     req.session.store_current = store_current;
@@ -205,6 +217,7 @@ var controllers = {
                 date: date
             }).save(function (error) {
                     if (!error) {
+                        controllers.get_store_array(req, res);
                         var query_store = store_schema.store.find({});
                         query_store.limit(1);
                         query_store.sort({date: -1});
@@ -224,8 +237,7 @@ var controllers = {
                         console.log(error);
                     }
                 }
-            )
-            ;
+            );
         },
 
         get_edit_store: function (req, res) {
@@ -370,7 +382,7 @@ var controllers = {
             controllers.get_all(req, res);
             var id_product;
             id_product = req.param('id');
-            req.session.product_id_recent = id_product;
+            req.session.product_id_current = id_product;
             product_schema.product.find({_id: id_product}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
                     req.session.product_array = product_array;
@@ -536,21 +548,25 @@ var controllers = {
                 product_image_save_path = ".." + product_image_save_path.replace("public", "");
                 product_image = product_image_save_path;
             }
-            product_schema.product.findByIdAndUpdate({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, description: description, product_image: product_image, tags: tags}}, function (err, result) {
-                if (!err && result) {
-                    var query_product = product_schema.product.find({id_store: req.session.store_id_recent});
+            product_schema.product.findByIdAndUpdate({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, description: description, product_image: product_image, tags: tags}}, function (error, result) {
+                if (!error && result) {
+                    var query_product = product_schema.product.find({id_store: req.session.store_id_current});
                     query_product.sort({date: -1});
                     query_product.exec(function (product_error, product_array) {
                         if (product_array && product_array.length > 0) {
+                            console.log(req.session.store_id_current);
+                            controllers.get_store_by_id(req, res, req.session.store_id_current);
                             req.session.product_array = product_array;
-                            res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_recent, store_array: req.session.store_array_recent});
+                            setTimeout(function () {
+                                res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_current, store_array: req.session.store});
+                            }, 20)
                         } else {
                             console.log("post_edit_product: " + product_error);
                             res.render('index');
                         }
                     });
                 } else {
-                    console.log(err);
+                    console.log(error);
                 }
             });
         },
@@ -566,7 +582,7 @@ var controllers = {
             if (req.param('id')) {
                 id_product = req.param('id');
             } else {
-                id_product = req.session.product_id_recent;
+                id_product = req.session.product_id_current;
             }
             if (id_product) {
                 var product_id = id_product;
@@ -577,12 +593,12 @@ var controllers = {
                 } else {
                     var media_upload_path = req.files.ulfMediaUrl.path;
                     var media_save_path = "public/images/" + req.files.ulfMediaUrl.name;
-                    var im = require('imagemagick');
-                    im.resize({
+                    var option = {
                         srcPath: media_upload_path,
                         dstPath: media_save_path,
                         width: 600
-                    }, function (err, stdout, stderr) {
+                    };
+                    im.resize(option, function (err, stdout, stderr) {
                         if (err) throw err;
                         console.log('Resized media successful.');
                     });
@@ -599,13 +615,14 @@ var controllers = {
                         if (error) {
                             console.log(error);
                         } else {
-                            product_schema.product.find({id_store: req.session.store_id_recent}, function (product_error, product_array) {
+                            console.log(req.session.store_id_current);
+                            product_schema.product.find({_id: req.session.product_id_current}, function (product_error, product) {
                                 var query_media = media_schema.media.find({product_id: id_product});
                                 query_media.sort({media_date: -1});
                                 query_media.exec(function (media_error, media_array) {
                                     if (media_array && media_array.length > 0) {
                                         req.session.media_array = media_array;
-                                        res.render('product_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_recent, store_array: req.session.store_array_recent, product_id: req.session.product_id_recent, media_array: media_array});
+                                        res.render('product_detail', {product_array: product, industry_array: req.session.industry_array_all, store_id: req.session.store_id_current, store_array: req.session.store_array_current, product_id: req.session.product_id_recent, media_array: media_array});
                                     } else {
                                         console.log(media_error);
                                     }
@@ -640,12 +657,12 @@ var controllers = {
             } else {
                 var media_upload_path = req.files.ulfMediaUrl.path;
                 var media_save_path = "public/images/" + req.files.ulfMediaUrl.name;
-                var im = require('imagemagick');
-                im.resize({
+                var option = {
                     srcPath: media_upload_path,
                     dstPath: media_save_path,
                     width: 600
-                }, function (err, stdout, stderr) {
+                };
+                im.resize(option, function (err, stdout, stderr) {
                     if (err) throw err;
                     console.log('Resized media successful.');
                 });
@@ -685,7 +702,6 @@ var controllers = {
         },
 
         post_insert_industry: function (req, res) {
-            controllers.get_all(req, res);
             var industry_name = req.body.txtIndustryName;
             //var industry_image = req.body.txtIndustryImage;
             new industry_schema.industry({
@@ -694,15 +710,8 @@ var controllers = {
                 //industry_image: industry_image
             }).save(function (save_error) {
                     if (!save_error) {
-                        var query_industry = industry_schema.industry.find({});
-                        query_industry.sort({industry_name: 1});
-                        query_industry.exec(function (industry_error, industry_array) {
-                            if (industry_array && industry_array.length > 0) {
-                                res.render('industry', {industry_array: industry_array, store_array: req.session.store_array});
-                            } else {
-                                console.log(industry_error);
-                            }
-                        });
+                        controllers.get_industry_array(req, res);
+                        res.render('industry', {industry_array: req.session.industry_array_all, store_array: req.session.store_array, industry_notification: "Không có store nào."});
                     } else {
                         console.log(save_error);
                     }
@@ -710,21 +719,21 @@ var controllers = {
         },
 
         get_industry: function (req, res) {
-            var industry_name = req.param('type');
-            if (!req.param('type')) {
-                store_schema.store.find(function (store_error, store_array) {
-                    industry_schema.industry.find(function (industry_error, industry_array) {
-
-                        req.session.store_array = store_array;
-                        req.session.industry_array = industry_array;
-                        res.render('industry', {store_array: store_array, industry_array: req.session.industry_array});
+            controllers.get_industry_array(req, res);
+            setTimeout(function () {
+                var industry_name = req.param('type');
+                if (!req.param('type')) {
+                    res.render('industry', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all, industry_notification: "Không có store nào."});
+                } else {
+                    store_schema.store.find({industry: industry_name}, function (store_error, store_array) {
+                        if(store_array.length > 0){
+                            res.render('industry', {industry_array: req.session.industry_array_all, store_array: store_array});
+                        }else{
+                            res.render('industry', {industry_array: req.session.industry_array_all, store_array: store_array, industry_notification: "Không có store nào."});
+                        }
                     });
-                });
-            } else {
-                store_schema.store.find({industry: {$in: [req.param("type")]}}, function (store_error, store_array) {
-                    res.render('industry', {industry_array: req.session.industry_array, store_array: store_array, industry_notification: "Không có store nào."});
-                });
-            }
+                }
+            }, 200);
         },
 
         get_search: function (req, res) {
