@@ -6,6 +6,8 @@ var media_schema = require('../models/media_schema');
 
 var S = require('string');
 var im = require('imagemagick');
+
+var product_image_when_edit_product;
 var controllers = {
     get_all: function (req, res) {
         req.session.setup = 0;
@@ -423,12 +425,30 @@ var controllers = {
             tags[i] = tags[i].trim();
         }
         var description = req.body.txtDescription;
-        //Media
-        var media = [];
-        var product_image_upload_path = req.files.ulfProductImage.path;
-        var product_image_save_path = "public/images/" + req.files.ulfProductImage.name;
-        product_image_save_path = ".." + product_image_save_path.replace("public", "");
-        var product_image = product_image_save_path;
+        //Product image:
+        var product_image;
+        if (!req.files.ulfProductImage) {
+            product_image = product_image_when_edit_product;
+        } else {
+            var product_image_upload_path = req.files.ulfProductImage.path;
+            var product_image_save_path = "public/images/" + req.files.ulfProductImage.name;
+            var im = require('imagemagick');
+            var option = {
+                srcPath: product_image_upload_path,
+                dstPath: product_image_save_path,
+                width: req.files.ulfProductImage.width,
+                //height: 500,
+                quality: 0.5
+                //gravity: "Center"
+            };
+            im.resize(option, function (err, stdout, stderr) {
+                if (!err) {
+                    console.log("Resize with option success.")
+                }
+            });
+            product_image_save_path = ".." + product_image_save_path.replace("public", "");
+            product_image = product_image_save_path;
+        }
         var status = true;
         var date = new Date();
         new product_schema.product({
@@ -439,7 +459,6 @@ var controllers = {
             price: price,
             tags: tags,
             description: description,
-            media: media,
             product_image: product_image,
             status: status,
             rating: [],
@@ -450,7 +469,9 @@ var controllers = {
                     query_product.sort({date: -1});
                     query_product.exec(function (product_error, product_array) {
                         if (product_array && product_array.length > 0) {
-                            res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, product_array: product_array, store_array: req.session.store_array_recent, media_array: req.session.media_array_all});
+                            setTimeout(function () {
+                                res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, product_array: product_array, store_array: req.session.store_array_recent, media_array: req.session.media_array_all});
+                            }, 500);
                         } else {
                             console.log(product_error);
                         }
@@ -467,10 +488,10 @@ var controllers = {
             var id = req.param('id');
             product_schema.product.find({_id: id}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
-                    res.render('edit_product', {product_array: product_array, industry_array: req.session.industry_array});
-                    product_array.forEach(function (p) {
-                        media = product_array.media;
+                    product_array.forEach(function (product) {
+                        product_image_when_edit_product = product.product_image;
                     });
+                    res.render('edit_product', {product_array: product_array, industry_array: req.session.industry_array});
                 } else {
                     console.log(product_error);
                 }
@@ -492,35 +513,42 @@ var controllers = {
             tags[i] = tags[i].trim();
         }
         var description = req.body.txtDescription;
-
-        //Media
-        var media = [];
-        var media_name = req.body.txtMediaName + i;
-
-        //Nếu không upload hình:
-        if (req.body.txtMediaUrl != "") {
-            var media_url = req.body.txtMediaUrl + i;
-            media.push({Name: media_name, Url: media_url});
-        } else if (req.files.ulfMedia.path) {
-            //Còn nếu có
-            var media_upload = req.files.ulfMedia + i;
-            var media_upload_path = media_upload.path;
-            var media_save_path = "public/images/" + media_upload.name;
+        //Product image:
+        var product_image;
+        if (!req.files.ulfProductImage) {
+            product_image = product_image_when_edit_product;
+        } else {
+            var product_image_upload_path = req.files.ulfProductImage.path;
+            var product_image_save_path = "public/images/" + req.files.ulfProductImage.name;
             var im = require('imagemagick');
-            im.resize({
-                srcPath: media_upload_path,
-                dstPath: media_save_path,
-                width: 600
-            }, function (err, stdout, stderr) {
-                console.log('Resize product media success.');
+            var option = {
+                srcPath: product_image_upload_path,
+                dstPath: product_image_save_path,
+                width: req.files.ulfProductImage.width,
+                //height: 500,
+                quality: 0.5
+                //gravity: "Center"
+            };
+            im.resize(options, function (err, stdout, stderr) {
+                if (!err) {
+                    console.log("Edit product, resize image success.")
+                }
             });
-            media.push({Name: media_name, Url: ".." + media_save_path.replace("public", "")});
+            product_image_save_path = ".." + product_image_save_path.replace("public", "");
+            product_image = product_image_save_path;
         }
-
-        product_schema.product.findByIdAndUpdate({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, tags: tags, description: description}}, function (err, result) {
+        product_schema.product.findByIdAndUpdate({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, description: description, product_image: product_image, tags: tags}}, function (err, result) {
             if (!err && result) {
-                product_schema.product.find({id_store: req.session.store_id_recent}, function (product_error, product_array) {
-                    res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_recent, store_array: req.session.store_array_recent});
+                var query_product = product_schema.product.find({id_store: req.session.store_id_recent});
+                query_product.sort({date: -1});
+                query_product.exec(function (product_error, product_array) {
+                    if (product_array && product_array.length > 0) {
+                        req.session.product_array = product_array;
+                        res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_recent, store_array: req.session.store_array_recent});
+                    } else {
+                        console.log("post_edit_product: " + product_error);
+                        res.render('index');
+                    }
                 });
             } else {
                 console.log(err);
@@ -570,7 +598,7 @@ var controllers = {
                 media_date: new Date()
             }).save(function (error) {
                     if (error) {
-                        console.log("lỗi save media");
+                        console.log(error);
                     } else {
                         product_schema.product.find({id_store: req.session.store_id_recent}, function (product_error, product_array) {
                             var query_media = media_schema.media.find({product_id: id_product});
@@ -702,6 +730,11 @@ var controllers = {
 
     get_search: function (req, res) {
         controllers.get_all(req, res);
+        if(req.session.header == true){
+            res.render('search', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array});
+        }else if(req.session.header == false){
+            res.render('search', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+        }
         location_schema.location.find(function (location_error, location_array) {
             if (!location_error && location_array.length > 0) {
                 req.session.location_array = location_array;
@@ -729,59 +762,61 @@ var controllers = {
         var district = req.body.optDistrict;
         var query_store;
 
-        if (type == "store" && key == "" && district == "Tất Cả Các Quận") { //tìm tất cả các store
-            console.log("1");
-            query_store = store_schema.store.find({});
-            query_store.sort({date: -1});
-            query_store.exec(function (store_error, store_array) {
-                if (store_array && store_array.length > 0) {
-                    res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                } else {
-                    console.log("Không có.");
-                    res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+        if (type == "store") {
+            if (key == "" && district == "Tất Cả Các Quận") { //tìm tất cả các store
+                console.log("1");
+                query_store = store_schema.store.find({});
+                query_store.sort({date: -1});
+                query_store.exec(function (store_error, store_array) {
+                    if (store_array && store_array.length > 0) {
+                        res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                    } else {
+                        console.log("1 - không có.");
+                        res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    }
+                });
+            } else if (key) { //tìm store, và có keyword
+                console.log("2");
+                if (district == "Tất Cả Các Quận") { //nếu không có quận
+                    console.log("2-1");
+                    query_store = store_schema.store.find({$or: [
+                        {store_name: {$regex: key, $options: 'xi'}},
+                        {store_name_non_accented: {$regex: key, $options: 'xi'}}
+                    ]});
+                } else { //nếu có quận
+                    console.log("2-2");
+                    query_store = store_schema.store.find({
+                        $and: [
+                            {$or: [
+                                {store_name: {$regex: key, $options: 'xi'}},
+                                {store_name_non_accented: {$regex: key, $options: 'xi'}}
+                            ]},
+                            {address: {$elemMatch: {district: district}}}
+                        ]
+                    });
                 }
-            });
-        } else if (type == "store" && key) { //tìm store, và có keyword
-            console.log("2");
-            if (district == "Tất Cả Các Quận") { //nếu không có quận
-                console.log("2-1");
-                query_store = store_schema.store.find({$or: [
-                    {store_name: {$regex: key, $options: 'xi'}},
-                    {store_name_non_accented: {$regex: key, $options: 'xi'}}
-                ]});
-            } else { //nếu có quận
-                console.log("2-2");
-                query_store = store_schema.store.find({
-                    $and: [
-                        {$or: [
-                            {store_name: {$regex: key, $options: 'xi'}},
-                            {store_name_non_accented: {$regex: key, $options: 'xi'}}
-                        ]},
-                        {address: {$elemMatch: {district: district}}}
-                    ]
+                query_store.sort({date: -1});
+                query_store.exec(function (store_error, store_array) {
+                    if (store_array && store_array.length > 0) {
+                        res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                    } else if (store_array.length == 0) {
+                        console.log("2 - Không có.");
+                        res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    }
+                });
+            } else if (key == "" && district != "Tất Cả Các Quận") { //tìm store, không keyword, có chọn quận
+                console.log("3");
+                query_store = store_schema.store.find({address: {$elemMatch: {district: district}}});
+                query_store.sort({date: -1});
+                query_store.exec(function (store_error, store_array) {
+                    if (store_array && store_array.length > 0) {
+                        res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                    } else {
+                        console.log("3 - Không có.");
+                        res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    }
                 });
             }
-            query_store.sort({date: -1});
-            query_store.exec(function (store_error, store_array) {
-                if (store_array && store_array.length > 0) {
-                    res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                } else if (store_array.length == 0) {
-                    console.log("Không có.");
-                    res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-                }
-            });
-        } else if (type == "store" && key == "" && district != "Tất Cả Các Quận") { //tìm store, không keyword, có chọn quận
-            console.log("3");
-            query_store = store_schema.store.find({address: {$elemMatch: {district: district}}});
-            query_store.sort({date: -1});
-            query_store.exec(function (store_error, store_array) {
-                if (store_array && store_array.length > 0) {
-                    res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                } else {
-                    console.log("Không có.");
-                    res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-                }
-            });
         } else if (type == "product") {
             console.log("4");
             if (district == "Tất Cả Các Quận") { //Không có quận.
@@ -793,7 +828,7 @@ var controllers = {
                     if (!product_error && product_array && product_array.length > 0) {
                         res.render('search', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
                     } else {
-                        console.log("Không có.");
+                        console.log("4-1 Không có.");
                         res.render('search', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
                     }
                 });
@@ -802,11 +837,13 @@ var controllers = {
                 query_store = store_schema.store.find({address: {$elemMatch: {district: district}}});
                 query_store.sort({date: -1});
                 query_store.exec(function (store_error, store_array) {
-                    var pa;
-                    store_array.forEach(function (value) {
+                    var product_array_render;
+                    var count_store = 0;
+                    store_array.forEach(function (store) {
+                        count_store++;
                         var query_product = product_schema.product.find({
                             $and: [
-                                {id_store: value._id},
+                                {id_store: store._id},
                                 {$or: [
                                     {product_name: {$regex: key, $options: 'xi'}},
                                     {product_name_non_accented: {$regex: key, $options: 'xi'}}
@@ -816,21 +853,21 @@ var controllers = {
                         query_product.sort({date: -1});
                         query_product.exec(function (product_error, product_array) {
                             console.log(product_array);
-                            if (pa == null) {
-                                pa = product_array;
+                            if (product_array_render == null) {
+                                product_array_render = product_array;
                             } else {
-                                pa = pa.concat(product_array);
+                                product_array_render = product_array_render.concat(product_array);
                             }
                         });
                     });
                     setTimeout(function () {
-                        console.log(pa);
-                        if (pa && pa.length > 0) {
-                            res.render('search', {product_array: pa, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                        } else {
-                            console.log("Không có.");
-                            res.render('search', {product_array: pa, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-                        }
+                    console.log(product_array_render);
+                    if (product_array_render && product_array_render.length > 0) {
+                        res.render('search', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                    } else {
+                        console.log("4-2 Không có.");
+                        res.render('search', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    }
                     }, 20);
                 });
             }
@@ -838,7 +875,6 @@ var controllers = {
     },
 
     header_search: function (req, res) {
-        console.log(req.session.keyword);
         var key = req.params.keyword;
         var query_store = store_schema.store.find({$or: [
             {store_name: {$regex: key, $options: 'xi'}},
@@ -848,10 +884,11 @@ var controllers = {
         query_store.exec(function (store_error, store_array) {
             if (store_array && store_array.length > 0) {
                 req.session.store_array = store_array;
-                console.log(store_array);
+                req.session.header = true;
+                req.session.store_array_header_search = store_array;
                 res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
             } else {
-                console.log("Không có.");
+                req.session.header = false;
                 res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
             }
         });
