@@ -398,7 +398,7 @@ var controllers = {
                         }
                     });
                 } else {
-                    res.render('store_detail', {store_array: req.session.store_array_recent, product_array: req.session.product_array_recent, industry_array: req.session.industry_array});
+                    res.render('store_detail', {store_array: req.session.store_array_current, product_array: req.session.product_array_curent, industry_array: req.session.industry_array});
                 }
             })
         },
