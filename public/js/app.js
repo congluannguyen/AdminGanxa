@@ -500,7 +500,7 @@ var App = function() {
         var chatMsg         = '';
 
         // Initialize scrolling on chat talk list
-        $('.chat-talk-messages').slimScroll({ height: 210, color: '#fff', size: '3px', position: 'left', touchScrollStep: 100 });
+        //$('.chat-talk-messages').slimScroll({ height: 210, color: '#fff', size: '3px', position: 'left', touchScrollStep: 100 });
 
         // If a chat user is clicked show the chat talk
         $('a', chatUsers).click(function(){

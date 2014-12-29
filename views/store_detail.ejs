@@ -233,14 +233,7 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-    <script>
-        var container = document.querySelector('#page-content');
-        var msnry = new Masonry(page - content, {
-            // options...
-            itemSelector: '.item',
-            columnWidth: 200
-        });
-    </script>
+
 </head>
 
 <body>
@@ -269,17 +262,14 @@
                 <div class="row">
 
                     <!--popup-->
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="popup-map" tabindex="-1" role="dialog"
                          aria-labelledby="myModalLabel"
                          aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-2"></div>
+                        <!--<div class="modal-dialog">-->
+                            <!--<div class="modal-body">-->
                                     <div id="map-canvas" class="map"></div>
-                                </div>
-                            </div>
-                        </div>
+                                <!--</div>-->
+                        <!--</div>-->
                     </div>
                     <!--end popup-->
                     <% store_array.forEach(function (store) { %>
@@ -312,45 +302,46 @@
                                     <table class="table table-borderless table-striped table-vcenter">
                                         <tbody>
                                         <tr>
-                                            <td class="text-left"><strong>Website</strong></td>
+                                            <td class="text-right"><strong>Website</strong></td>
                                             <td><%= store.website %></td>
                                             <!--<td rowspan="7">-->
-                                                <!--aaa-->
                                                 <!--<div id="map-canvas" class="map"></div>-->
-                                                <!--aa-->
                                             <!--</td>-->
                                         </tr>
 
 
                                         <tr>
-                                            <td class="text-left"><strong>Fan page</strong></td>
+                                            <td class="text-right"><strong>Fan page</strong></td>
                                             <td><%= store.fanpage %></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-left"><strong>Address</strong></td>
-                                            <td style="white-space: nowrap;">
+                                            <td class="text-right"><strong>Address</strong></td>
+                                            <td style="white-space: pre-line;">
+                                                <a href="" data-toggle="modal" data-target="#popup-map">
+
                                                 <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
                                                 <% if(store.address[0].room){ %>
                                                 <%= store.address[0].room %>
                                                 <% } %>
+                                                </a>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td class="text-left"><strong>Description</strong></td>
+                                            <td class="text-right"><strong>Description</strong></td>
                                             <td><%= store.description %></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-left"><strong>Time of work</strong></td>
+                                            <td class="text-right"><strong>Time of work</strong></td>
                                             <td><%= store.hours_of_work %></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-left"><strong>Industry</strong></td>
+                                            <td class="text-right"><strong>Industry</strong></td>
                                             <td><a href="industry?type=<%= store.industry %>"><%= store.industry %></a>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-left"><strong>Status</strong></td>
+                                            <td class="text-right"><strong>Status</strong></td>
                                             <td><span class="label label-success"><i
                                                             class="fa fa-check"></i> Active</span></td>
                                         </tr>
@@ -390,7 +381,7 @@
                                     <i class="fa fa-plus"></i>
                                 </a>
                                 <h4 class="widget-content">
-                                    <a href="javascript:void(0)"><strong><%= product.product_name %></strong></a>
+                                    <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
                                     <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
                                                     class="label label-primary ">
                                                 <%= product.tags[0] %></p></a></small>
@@ -428,7 +419,6 @@
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
 <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
-<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
-<script src="js/vendor/bootstrap.min.js"></script>
+
 </body>
 </html>
