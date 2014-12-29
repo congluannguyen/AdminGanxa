@@ -481,7 +481,7 @@ var controllers = {
                         query_product.exec(function (product_error, product_array) {
                             if (product_array && product_array.length > 0) {
                                 setTimeout(function () {
-                                    res.render("store_detail", {store_id: store_id, industry_array: req.session.industry_array, product_array: product_array, store_array: req.session.store_array_recent, media_array: req.session.media_array_all});
+                                    res.render("store_detail", {store_id: store_id, store_array: req.session.store_current, product_array: product_array, industry_array: req.session.industry_array});
                                 }, 500);
                             } else {
                                 console.log(product_error);
@@ -622,7 +622,7 @@ var controllers = {
                                 query_media.exec(function (media_error, media_array) {
                                     if (media_array && media_array.length > 0) {
                                         req.session.media_array = media_array;
-                                        res.render('product_detail', {product_array: product, industry_array: req.session.industry_array_all, store_id: req.session.store_id_current, store_array: req.session.store_array_current, product_id: req.session.product_id_recent, media_array: media_array});
+                                        res.render('product_detail', {product_array: product, industry_array: req.session.industry_array_all, store_id: req.session.store_id_current, store_array: req.session.store_current, product_id: req.session.product_id_current, media_array: media_array});
                                     } else {
                                         console.log(media_error);
                                     }
