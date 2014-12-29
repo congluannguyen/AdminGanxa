@@ -68,36 +68,38 @@
                                     </div>
                                     <% }else{ %>
                                     <div style="height: 200px;overflow-y: hidden;">
-                                        <iframe height="200" src="<%= media.media_url %>" frameborder="0" allowfullscreen></iframe>
+                                        <iframe height="200" src="<%= media.media_url %>" frameborder="0"
+                                                allowfullscreen></iframe>
                                     </div>
-                                     <% } %>
-                                <div class="gallery-image-options text-center">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="<%= media.media_url %>"
-                                           class="gallery-link btn btn-sm btn-alt btn-default"
-                                           title="Image Info">View</a>
-                                        <a href="edit_media?id=<%= media._id %>" class="btn btn-sm btn-alt btn-default"
-                                           data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                    <% } %>
+                                    <div class="gallery-image-options text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="<%= media.media_url %>"
+                                               class="gallery-link btn btn-sm btn-alt btn-default"
+                                               title="Image Info">View</a>
+                                            <a href="edit_media?id=<%= media._id %>"
+                                               class="btn btn-sm btn-alt btn-default"
+                                               data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                        </div>
                                     </div>
                                 </div>
+                                <% })}else{ %>
+                                <p><%= media_notification %></p>
+                                <% } %>
                             </div>
-                            <% })}else{ %>
-                                <p><%=media_notification%></p>
-                                <%}%>
                         </div>
+                        <!-- END Lightbox Gallery with Options Content -->
                     </div>
-                    <!-- END Lightbox Gallery with Options Content -->
+                    <!-- END Lightbox Gallery with Options Block -->
                 </div>
-                <!-- END Lightbox Gallery with Options Block -->
+                <% }) %>
+                <!--END ROW-->
             </div>
-            <% }) %>
-            <!--END ROW-->
+            <!-- END Page Content -->
+            <% include ./partial/footer %>
         </div>
-        <!-- END Page Content -->
-        <% include ./partial/footer %>
+        <!-- Page content -->
     </div>
-    <!-- Page content -->
-</div>
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
