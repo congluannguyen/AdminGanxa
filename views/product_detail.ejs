@@ -27,14 +27,13 @@
             <div id="page-content">
                 <!--ROW-->
 
-
-
+                <% product_array.forEach(function(product){ %>
                 <div class="col-md-12">
                     <!-- Lightbox Gallery with Options Block -->
                     <div class="block">
                         <!-- Lightbox Gallery with Options Title -->
                         <div class="block-title">
-                            <% product_array.forEach(function(product){ %>
+
                             <a href="" title="Edit product"
                                class="btn btn-lg btn-default pull-right themed-background" style="margin-top: 10px;margin-right: 10px;">
                                 <i class="fa fa-pencil"></i>
@@ -46,7 +45,7 @@
                             <h2><strong>Media </strong>in  <%= product.product_name %></h2>
                             <br>
                             <h2><strong>Price </strong>  <%= product.price %> VND</h2>
-                            <% }) %>
+
 
 
                         </div>
@@ -60,7 +59,7 @@
                                 <% media_array.forEach(function(media){ %>
                                 <div class="col-sm-6 col-xs-12 col-md-4 gallery-image">
 
-                                    <div style="height: 300px;overflow-y: hidden;">
+                                    <div style="height: 200px;overflow-y: hidden;">
                                         <img src="<%= media.media_url %>"  alt="image"></div>
                                     <div class="gallery-image-options text-center">
                                         <div class="btn-group btn-group-sm">
@@ -77,7 +76,7 @@
                     </div>
                     <!-- END Lightbox Gallery with Options Block -->
                 </div>
-
+                <% }) %>
                 <!--END ROW-->
             </div>
             <!-- END Page Content -->
