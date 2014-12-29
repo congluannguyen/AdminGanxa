@@ -70,3 +70,15 @@ a:active {
     position: absolute;
     margin-left: 43%;
 }
+.edit{
+    position: absolute;
+    top: 0;
+    bottom: 200px;
+    left: 0;
+    right: 0;
+    display: none;
+    padding: 10px;
+}
+.gallery-image:hover .edit {
+    display: block;
+}
