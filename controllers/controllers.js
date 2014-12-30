@@ -652,7 +652,7 @@ var controllers = {
             if (req.param('id')) {
                 id = req.param('id');
             } else {
-                id = req.session.media_id_recent;
+                id = req.session.media_id_current;
             }
             media_schema.media.find({_id: id}, function (media_error, media_array) {
                 res.render('edit_media', {media_array: media_array});
@@ -1079,24 +1079,25 @@ module.exports = function (router) {
     //industry
     router.get('/industry', controllers.get_industry);
     //insert industry
-    //router.get('/insert_industry', controllers.get_insert_industry);
     router.post('/industry', controllers.post_insert_industry);
 
     //search
     router.get('/search', controllers.get_search);
     router.post('/search', controllers.post_search);
     router.post('/header/search/:keyword', controllers.header_search);
+
     //tags
     router.get('/tags', controllers.get_tag);
+
     //location
     router.get('/location', controllers.get_location);
-    //router.post('/location', controllers.post_location);
     //insert_location
     router.get('/insert_location', controllers.get_insert_location);
     router.post('/insert_location', controllers.post_insert_location);
     //edit_location
     router.get('/edit_location', controllers.get_edit_location);
     router.post('/edit_location', controllers.post_edit_location);
+
     //test
     router.get('/test', controllers.get_test);
 
