@@ -12,10 +12,10 @@ var product_image_when_edit_product;
 var controllers = {
 
         get_store_array: function (req, res) {
-            var query_store = store_schema.store.find({});
-            //query_store.limit(8);
-            query_store.sort({date: -1});
-            query_store.exec(function (store_error, store_array) {
+            var store_query = store_schema.store.find({});
+            //store_query.limit(8);
+            store_query.sort({date: -1});
+            store_query.exec(function (store_error, store_array) {
                 if (store_array && store_array.length > 0) {
                     req.session.store_array_all = store_array;
                 } else {
@@ -25,9 +25,9 @@ var controllers = {
         },
 
         get_product_array: function (req, res) {
-            var query_product = product_schema.product.find({});
-            query_product.sort({date: -1});
-            query_product.exec(function (product_error, product_array) {
+            var product_query = product_schema.product.find({});
+            product_query.sort({date: -1});
+            product_query.exec(function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
                     req.session.product_array_all = product_array;
                 } else {
@@ -37,9 +37,9 @@ var controllers = {
         },
 
         get_media_array: function (req, res) {
-            var query_media = media_schema.media.find({});
-            query_media.sort({media_date: -1});
-            query_media.exec(function (media_error, media_array) {
+            var media_query = media_schema.media.find({});
+            media_query.sort({media_date: -1});
+            media_query.exec(function (media_error, media_array) {
                 if (media_array && media_array.length > 0) {
                     req.session.media_array_all = media_array;
                 } else {
@@ -49,9 +49,9 @@ var controllers = {
         },
 
         get_industry_array: function (req, res) {
-            var query_industry = industry_schema.industry.find({});
-            query_industry.sort({industry_name: -1});
-            query_industry.exec(function (industry_error, industry_array) {
+            var industry_query = industry_schema.industry.find({});
+            industry_query.sort({industry_name: -1});
+            industry_query.exec(function (industry_error, industry_array) {
                 if (industry_array && industry_array.length > 0) {
                     req.session.industry_array_all = industry_array;
                 } else {
@@ -61,8 +61,8 @@ var controllers = {
         },
 
         get_location_array: function (req, res) {
-            var query_location = location_schema.location.find({});
-            query_location.exec(function (location_error, location_array) {
+            var location_query = location_schema.location.find({});
+            location_query.exec(function (location_error, location_array) {
                 if (location_array && location_array.length > 0) {
                     req.session.location_array_all = location_array;
                 } else {
@@ -80,9 +80,9 @@ var controllers = {
         },
 
         get_store_by_id: function (req, res, id_store) {
-            var query_store = store_schema.store.find({_id: id_store});
-            query_store.sort({date: -1});
-            query_store.exec(function (store_error, store) {
+            var store_query = store_schema.store.find({_id: id_store});
+            store_query.sort({date: -1});
+            store_query.exec(function (store_error, store) {
                 if (store && store.length > 0) {
                     req.session.store = store;
                 } else {
@@ -110,9 +110,9 @@ var controllers = {
             if (id_store) {
                 store_schema.store.find({_id: id_store}, function (store_error, store_current) {
                     req.session.store_current = store_current;
-                    var query_product = product_schema.product.find({"id_store": id_store});
-                    query_product.sort({date: -1});
-                    query_product.exec(function (product_error, product_array) {
+                    var product_query = product_schema.product.find({"id_store": id_store});
+                    product_query.sort({date: -1});
+                    product_query.exec(function (product_error, product_array) {
                         if (product_array && product_array.length > 0) {
                             req.session.product_array_curent = product_array;
                             res.render('store_detail', {store_id_current: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, media_array: req.session.media_array_all});
@@ -218,10 +218,10 @@ var controllers = {
             }).save(function (error) {
                     if (!error) {
                         controllers.get_store_array(req, res);
-                        var query_store = store_schema.store.find({});
-                        query_store.limit(1);
-                        query_store.sort({date: -1});
-                        query_store.exec(function (store_error, store_current) {
+                        var store_query = store_schema.store.find({});
+                        store_query.limit(1);
+                        store_query.sort({date: -1});
+                        store_query.exec(function (store_error, store_current) {
                                 if (store_current && store_current.length > 0) {
                                     req.session.store_array_current = store_current;
                                     var id_store = store_current[0]._id;
@@ -252,9 +252,9 @@ var controllers = {
                             location_schema.location.find(function (location_error, location_array) {
                                 if (!location_error && location_array.length > 0) {
                                     req.session.location_array = location_array;
-                                    var query_industry = industry_schema.industry.find({});
-                                    query_industry.sort({industry_name: 1});
-                                    query_industry.exec(function (industry_error, industry_array) {
+                                    var industry_query = industry_schema.industry.find({});
+                                    industry_query.sort({industry_name: 1});
+                                    industry_query.exec(function (industry_error, industry_array) {
                                         if (industry_array && industry_array.length > 0) {
                                             res.render('edit_store', {store_array: store_array, product_array: product_array, industry_array: industry_array, location_array: location_array});
                                         } else {
@@ -343,15 +343,15 @@ var controllers = {
                 fanpage: fanpage
             }}, function (error, result) {
                 if (!error && result) {
-                    var query_store = store_schema.store.find({"_id": store_id});
-                    query_store.limit(8);
-                    query_store.sort({date: -1});
-                    query_store.exec(function (store_error, store_array) {
+                    var store_query = store_schema.store.find({"_id": store_id});
+                    store_query.limit(8);
+                    store_query.sort({date: -1});
+                    store_query.exec(function (store_error, store_array) {
                         if (store_array && store_array.length > 0) {
-                            var query_product = product_schema.product.find({"id_store": store_id});
-                            query_product.limit(10);
-                            query_product.sort({date: -1});
-                            query_product.exec(function (product_error, product_array) {
+                            var product_query = product_schema.product.find({"id_store": store_id});
+                            product_query.limit(10);
+                            product_query.sort({date: -1});
+                            product_query.exec(function (product_error, product_array) {
                                 if (product_array && product_array.length > 0) {
                                     res.render('store_detail', {store_id: store_id, store_array: store_array, industry_array: req.session.industry_array, product_array: product_array, media_array: req.session.media_array_all});
                                 } else {
@@ -386,9 +386,9 @@ var controllers = {
             product_schema.product.find({_id: id_product}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
                     req.session.product_array = product_array;
-                    var query_media = media_schema.media.find({product_id: id_product});
-                    query_media.sort({media_date: -1});
-                    query_media.exec(function (media_error, media_array) {
+                    var media_query = media_schema.media.find({product_id: id_product});
+                    media_query.sort({media_date: -1});
+                    media_query.exec(function (media_error, media_array) {
                         console.log(media_array);
                         if (media_array && media_array.length > 0) {
                             req.session.media_array = media_array;
@@ -436,6 +436,7 @@ var controllers = {
                 tags[i] = tags[i].trim();
             }
             var description = req.body.txtDescription;
+            console.log(description);
             //Product image:
             var product_image;
             if (!req.files.ulfProductImage) {
@@ -476,9 +477,9 @@ var controllers = {
                 date: date
             }).save(function (save_error) {
                     if (!save_error) {
-                        var query_product = product_schema.product.find({id_store: store_id});
-                        query_product.sort({date: -1});
-                        query_product.exec(function (product_error, product_array) {
+                        var product_media = product_schema.product.find({id_store: store_id});
+                        product_media.sort({date: -1});
+                        product_media.exec(function (product_error, product_array) {
                             if (product_array && product_array.length > 0) {
                                 setTimeout(function () {
                                     res.render("store_detail", {store_id: store_id, store_array: req.session.store_current, product_array: product_array, industry_array: req.session.industry_array});
@@ -550,16 +551,16 @@ var controllers = {
             }
             product_schema.product.findByIdAndUpdate({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, description: description, product_image: product_image, tags: tags}}, function (error, result) {
                 if (!error && result) {
-                    var query_product = product_schema.product.find({id_store: req.session.store_id_current});
-                    query_product.sort({date: -1});
-                    query_product.exec(function (product_error, product_array) {
+                    var product_query = product_schema.product.find({id_store: req.session.store_id_current});
+                    product_query.sort({date: -1});
+                    product_query.exec(function (product_error, product_array) {
                         if (product_array && product_array.length > 0) {
                             console.log(req.session.store_id_current);
                             controllers.get_store_by_id(req, res, req.session.store_id_current);
                             req.session.product_array = product_array;
                             setTimeout(function () {
                                 res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_current, store_array: req.session.store});
-                            }, 20)
+                            }, 200)
                         } else {
                             console.log("post_edit_product: " + product_error);
                             res.render('index');
@@ -617,9 +618,9 @@ var controllers = {
                         } else {
                             console.log(req.session.store_id_current);
                             product_schema.product.find({_id: req.session.product_id_current}, function (product_error, product) {
-                                var query_media = media_schema.media.find({product_id: id_product});
-                                query_media.sort({media_date: -1});
-                                query_media.exec(function (media_error, media_array) {
+                                var media_query = media_schema.media.find({product_id: id_product});
+                                media_query.sort({media_date: -1});
+                                media_query.exec(function (media_error, media_array) {
                                     if (media_array && media_array.length > 0) {
                                         req.session.media_array = media_array;
                                         res.render('product_detail', {product_array: product, industry_array: req.session.industry_array_all, store_id: req.session.store_id_current, store_array: req.session.store_current, product_id: req.session.product_id_current, media_array: media_array});
@@ -674,11 +675,17 @@ var controllers = {
                 media_type: media_type,
                 media_url: media_url
             }, function (error, result) {
-                if (result) {
-                    product_schema.product.find({_id: req.session.product_id_recent}, function (product_error, product_array) {
+                if (result) { //sort -1
+                    product_schema.product.find({_id: req.session.product_id_current}, function (product_error, product_array) {
                         if (product_array.length > 0) {
-                            media_schema.media.find({product_id: req.session.product_id_recent}, function (media_error, media_array) {
-                                res.render('product_detail', {product_array: product_array, media_array: media_array, industry_array: req.session.industry_array});
+                            var media_query = media_schema.media.find({product_id: req.session.product_id_current});
+                            media_query.sort({media_date: -1});
+                            media_query.exec(function (media_error, media_array) {
+                                if (media_array && media_array.length > 0) {
+                                    res.render('product_detail', {product_array: product_array, media_array: media_array, industry_array: req.session.industry_array});
+                                } else {
+                                    console.log(media_error);
+                                }
                             });
                         } else {
                             console.log(product_array);
@@ -689,9 +696,9 @@ var controllers = {
         },
 
         get_insert_industry: function (req, res) {
-            var query_industry = industry_schema.industry.find({});
-            query_industry.sort({industry_name: 1});
-            query_industry.exec(function (industry_error, industry_array) {
+            var industry_query = industry_schema.industry.find({});
+            industry_query.sort({industry_name: 1});
+            industry_query.exec(function (industry_error, industry_array) {
                 if (industry_array && industry_array.length > 0) {
                     req.session.industry_array = industry_array;
                     res.render('insert_industry', {industry_array: req.session.industry_array});
@@ -746,9 +753,9 @@ var controllers = {
             location_schema.location.find(function (location_error, location_array) {
                 if (!location_error && location_array.length > 0) {
                     req.session.location_array = location_array;
-                    var query_industry = industry_schema.industry.find({});
-                    query_industry.sort({industry_name: 1});
-                    query_industry.exec(function (industry_error, industry_array) {
+                    var industry_query = industry_schema.industry.find({});
+                    industry_query.sort({industry_name: 1});
+                    industry_query.exec(function (industry_error, industry_array) {
                         if (industry_array && industry_array.length > 0) {
                             req.session.industry_array = industry_array;
                             res.render('search', {industry_array: req.session.industry_array, location_array: location_array});
@@ -768,14 +775,14 @@ var controllers = {
             }
             var type = req.body.type;
             var district = req.body.optDistrict;
-            var query_store;
+            var store_query;
 
             if (type == "store") {
                 if (key == "" && district == "Tất Cả Các Quận") { //tìm tất cả các store
                     console.log("1");
-                    query_store = store_schema.store.find({});
-                    query_store.sort({date: -1});
-                    query_store.exec(function (store_error, store_array) {
+                    store_query = store_schema.store.find({});
+                    store_query.sort({date: -1});
+                    store_query.exec(function (store_error, store_array) {
                         if (store_array && store_array.length > 0) {
                             res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
                         } else {
@@ -787,13 +794,13 @@ var controllers = {
                     console.log("2");
                     if (district == "Tất Cả Các Quận") { //nếu không có quận
                         console.log("2-1");
-                        query_store = store_schema.store.find({$or: [
+                        store_query = store_schema.store.find({$or: [
                             {store_name: {$regex: key, $options: 'xi'}},
                             {store_name_non_accented: {$regex: key, $options: 'xi'}}
                         ]});
                     } else { //nếu có quận
                         console.log("2-2");
-                        query_store = store_schema.store.find({
+                        store_query = store_schema.store.find({
                             $and: [
                                 {$or: [
                                     {store_name: {$regex: key, $options: 'xi'}},
@@ -803,8 +810,8 @@ var controllers = {
                             ]
                         });
                     }
-                    query_store.sort({date: -1});
-                    query_store.exec(function (store_error, store_array) {
+                    store_query.sort({date: -1});
+                    store_query.exec(function (store_error, store_array) {
                         if (store_array && store_array.length > 0) {
                             res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
                         } else if (store_array.length == 0) {
@@ -814,9 +821,9 @@ var controllers = {
                     });
                 } else if (key == "" && district != "Tất Cả Các Quận") { //tìm store, không keyword, có chọn quận
                     console.log("3");
-                    query_store = store_schema.store.find({address: {$elemMatch: {district: district}}});
-                    query_store.sort({date: -1});
-                    query_store.exec(function (store_error, store_array) {
+                    store_query = store_schema.store.find({address: {$elemMatch: {district: district}}});
+                    store_query.sort({date: -1});
+                    store_query.exec(function (store_error, store_array) {
                         if (store_array && store_array.length > 0) {
                             res.render('search', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
                         } else {
@@ -842,14 +849,14 @@ var controllers = {
                     });
                 } else { //Có quận.
                     console.log("4-2");
-                    query_store = store_schema.store.find({address: {$elemMatch: {district: district}}});
-                    query_store.sort({date: -1});
-                    query_store.exec(function (store_error, store_array) {
+                    store_query = store_schema.store.find({address: {$elemMatch: {district: district}}});
+                    store_query.sort({date: -1});
+                    store_query.exec(function (store_error, store_array) {
                         var product_array_render;
                         var count_store = 0;
                         store_array.forEach(function (store) {
                             count_store++;
-                            var query_product = product_schema.product.find({
+                            var product_query = product_schema.product.find({
                                 $and: [
                                     {id_store: store._id},
                                     {$or: [
@@ -858,8 +865,8 @@ var controllers = {
                                     ]}
                                 ]
                             });
-                            query_product.sort({date: -1});
-                            query_product.exec(function (product_error, product_array) {
+                            product_query.sort({date: -1});
+                            product_query.exec(function (product_error, product_array) {
                                 console.log(product_array);
                                 if (product_array_render == null) {
                                     product_array_render = product_array;
@@ -884,12 +891,12 @@ var controllers = {
 
         header_search: function (req, res) {
             var key = req.params.keyword;
-            var query_store = store_schema.store.find({$or: [
+            var store_query = store_schema.store.find({$or: [
                 {store_name: {$regex: key, $options: 'xi'}},
                 {store_name_non_accented: {$regex: key, $options: 'xi'}}
             ]});
-            query_store.sort({date: -1});
-            query_store.exec(function (store_error, store_array) {
+            store_query.sort({date: -1});
+            store_query.exec(function (store_error, store_array) {
                 if (store_array && store_array.length > 0) {
                     req.session.store_array = store_array;
                     req.session.header = true;
