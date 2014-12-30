@@ -636,7 +636,6 @@ var controllers = {
             }
         },
 
-
         delete_media: function (req, res) {
             media_schema.media.findByIdAndRemove(req.params.id, function (remove_error) {
                 if (!remove_error) {
