@@ -636,6 +636,16 @@ var controllers = {
             }
         },
 
+        delete_media: function (req, res) {
+            media_schema.media.findByIdAndRemove(req.params.id, function (remove_error) {
+                if (!remove_error) {
+                    return res.send('');
+                } else {
+                    console.log(remove_error);
+                }
+            });
+        },
+
         get_edit_media: function (req, res) {
             controllers.get_all(req, res);
             var id;
@@ -733,9 +743,9 @@ var controllers = {
                     res.render('industry', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all, industry_notification: "Không có store nào."});
                 } else {
                     store_schema.store.find({industry: industry_name}, function (store_error, store_array) {
-                        if(store_array.length > 0){
+                        if (store_array.length > 0) {
                             res.render('industry', {industry_array: req.session.industry_array_all, store_array: store_array});
-                        }else{
+                        } else {
                             res.render('industry', {industry_array: req.session.industry_array_all, store_array: store_array, industry_notification: "Không có store nào."});
                         }
                     });
@@ -1031,37 +1041,47 @@ var controllers = {
 module.exports = function (router) {
     //comming
     router.get('/comming', controllers.get_comming);
+
     //index
     router.get('/', controllers.get_index);
+
     //store detail
     router.get('/store_detail', controllers.get_store_detail);
-    //insert store
+    //store insert
     router.get('/insert_store', controllers.get_insert_store);
     router.post('/insert_store', controllers.post_insert_store);
-    //edit store
+    //store delete
+    router.delete('/delete/store/:id', controllers.delete_store);
+    //store edit
     router.get('/edit_store', controllers.get_edit_store);
     router.post('/edit_store', controllers.post_edit_store);
-    //delete store
-    router.delete('/delete/store/:id', controllers.delete_store);
+
     //product detail
     router.get('/product_detail', controllers.get_product_detail);
-    //insert product
+    //product insert
     router.get('/insert_product', controllers.get_insert_product);
     router.post('/insert_product', controllers.post_insert_product);
-    //edit product
+    //product delete
+    router.delete('/delete/product/:id', controllers.delete_product);
+    //product edit
     router.get('/edit_product', controllers.get_edit_product);
     router.post('/edit_product', controllers.post_edit_product);
+
     //insert media in product
     router.get('/insert_media', controllers.get_insert_media);
     router.post('/insert_media', controllers.post_insert_media);
+    //delete media in product
+    router.delete('/delete/media/:id', controllers.delete_media);
     //edit media in product
     router.get('/edit_media', controllers.get_edit_media);
     router.post('/edit_media', controllers.post_edit_media);
+
     //industry
     router.get('/industry', controllers.get_industry);
     //insert industry
     //router.get('/insert_industry', controllers.get_insert_industry);
     router.post('/industry', controllers.post_insert_industry);
+
     //search
     router.get('/search', controllers.get_search);
     router.post('/search', controllers.post_search);
@@ -1079,6 +1099,6 @@ module.exports = function (router) {
     router.post('/edit_location', controllers.post_edit_location);
     //test
     router.get('/test', controllers.get_test);
-    router.delete('/delete/products/:id', controllers.delete_product);
+
     return router;
 };

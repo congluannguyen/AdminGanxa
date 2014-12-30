@@ -3,17 +3,13 @@
 <head>
     <title>Ganxa Home Page</title>
     <% include ./partial/head %>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".deletebutton").click(function () {
+            $(".deletestorebutton").click(function () {
                 $.ajax({
                     url: "/delete/store/"+$(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
-                        /*var x = document.cookie;
-                        alert(x + " nha");
-                        document.cookie = "login=ok";*/
                         window.location.href = "/";
                     }
                 });
@@ -83,7 +79,7 @@
                                     <div class="btn-group btn-group-xs">
                                         <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
                                            class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                        <button value="<%= store._id %>" class="btn btn-danger deletebutton"><i class="fa fa-times"></i></button>
+                                        <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i class="fa fa-times"></i></button>
                                     </div>
                                 </td>
                             </tr>

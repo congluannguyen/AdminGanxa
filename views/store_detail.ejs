@@ -230,10 +230,21 @@
                 }
             });
         }
-
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deleteproductbutton").click(function () {
+                $.ajax({
+                    url: "/delete/product/"+$(this).val(),
+                    type: "DELETE",
+                    success: function (data, textStatus, jqXHR) {
+                        window.location.href = "/";
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <!-- Preloader -->
