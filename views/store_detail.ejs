@@ -235,11 +235,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deleteproductbutton").click(function () {
+
                 $.ajax({
                     url: "/delete/product/"+$(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
-                        window.location.href = "/";
+                        window.location.href = "";
                     }
                 });
             });
@@ -382,14 +383,19 @@
                     <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
                         <div class="widget">
                             <div class="widget-simple">
+                                <button value="<%=product._id%>" title="Del product"
+                                        class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
+                                    <i class="gi gi-remove_2"></i>
+                                </button>
                                 <a href="edit_product?id=<%= product._id %>" title="Edit product"
                                    class="btn btn-xs btn-default pull-right themed-background">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="insert_media?id=<%= product._id %>" title="Add media"
+                                <a href="insert_media?id=<%= product._id %>" title="Add media "
                                    class="btn btn-xs btn-default  pull-right themed-background">
                                     <i class="fa fa-plus"></i>
                                 </a>
+
                                 <h4 class="widget-content">
                                     <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
                                     <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p

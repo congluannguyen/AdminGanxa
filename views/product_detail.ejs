@@ -3,14 +3,16 @@
 <head>
     <title>Ganxa Home Page</title>
     <% include ./partial/head %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deletemediabutton").click(function () {
                 $.ajax({
+
                     url: "/delete/media/"+$(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
-                        window.location.href = "/";
+                        window.location.href = "";
                     }
                 });
             });
@@ -47,7 +49,7 @@
                         <!-- Lightbox Gallery with Options Title -->
                         <div class="block-title">
 
-                            <a href="" title="Edit product"
+                            <a href="edit_product?id=<%= product._id%>" title="Edit product"
                                class="btn btn-lg btn-default pull-right themed-background"
                                style="margin-top: 10px;margin-right: 10px;">
                                 <i class="fa fa-pencil"></i>
@@ -87,6 +89,9 @@
                                             <a href="edit_media?id=<%= media._id %>"
                                                class="btn btn-sm btn-alt btn-default"
                                                data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <button value="<%=media._id%>"
+                                               class="btn-sm btn btn-danger deletemediabutton"
+                                               data-toggle="tooltip" title="Delete"><i class="gi gi-remove_2"></i></button>
                                         </div>
                                     </div>
                                     <% }else{ %>
@@ -98,6 +103,9 @@
                                             <a href="edit_media?id=<%= media._id %>"
                                                class="btn btn-sm btn-alt btn-default"
                                                data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <button value="<%=media._id%>"
+                                                    class="btn-sm btn btn-danger deletemediabutton"
+                                                    data-toggle="tooltip" title="Delete"><i class="gi gi-remove_2"></i></button>
                                         </div>
                                     </div>
                                     <% } %>
