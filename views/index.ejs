@@ -8,7 +8,7 @@
         $(document).ready(function () {
             $(".deletestorebutton").click(function () {
                 $.ajax({
-                    url: "/delete/store/"+$(this).val(),
+                    url: "/delete/store/" + $(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
                         window.location.href = "/";
@@ -23,8 +23,10 @@
     <!-- Preloader -->
     <div class="preloader themed-background">
         <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
         <div class="inner">
             <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
             <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
         </div>
     </div>
@@ -60,8 +62,9 @@
                                 <th style="width: 150px;" class="text-center">Actions</th>
                             </tr>
                             </thead>
-                            <% store_array.forEach(function(store){ %>
+
                             <tbody>
+                            <% store_array.forEach(function(store){ %>
                             <tr>
                                 <td class="text-center"><img src="<%= store.logo %>" alt="avatar"
                                                              class="img-circle img-store"></td>
@@ -80,13 +83,27 @@
                                     <div class="btn-group btn-group-xs">
                                         <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
                                            class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                        <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i class="fa fa-times"></i></button>
+                                        <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i
+                                                    class="fa fa-times"></i></button>
                                     </div>
                                 </td>
                             </tr>
-                            </tbody>
                             <% }) %>
+                            </tbody>
+
+
                         </table>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4 text-center">
+                            <ul class="pagination">
+                                <li><a href="javascript:void(0)"><i class="fa fa-chevron-left"></i></a></li>
+                                <li class="active"><a href="javascript:void(0)">1</a></li>
+                                <li><a href="javascript:void(0)">2</a></li>
+                                <li><a href="javascript:void(0)">3</a></li>
+                                <li><a href="javascript:void(0)">4</a></li>
+                                <li><a href="javascript:void(0)"><i class="fa fa-chevron-right"></i></a></li>
+                            </ul>
+                        </div>
                     </div>
                     <!-- END Responsive Full Content -->
                 </div>

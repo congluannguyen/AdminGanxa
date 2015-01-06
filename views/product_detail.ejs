@@ -58,12 +58,38 @@
                                style="margin-top: 10px;margin-right: 10px;">
                                 <i class="fa fa-plus"></i>
                             </a>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td width="30%;">
+                                        <h2><strong>Media </strong>in  <%= product.product_name %></h2>
+                                    </td>
+                                    <td rowspan="3" width="10%;" style="padding-right: 5%;white-space: pre-line;">
+                                        <h2><strong>Description</strong></h2>
+                                    </td>
+                                    <td rowspan="3"  width="60%;" style="white-space: pre-line;">
+                                        <%= product.description%>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%;">
+                                        <h2><strong>Price </strong>  <%= product.price %> VND</h2>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%;">
+                                        <h2>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
+                                                        class="label label-primary ">
+                                                    <%= product.tags[0] %></p></a></h2>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                            <h2><strong>Media </strong>in  <%= product.product_name %></h2>
                             <br>
 
-                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
 
+                            <br>
 
                         </div>
                         <!-- END Lightbox Gallery with Options Title -->
@@ -95,7 +121,7 @@
                                     </div>
                                     <% }else{ %>
                                     <div style="height: 200px;overflow-y: hidden;">
-                                        <iframe height="200" src="<%= media.media_url%>" frameborder="0" allowfullscreen></iframe>
+                                        <iframe WIDTH="100%" HEIGHT="100%" src="<%= media.media_url%>" frameborder="0" allowfullscreen></iframe>
                                     </div>
                                     <div class="text-center edit" >
                                         <div class="btn-group btn-group-sm">
