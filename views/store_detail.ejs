@@ -235,12 +235,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deleteproductbutton").click(function () {
-
                 $.ajax({
                     url: "/delete/product/"+$(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
-                        window.location.href = "";
+                        window.location.href = "/store_detail";
                     }
                 });
             });

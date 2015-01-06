@@ -44,7 +44,8 @@
                 </ul>
                 <!-- END Validation Header -->
                 <% media_array.forEach(function(media){ %>
-                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data"
+                      class="form-horizontal form-bordered">
                     <div class="row">
                         <!--<div class="col-md-2"></div>-->
                         <div class="col-md-12">
@@ -60,14 +61,15 @@
 
 
                                 <fieldset>
-                                                                <div class="form-group">
+                                    <div class="form-group">
                                         <label class="col-md-4 control-label" for="val_storename">Media name <span
                                                     class="text-danger">*</span></label>
 
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="val_medianame" name="txtMediaName"
-                                                       class="form-control" placeholder="Your media name.." value="<%=media.media_name%>">
+                                                       class="form-control" placeholder="Your media name.."
+                                                       value="<%= media.media_name %>">
                                                 <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
                                             </div>
                                         </div>
@@ -75,12 +77,21 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">Media type<span
                                                     class="text-danger">*</span></label>
+
                                         <div class="col-md-6">
                                             <label class="radio-inline" for="example-inline-radio1">
-                                                <input type="radio" name="grpType" value="Image" <% if (media.media_type == "Image"){ %> checked <% } %>> Image
+                                                <input type="radio" name="grpType" value="Image"
+                                                        <% if (media.media_type == "Image"){ %>
+                                                       checked
+                                                        <% } %>
+                                                        > Image
                                             </label>
                                             <label class="radio-inline" for="example-inline-radio2">
-                                                <input type="radio" name="grpType" value="Video" <% if (media.media_type == "Video"){ %> checked <% } %> > Video
+                                                <input type="radio" name="grpType" value="Video"
+                                                        <% if (media.media_type == "Video"){ %>
+                                                       checked
+                                                        <% } %>
+                                                        > Video
                                             </label>
                                         </div>
                                     </div>
@@ -90,9 +101,21 @@
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="val_mediaurl" name="txtMediaUrl"
-                                                       class="form-control" placeholder="Your media url.." value="<%=media.media_url%>">
+                                                       class="form-control" placeholder="Your media url.."
+                                                        <% if(media.media_url.substr(0, 2) != ".."){ %>
+                                                       value="<%= media.media_url %>"
+                                                        <% } %>
+                                                        >
                                                 <span class="input-group-addon"><i class="fa fa-gears"></i></span>
                                             </div>
+                                            <% if(media.media_url.substr(0, 2) != ".." && media.media_type == "Image"){ %>
+                                            <img height="200px" src="<%= media.media_url %>">
+                                            <% }else if(media.media_url.substr(0, 2) != ".." && media.media_type == "Video"){ %>
+                                            <div style="height: 200px;overflow-y: hidden;">
+                                                <iframe height="200" src="<%= media.media_url %>" frameborder="0"
+                                                        allowfullscreen></iframe>
+                                            </div>
+                                            <% } %>
                                         </div>
                                     </div>
 
@@ -103,9 +126,12 @@
                                             <div class="input-group">
                                                 <input type="file" name="ulfMediaUrl" placeholder="E"
                                                        accept="image/*" alt="Product Image"
-                                                       class="form-control  input_insertstore">
+                                                       class="form-control  input_insertstore" >
                                                 <span class="input-group-addon"><i class="fa fa-file"></i></span>
                                             </div>
+                                            <% if(media.media_url.substr(0, 2) == "..") { %>
+                                            <img height="200px" src="<%= media.media_url %>">
+                                            <% } %>
                                         </div>
                                     </div>
                                     <div class="form-group form-actions">
@@ -124,11 +150,11 @@
 
                             <!-- END Validation Block -->
                         </div>
-                        </div>
-                    </form>
+                    </div>
+                </form>
                 <% }) %>
 
-                                <!-- END Form Validation Example Content -->
+                <!-- END Form Validation Example Content -->
 
 
             </div>

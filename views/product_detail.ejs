@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Product details page</title>
+    <title>Ganxa Home Page</title>
     <% include ./partial/head %>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deletemediabutton").click(function () {
+                $.ajax({
+                    url: "/delete/media/"+$(this).val(),
+                    type: "DELETE",
+                    success: function (data, textStatus, jqXHR) {
+                        window.location.href = "/product_detail";
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <div id="page-wrapper">
@@ -117,6 +130,5 @@
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
-
 </body>
 </html>

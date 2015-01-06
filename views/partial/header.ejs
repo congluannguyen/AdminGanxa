@@ -47,6 +47,11 @@
                             url: "/header/search/"+$("#top-search").val(),
                             type: "post",
                             success: function (data, textStatus, jqXHR) {
+                                alert(data);
+                                window.location.href = "/search";
+                            },
+                            error: function (e) {
+                                alert(e.toString);
                                 window.location.href = "/search";
                             }
                         });
