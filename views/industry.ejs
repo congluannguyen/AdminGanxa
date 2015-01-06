@@ -1,119 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>
+<html class="no-js lt-ie10"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js"> <!--<![endif]-->
 <head>
-    <title>Ganxa Home Page</title>
-    <% include ./partial/head %>
+    <meta charset="utf-8">
+
+    <title>Search Page - Ganxa</title>
+
+    <meta name="description"
+          content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/plugins.css">
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/themes.css">
+
+    <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
 </head>
 <body>
+<!-- Alternative Sidebar -->
+
 <div id="page-wrapper">
-    <!-- Preloader -->
-    <div class="preloader themed-background">
-        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
 
-        <div class="inner">
-            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
-
-            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
-        </div>
-    </div>
-    <!-- END Preloader -->
-
-    <!-- Page Container -->
     <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
-        <!-- Alternative Sidebar -->
         <% include ./partial/slidebar %>
+        <!-- Main Container -->
         <div id="main-container">
             <% include ./partial/header %>
+            <!-- END Header -->
+
             <!-- Page content -->
             <div id="page-content">
-                <!--ROW-->
-                <div class="row">
-                    <!--VIET TRONG NAY  -->
-                    <div class="dropdown-industry">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-8">
-                            <div class="input-group-btn ">
-                                <button type="button" class="btn btn-primary dropdown-toggle form-control" data-toggle="dropdown"
-                                        tabindex="-1">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-industry">
-                                    <% industry_array.forEach(function(industry){ %>
-                                    <center>
-                                        <P><a href="industry?type=<%= industry.industry_name %>"
-                                              class="form-control form-control-industry"><%=
-                                                    industry.industry_name %></a></P>
-                                    </center>
+                <!-- Wizard Header -->
+                <!-- END Wizard Header -->
 
-                                    <% }) %>
-                                    <hr>
-                                    <center><P><a href="#" class="form-control form-control-industry" data-toggle="modal" data-target="#myModal">
-                                                Thêm industry</a></P></center>
 
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                    <h3 class="modal-title" id="myModalLabel">Thêm industry</h3>
-                                </div>
-
-                                <form method="post">
-                                    <div class="modal-body">
-                                        <input type="text" class="form-control" name="txtIndustryName">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        <input type="submit" class="btn btn-primary"></button>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
-                    <center>
-                        <% if(typeof store_array != 'undefined'){ %>
-                        <% store_array.forEach(function (s) { %>
-                        <center>
-                            <div class="col-md-3">
-                                <div class="row-home">
-                                    <div class="thumbnail">
-                                        <img class="img-store" src="<%= s.cover %>" alt=" ">
-                                        <img class="img-logo" src="<%= s.logo %>">
-                                        <center><a href="store_detail?id=<%= s._id %>"><h4 class="h4_index"><%= s.store_name.substring(0, 40) %><%if (s.store_name.length>40){%>...<%} %></h4></a>
-                                        </center>
-                                        <p class="p-index">
-                                            <% s.address.forEach(function (a) { %>
-                                            <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 50) %>... <a
-                                                    href="store_detail?id=<%= s._id %>">xem thêm</a>
-                                            <% }) %>
-                                        </p>
-                                        <a href="edit_store?id=<%= s._id %>" class="btn btn-primary btn-block btn_index">Edit store</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <% })}else{ %>
-                                <p><%=industry_notification%></p>
-                            <% } %>
-                        </center>
-                    </center>
+                <!-- eCommerce Dashboard Header -->
+                <div class="content-header">
+                    <ul class="nav-horizontal text-center">
+                        <li>
+                            <a href="search_store"><i class="fa fa-shopping-cart"></i> Store</a>
+                        </li>
+                        <li>
+                            <a href="search_product"><i class="gi gi-oxygen_bottle"></i> Product</a>
+                        </li>
+                        <li class="active">
+                            <a href=""><i class="gi gi-tablet"></i> Industry</a>
+                        </li>
+                    </ul>
                 </div>
-                <!--END ROW-->
+                <!-- END eCommerce Dashboard Header -->
+                <form action="" method="post" class="form-horizontal form-bordered" onsubmit="return false;">
+
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <div class="btn-group">
+                                    <a href="javascript:void(0)" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">-- INDUSTRY -- <span class="caret"></span></a>
+                                    <ul class="dropdown-menu dropdown-custom text-left">
+                                        <li class="dropdown-header">All industry of website</li>
+                                        <li>
+                                            <a href="javascript:void(0)"><i class="fa fa-plus pull-right"></i>Action</a>
+
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="javascript:void(0)"><i class="fa fa-pencil pull-right"></i>Edit</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                </form>
+
+                <!-- END Responsive Full Title -->
+
             </div>
-            <!-- END Page Content -->
+            <!-- END Responsive Full Content -->
             <% include ./partial/footer %>
         </div>
-        <!-- Page content -->
+        <!-- END Page Content -->
 
     </div>
+    <!-- END Main Container -->
 
 </div>
-<!--END PAGE WRAPPER-->
-<% include ./partial/settings %>
+<!-- END Page Container -->
 
+</div>
+<!-- END Page Wrapper -->
+
+
+<!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
+<% include ./partial/settings %>
+<!-- END User Settings -->
+
+<!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+
+<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Load and execute javascript code used only in this page -->
+<script src="js/pages/formsWizard.js"></script>
+<script>$(function () {
+        FormsWizard.init();
+    });</script>
 </body>
 </html>

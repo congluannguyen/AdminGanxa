@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>
+<html class="no-js lt-ie10"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <title>Search Page - Ganxa</title>
+
+    <meta name="description"
+          content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/plugins.css">
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/themes.css">
+
+    <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+</head>
+<body>
+<!-- Alternative Sidebar -->
+
+<div id="page-wrapper">
+
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <% include ./partial/slidebar %>
+        <!-- Main Container -->
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- END Header -->
+
+            <!-- Page content -->
+            <div id="page-content">
+                <!-- Wizard Header -->
+                <!-- END Wizard Header -->
+
+
+                <!-- eCommerce Dashboard Header -->
+                <div class="content-header">
+                    <ul class="nav-horizontal text-center">
+                        <li>
+                            <a href="search_store"><i class="fa fa-shopping-cart"></i> Store</a>
+                        </li>
+                        <li class="active">
+                            <a href="#"><i class="gi gi-oxygen_bottle"></i> Product</a>
+                        </li>
+                        <li>
+                            <a href="industry"><i class="gi gi-tablet"></i> Industry</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END eCommerce Dashboard Header -->
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+
+
+                                <fieldset>
+
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_productname">Store name <span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_productname" name="txtTextSearchProduct"
+                                                       class="form-control" placeholder="Your product name..">
+                                                <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-actions">
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-7 ">
+                                            <input type="submit" name="button_s" class="button_ss btn btn-primary" tabindex="-1" value="Search">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <!-- END Form Validation Example Content -->
+                                <%if(typeof product_array != 'undefined'){ %>
+                                <% product_array.forEach(function(product){ %>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td width="30%;">
+                                            <h2><strong>Media </strong>in  <%= product.product_name %></h2>
+                                        </td>
+                                        <td rowspan="3" width="10%;" style="padding-right: 5%;white-space: pre-line;">
+                                            <h2><strong>Description</strong></h2>
+                                        </td>
+                                        <td rowspan="3"  width="60%;" style="white-space: pre-line;">
+                                            <%= product.description%>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%;">
+                                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%;">
+                                            <h2>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
+                                                            class="label label-primary ">
+                                                        <%= product.tags[0] %></p></a></h2>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <% })} %>
+
+                            </div>
+
+                            <!-- END Validation Block -->
+                        </div>
+
+                    </div>
+                </form>
+
+                <!-- END Responsive Full Title -->
+
+                </div>
+                <!-- END Responsive Full Content -->
+                <% include ./partial/footer %>
+            </div>
+            <!-- END Page Content -->
+
+        </div>
+        <!-- END Main Container -->
+
+    </div>
+    <!-- END Page Container -->
+
+</div>
+<!-- END Page Wrapper -->
+
+
+<!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
+<% include ./partial/settings    %>
+<!-- END User Settings -->
+
+<!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+
+<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Load and execute javascript code used only in this page -->
+<script src="js/pages/formsWizard.js"></script>
+<script>$(function () {
+        FormsWizard.init();
+    });</script>
+</body>
+</html>
