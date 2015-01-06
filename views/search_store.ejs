@@ -60,112 +60,128 @@
                     </ul>
                 </div>
                 <!-- END eCommerce Dashboard Header -->
-                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Form Validation Example Block -->
-                        <div class="block">
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data"
+                      class="form-horizontal form-bordered">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
 
 
-                            <fieldset>
+                                <fieldset>
 
 
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label" for="val_storename">Store name <span
-                                                class="text-danger">*</span></label>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_storename">Store name <span
+                                                    class="text-danger">*</span></label>
 
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <input type="text" id="val_storename" name="txtTextSearch"
-                                                   class="form-control" placeholder="Your store name..">
-                                            <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_storename" name="txtTextSearch"
+                                                       class="form-control" placeholder="Your store name..">
+                                                <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="example-select2">City</label>
+
                                         <div class="col-md-6">
-                                            <select id="example-select2" name="optDistrict" class="select-select2" style="width: 100%;" data-placeholder="Choose one..">
-                                                <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                                            <select id="example-select2" name="optDistrict" class="select-select2"
+                                                    style="width: 100%;" data-placeholder="Choose one..">
+                                                <option></option>
+                                                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                                                 <option selected>Tất Cả Các Quận</option>
                                                 <% location_array.forEach(function(location){ %>
                                                 <optgroup label="<%= location.city %>">
                                                     <% location.district.forEach(function(district){ %>
-                                                    <option value="<%=district%>"><%=district%></option>
+                                                    <option value="<%= district %>"><%= district %></option>
                                                     <% }) %>
                                                 </optgroup>
                                                 <% }) %>
                                             </select>
                                         </div>
                                     </div>
-                                <div class="form-group form-actions">
-                                    <div class="col-md-5"></div>
-                                    <div class="col-md-7 ">
-                                        <input type="submit" name="button_s" class="button_ss btn btn-primary" tabindex="-1" value="Search">
+                                    <div class="form-group form-actions">
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-7 ">
+                                            <input type="submit" name="button_s" class="button_ss btn btn-primary"
+                                                   tabindex="-1" value="Search">
+                                        </div>
                                     </div>
-                                </div>
-                            </fieldset>
+                                </fieldset>
 
-                            <!-- END Form Validation Example Content -->
+                                <!-- END Form Validation Example Content -->
 
 
+                            </div>
+
+                            <!-- END Validation Block -->
                         </div>
 
-                        <!-- END Validation Block -->
                     </div>
-
-                </div>
                 </form>
 
                 <!-- END Responsive Full Title -->
-
-                <div class="table-responsive">
-                    <table class="table table-vcenter table-striped">
-
-                        <thead>
-                        <tr>
-                            <th style="width: 150px;" class="text-center"><i class="gi gi-user"></i></th>
-                            <th>Store Name</th>
-                            <th>Address</th>
-                            <th style="width: 150px;" class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <% if(typeof store_array != 'undefined'){ %>
-                        <% store_array.forEach(function(store){ %>
-                        <tbody>
-
-                        <tr>
-                            <td class="text-center"><img style="width: 30px;height: 30px;" src="<%= store.logo %>" alt="avatar"
-                                                         class="img-circle"></td>
-                            <td><a href="store_detail?id=<%= store._id %>"><%= store.store_name.substring(0, 40) %>
-                                    <% if (store.store_name.length > 20){ %>
-                                    ...
-                                    <% } %>
-                                </a></td>
-                            <td>
-                                <% store.address.forEach(function (a) { %>
-                                <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
-                                        href="store_detail?id=<%= store._id %>">more</a>
-                                <% }) %>
-                            </td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-xs">
-                                    <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
-                                       class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                    <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i
-                                                class="fa fa-times"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        </tbody>
-                        <% })} %>
-
-                    </table>
+                <div class="block">
 
 
+                    <div class="table-responsive">
+                        <table class="table table-vcenter table-striped">
 
+                            <thead>
+                            <tr>
+                                <th style="width: 150px;" class="text-center"><i class="gi gi-user"></i></th>
+                                <th>Store Name</th>
+                                <th>Address</th>
+                                <th style="width: 150px;" class="text-center">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <% if(typeof store_array != 'undefined'){ %>
+                            <% store_array.forEach(function(store){ %>
+                            <tbody>
+
+                            <tr>
+                                <td class="text-center"><img style="width: 30px;height: 30px;" src="<%= store.logo %>"
+                                                             alt="avatar"
+                                                             class="img-circle"></td>
+                                <td><a href="store_detail?id=<%= store._id %>"><%= store.store_name.substring(0, 40) %>
+                                        <% if (store.store_name.length > 20){ %>
+                                        ...
+                                        <% } %>
+                                    </a></td>
+                                <td>
+                                    <% store.address.forEach(function (a) { %>
+                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
+                                            href="store_detail?id=<%= store._id %>">more</a>
+                                    <% }) %>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
+                                           class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                        <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i
+                                                    class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                            <% })} else{%>
+                            <tr class="text-center" >
+                                <td class="text-center" colspan="4">
+                                    Không có cửa hàng nào được tìm thấy!
+                                </td>
+
+                            </tr>
+                            <%}%>
+
+                        </table>
+                    </div>
+
+</div>
                 </div>
                 <!-- END Responsive Full Content -->
                 <% include ./partial/footer %>
@@ -183,7 +199,7 @@
 
 
 <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
-<% include ./partial/settings    %>
+<% include ./partial/settings %>
 <!-- END User Settings -->
 
 <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->

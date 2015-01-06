@@ -71,7 +71,7 @@
 
 
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label" for="val_productname">Store name <span
+                                        <label class="col-md-4 control-label" for="val_productname">Product name <span
                                                     class="text-danger">*</span></label>
 
                                         <div class="col-md-6">
@@ -107,45 +107,61 @@
                                         </div>
                                     </div>
                                 </fieldset>
-
+                            </div>
                                 <!-- END Form Validation Example Content -->
                                 <%if(typeof product_array != 'undefined'){ %>
                                 <% product_array.forEach(function(product){ %>
-                                <table>
-                                    <tbody>
-                                    <tr>
-                                        <td width="30%;">
-                                            <h2><strong>Media </strong>in  <%= product.product_name %></h2>
-                                        </td>
-                                        <td rowspan="3" width="10%;" style="padding-right: 5%;white-space: pre-line;">
-                                            <h2><strong>Description</strong></h2>
-                                        </td>
-                                        <td rowspan="3"  width="60%;" style="white-space: pre-line;">
-                                            <%= product.description%>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%;">
-                                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td width="30%;">
-                                            <h2>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
-                                                            class="label label-primary ">
-                                                        <%= product.tags[0] %></p></a></h2>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <% })} %>
+                                <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
+                                    <div class="widget">
+                                        <div class="widget-simple">
+                                            <button value="<%=product._id%>" title="Del product"
+                                                    class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
+                                                <i class="gi gi-remove_2"></i>
+                                            </button>
+                                            <a href="edit_product?id=<%= product._id %>" title="Edit product"
+                                               class="btn btn-xs btn-default pull-right themed-background">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="insert_media?id=<%= product._id %>" title="Add media "
+                                               class="btn btn-xs btn-default  pull-right themed-background">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
 
+                                            <h4 class="widget-content">
+                                                <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
+                                                <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
+                                                                class="label label-primary ">
+                                                            <%= product.tags[0] %></p></a></small>
+                                            </h4>
+                                        </div>
+                                        <div class="widget-extra-full themed-background-dark">
+                                            <!-- Carousel -->
+                                            <div id="widget-carousel1" class="carousel slide remove-margin">
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner">
+                                                    <div class="active item" style="height:350px; overflow-y:hidden;">
+                                                        <img src="<%= product.product_image %>">
+
+                                                    </div>
+                                                </div>
+                                                <!-- END Wrapper for slides -->
+                                            </div>
+                                            <!-- END Carousel -->
+                                        </div>
+                                    </div>
+                                </div>
+                                 <% })} else{%>
+
+                            <div class="block text-center">
+                                Không có sản phẩm nào!
+                                </div>
+                            <%}%>
+                                </div>
                             </div>
 
                             <!-- END Validation Block -->
-                        </div>
 
-                    </div>
+
                 </form>
 
                 <!-- END Responsive Full Title -->
