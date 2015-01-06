@@ -57,7 +57,6 @@ var controllers = {
             console.log("media_array_all có");
         }
     },
-
     get_industry_array: function (req, res) {
         if (!req.session.industry_array_all) {
             console.log("industry_array_all không có");
