@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Edit Store</title>
+    <title>Ganxa Home Page</title>
     <% include ./partial/head %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
@@ -243,9 +243,9 @@
         <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
 
         <div class="inner">
-            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+            <h3 class="fa fa-spinner fa-spin fa-3x"><strong>Loading..</strong></h3>
 
-            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+            <div class="fa fa-spinner fa-spin fa-3x"></div>
         </div>
     </div>
     <!-- END Preloader -->
@@ -258,128 +258,322 @@
             <% include ./partial/header %>
             <!-- Page content -->
             <div id="page-content">
-                <!--ROW-->
-                <div class="row insert_container">
+                <!-- Validation Header -->
+                <div class="content-header">
+                    <div class="header-section">
+                        <h1>
+                            <i class="gi gi-warning_sign"></i>Create new store<br>
+                            <small>You can create new store!</small>
+                        </h1>
+                    </div>
+                </div>
+                <ul class="breadcrumb breadcrumb-top">
+                    <li>Store</li>
+                    <li><a href="">Add store</a></li>
+                </ul>
+                <!-- END Validation Header -->
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                    <% store_array.forEach(function (store) { %>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+                                <!-- Form Validation Example Title -->
+                                <div class="block-title">
+                                    <h2><strong>Add Store</strong></h2>
+                                </div>
+                                <!-- END Form Validation Example Title -->
+
+                                <!-- Form Validation Example Content -->
 
 
+                                <fieldset>
 
-                    <!--VIET TRONG NAY  -->
+                                    <legend><i class="fa fa-angle-right"></i> Profile</legend>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_storename">Store name <span
+                                                    class="text-danger">*</span></label>
 
-                    <center>
-                        <% store_array.forEach(function (store) { %>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    <div class="col-md-12 map-insertstore">
-                                        <div id="map-canvas" class="map"></div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_storename" name="txtStoreName"
+                                                       class="form-control" value="<%= store.store_name %>" placeholder="Your store name..">
+                                                <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 input_insertstore">
-                                        <input type="text" id="a" name="txtLatitude"
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_description">Description <span
+                                                    class="text-danger">*</span></label>
+
+
+                                        <div class="form-group">
+                                            <div class="col-md-6">
+                                                <textarea id="textarea-wysiwyg" name="txtDescription" rows="10" class="form-control textarea-editor"><%= store.description %></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_website">Website <span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="url" id="val_website" name="txtWebsite"
+                                                       class="form-control" value="<%= store.website %>" placeholder="Website...">
+                                                <span class="input-group-addon"><i class="gi gi-globe"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_fanpage">Fanpage facebook<span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="url" id="val_fanpage"
+                                                       name="txtFanpage" class="form-control" value="<%= store.fanpage %>"
+                                                       placeholder="This is fan page of your store!!">
+                                                <span class="input-group-addon"><i
+                                                            class="gi gi-address_book"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Phone number<span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+
+
+                                            <div class="input-group">
+                                                <input type="text" id="val_phonenumber" value="<%= store.phone %>" name="txtPhone"
+                                                       class="form-control" placeholder="Your store phone number..">
+                                                <span class="input-group-addon"><i class="gi gi-phone_alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Time of
+                                            work<span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtHoursOfWork" value="<%= store.hours_of_work %>" name="txtHoursOfWork"
+                                                       class="form-control" placeholder="Time of work..">
+                                                <span class="input-group-addon"><i class="gi gi-alarm"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_phonenumber">Industry
+                                            <span class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <select name="slcIndustry"  class="size-selcter form-control size-selcter ">
+                                                <% if(typeof industry_array != "undefined"){
+                                                        industry_array.forEach(function(industry){ %>
+                                                <% if(industry.industry_name == store.industry){ %>
+                                                <option value="<%= industry.industry_name %>"
+                                                        selected><%= industry.industry_name %></option>
+                                                <% }else{ %>
+                                                <option value="<%= industry.industry_name %>"><%= industry.industry_name %></option>
+                                                <% }})} %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-11 control-label" >
+
+                                        </label>
+
+
+                                        <div class="col-md-1">
+                                            <i class="gi gi-right_arrow fa-3x"></i>
+                                        </div>
+                                    </div>
+
+
+                                </fieldset>
+
+                                <!-- END Form Validation Example Content -->
+
+
+                            </div>
+
+                            <!-- END Validation Block -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+
+                                <!-- Form Validation Example Content -->
+                                <legend><i class="fa fa-angle-right"></i> Media</legend>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="val_ImageCover">Image Cover<span
+                                                class="text-danger">*</span></label>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input type="file" required name="ulfCover" ONCHANGE="show_cover(this)" accept="image/*"
+                                                   alt="Cover image"
+                                                   class="form-control">
+                                            <span class="input-group-addon"><i class="gi gi-picture"></i></span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-8 ">
+                                        <a href="#" data-toggle="modal" data-target="#myModal"><img class="cover-addstore" id="thumbnil"  src="<%= store.cover %>" alt="Cover image"></a>
+                                    </div>
+                                </div>
+                                <!--Model-->
+
+                                <!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+                                <!--<div class="modal-dialog">-->
+                                <!--<div class="modal-body">-->
+                                <!--<img class="img-thumbnil" id="thumbnil" src="" alt="Cover image">-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" for="val_Avatar">Avatar<span
+                                                class="text-danger">*</span></label>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <input type="file" required name="ulfLogo" ONCHANGE="show_logo(this)" accept="image/*"
+                                                   alt="Cover image"
+                                                   class="form-control">
+                                            <span class="input-group-addon"><i class="gi gi-picture"></i></span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <img class="img-thumbnil img-addstore" id="thumbnil2" src="<%= store.logo %>" alt="Logo image">
+                                    </div>
+                                </div>
+                                </fieldset>
+
+
+
+
+                                <!-- END Form Validation Example Content -->
+
+
+                            </div>
+                            <!-- END Validation Block -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+
+                                <!-- Form Validation Example Content -->
+                                <fieldset>
+                                    <legend><i class="fa fa-angle-right"></i> Location</legend>
+                                    <div class="col-md-12">
+                                        <div id="map-canvas" class="map"></div>
+                                        <input id="pac-input" type="text" value="Ho Chi Minh City, Ho Chi Minh, Vietnam"
+                                               placeholder="Enter a location"
+                                               onfocus="codeAddress()">
+
+                                        <!--<div class="col-md-4">-->
+                                        <!--<input type="button" value="Location" onclick="codeAddress()"-->
+                                        <!--class="btn btn-primary btn-block ">-->
+                                        <!--</div>-->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="hidden" id="a" name="txtLatitude"
                                                class="form-control">
                                     </div>
-                                    <div class="col-md-6 input_insertstore">
-                                        <input type="text" id="o" name="txtLongitude"
+                                    <div class="col-md-6 ">
+                                        <input type="hidden" id="o" name="txtLongitude"
                                                class="form-control  ">
                                     </div>
-                                    <div class="col-md-12">
-                                        <input type="button" value="Location" onclick="codeAddress()"
-                                               class="btn btn-primary btn-block input_insertstore ">
-                                    </div>
-                                    <input id="pac-input" type="text" value="" placeholder="Enter a location">
+                                    <input id="pac-button" type="button" value="Location"  onclick="codeAddress()">
+                                    <!--<input type="button" value="Location"  onclick="codeAddress()">-->
 
-
-                                    <div class="col-md-12">
-                                        <input type="text" required name="txtStoreName" placeholder="Tên cửa hàng"
-                                               class="form-control  input_insertstore" value="<%= store.store_name %>">
-                                    </div>
-                                    <div class="col-md-4 input_insertstore">
-                                        <input type="file" name="ulfCover" ONCHANGE="show_cover(this)" accept="image/*"
-                                               alt="Cover image"
-                                               class="form-control">
-                                    </div>
-                                    <div class="col-md-2 input_insertstore">
-                                        <img class="img-thumbnil" id="thumbnil" src="<%= store.cover %>" alt="Cover image">
-                                    </div>
-                                    <div class="col-md-4 input_insertstore">
-                                        <input type="file" name="ulfLogo" ONCHANGE="show_logo(this)" accept="image/*"
-                                               alt="Cover image"
-                                               class="form-control input_insertstore">
-                                    </div>
-                                    <div class="col-md-2 input_insertstore">
-                                        <img class="img-thumbnil" id="thumbnil2" src="<%= store.logo %>" alt="Logo image">
-                                    </div>
-                                    <div class="col-md-12">
-                        <textarea required name="txtDescription" placeholder="Tự giới thiệu."
-                                  class="form-control input_insertstore"><%= store.description %></textarea>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <input type="text" required name="txtWebsite" placeholder="Website"
-                                               class="form-control input_insertstore" value="<%= store.website %>">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <input type="text" required name="txtFanpage" placeholder="Facebook fanpage url"
-                                               class="form-control  input_insertstore" value="<%= store.fanpage %>">
-                                    </div>
-
+                                </fieldset>
+                                <fieldset>
                                     <% store.address.forEach(function (address) { %>
-                                    <div class="col-md-4">
-                                        <input type="text" required name="txtCity" placeholder="Thành Phố"
-                                               class="form-control input_insertstore" value="<%= address.city %>">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">Address<span
+                                                    class="text-danger">*</span></label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtRoom" name="txtRoom"
+                                                       class="form-control" value="<% if(address.room){ %><%=address.room%><% }else{}%>" placeholder="Room number.." >
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <select name="optDistrict" class="form-control">
-                                            <% location_array.forEach(function(location){ %>
-                                            <optgroup label="<%= location.city %>">
-                                                <% location.district.forEach(function(district){ %>
-                                                <option value="<%=district%>" <% if(address.district == district){%>selected<%}%>><%=district%></option>
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 "></label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtStreet" value="<%= address.street %>" name="txtStreet"
+                                                       class="form-control" placeholder="Street..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_light"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label"></label>
+                                        <div class="col-md-6">
+                                            <select name="optDistrict" class="form-control">
+                                                <% location_array.forEach(function(location){ %>
+                                                <optgroup label="<%= location.city %>">
+                                                    <% location.district.forEach(function(district){ %>
+                                                    <option value="<%=district%>" <% if(address.district == district){%>selected<%}%>><%=district%></option>
+                                                    <% }) %>
+                                                </optgroup>
                                                 <% }) %>
-                                            </optgroup>
-                                            <% }) %>
-                                        </select>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <input type="text" required name="txtStreet" placeholder="Số/Đường"
-                                               class="form-control input_insertstore" value="<%= address.street %>">
+                                    <div class="form-group">
+                                        <label class="col-md-4 "></label>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="txtCity" name="txtCity"
+                                                       class="form-control" value="<%= address.city %>" placeholder="City..">
+                                                <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="txtRoom" placeholder="Phòng"
-                                               class="form-control input_insertstore" value="<% if(address.room){ %><%=address.room%><% }else{}%>">
+                                    <div class="form-group form-actions">
+                                        <div class="col-md-9 col-md-offset-3">
+                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
+                                            <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
+                                        </div>
                                     </div>
                                     <% }) %>
-                                    <div class=" col-md-12">
-                                        <input type="text" required name="txtPhone" placeholder="Số Điện Thoại"
-                                               class="form-control  input_insertstore" value="<%= store.phone %>">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <input type="text" required name="txtHoursOfWork" placeholder="Giờ làm việc"
-                                               class="form-control input_insertstore" value="<%= store.hours_of_work %>">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <select name="slcIndustry"
-                                                class="size-selcter form-control size-selcter selecter_1 input_insertstore">
-                                            <% if(typeof industry_array != "undefined"){
-                                                    industry_array.forEach(function(industry){ %>
-                                            <% if(industry.industry_name == store.industry){ %>
-                                            <option value="<%= industry.industry_name %>"
-                                                    selected><%= industry.industry_name %></option>
-                                            <% }else{ %>
-                                            <option value="<%= industry.industry_name %>"><%= industry.industry_name %></option>
-                                            <% }})} %>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <input type="submit" value="Lưu" class="btn btn-primary btn-block input_insertstore">
-                                    </div>
-                                </form>
+                                </fieldset>
+
+
+
+                                <!-- END Form Validation Example Content -->
+
+
                             </div>
+                            <!-- END Validation Block -->
                         </div>
-                        <% }) %>
-                    </center>
 
-
-
-                </div>
-                <!--END ROW-->
+                    </div>
+                    <% }) %>
+                </form>
             </div>
             <!-- END Page Content -->
             <% include ./partial/footer %>
