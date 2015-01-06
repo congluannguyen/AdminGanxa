@@ -7,13 +7,18 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deletemediabutton").click(function () {
-                $.ajax({
-                    url: "/delete/media/"+$(this).val(),
-                    type: "DELETE",
-                    success: function (data, textStatus, jqXHR) {
-                        window.location.href = "/product_detail";
-                    }
-                });
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    var x = $(this).val();
+                    $.ajax({
+                        url: "/delete/media/" + $(this).val(),
+                        type: "DELETE",
+                        success: function (data, textStatus, jqXHR) {
+                            //window.location.href = "/product_detail";
+                            $('#' + x).slideUp();
+                        }
+                    });
+                }
             });
         });
     </script>
@@ -48,7 +53,7 @@
                         <!-- Lightbox Gallery with Options Title -->
                         <div class="block-title">
 
-                            <a href="edit_product?id=<%= product._id%>" title="Edit product"
+                            <a href="edit_product?id=<%= product._id %>" title="Edit product"
                                class="btn btn-lg btn-default pull-right themed-background"
                                style="margin-top: 10px;margin-right: 10px;">
                                 <i class="fa fa-pencil"></i>
@@ -67,8 +72,8 @@
                                     <td rowspan="3" width="10%;" style="padding-right: 5%;white-space: pre-line;">
                                         <h2><strong>Description</strong></h2>
                                     </td>
-                                    <td rowspan="3"  width="60%;" style="white-space: pre-line;">
-                                        <%= product.description%>
+                                    <td rowspan="3" width="60%;" style="white-space: pre-line;">
+                                        <%= product.description %>
                                     </td>
                                 </tr>
                                 <tr>
@@ -100,7 +105,7 @@
 
                                 <% if(typeof media_array != 'undefined'){ %>
                                 <% media_array.forEach(function(media){ %>
-                                <div class="col-sm-6 col-xs-12 col-md-4 gallery-image">
+                                <div class="col-sm-6 col-xs-12 col-md-4 gallery-image" id="<%=media._id%>">
 
                                     <% if (media.media_type == 'Image'){ %>
                                     <div style="height: 200px;overflow-y: hidden;">
@@ -110,27 +115,30 @@
                                         <div class="btn-group btn-group-sm">
                                             <a href="<%= media.media_url %>"
                                                class="gallery-link btn btn-sm btn-alt btn-default"
-                                               title="<%=media.media_name%>">View</a>
+                                               title="<%= media.media_name %>">View</a>
                                             <a href="edit_media?id=<%= media._id %>"
                                                class="btn btn-sm btn-alt btn-default"
                                                data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <button value="<%=media._id%>"
-                                               class="btn-sm btn btn-danger deletemediabutton"
-                                               data-toggle="tooltip" title="Delete"><i class="gi gi-remove_2"></i></button>
+                                            <button value="<%= media._id %>"
+                                                    class="btn-sm btn btn-danger deletemediabutton"
+                                                    data-toggle="tooltip" title="Delete"><i class="gi gi-remove_2"></i>
+                                            </button>
                                         </div>
                                     </div>
                                     <% }else{ %>
                                     <div style="height: 200px;overflow-y: hidden;">
-                                        <iframe WIDTH="100%" HEIGHT="100%" src="<%= media.media_url%>" frameborder="0" allowfullscreen></iframe>
+                                        <iframe WIDTH="100%" HEIGHT="100%" src="<%= media.media_url %>" frameborder="0"
+                                                allowfullscreen></iframe>
                                     </div>
-                                    <div class="text-center edit" >
+                                    <div class="text-center edit">
                                         <div class="btn-group btn-group-sm">
                                             <a href="edit_media?id=<%= media._id %>"
                                                class="btn btn-sm btn-alt btn-default"
                                                data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            <button value="<%=media._id%>"
+                                            <button value="<%= media._id %>"
                                                     class="btn-sm btn btn-danger deletemediabutton"
-                                                    data-toggle="tooltip" title="Delete"><i class="gi gi-remove_2"></i></button>
+                                                    data-toggle="tooltip" title="Delete"><i class="gi gi-remove_2"></i>
+                                            </button>
                                         </div>
                                     </div>
                                     <% } %>

@@ -13,7 +13,6 @@ var controllers = {
 
         get_store_array: function (req, res) {
             var store_query = store_schema.store.find({});
-            //store_query.limit(8);
             store_query.sort({date: -1});
             store_query.exec(function (store_error, store_array) {
                 if (store_array && store_array.length > 0) {
@@ -381,7 +380,11 @@ var controllers = {
         get_product_detail: function (req, res) {
             controllers.get_all(req, res);
             var id_product;
-            id_product = req.param('id');
+            if (req.param('id')) {
+                id_product = req.param('id');
+            } else {
+                id_product = req.session.product_id_current;
+            }
             req.session.product_id_current = id_product;
             product_schema.product.find({_id: id_product}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
@@ -398,7 +401,7 @@ var controllers = {
                         }
                     });
                 } else {
-                    res.render('store_detail', {store_array: req.session.store_array_current, product_array: req.session.product_array_curent, industry_array: req.session.industry_array});
+                    res.render('store_detail', {store_array: req.session.store_current, product_array: req.session.product_array_curent, industry_array: req.session.industry_array});
                 }
             })
         },
@@ -633,12 +636,14 @@ var controllers = {
                     })
             } else {
                 console.log("Không có id_product.");
+                res.render('index', {store_array: req.session.store_array_all});
             }
         },
 
         delete_media: function (req, res) {
             media_schema.media.findByIdAndRemove(req.params.id, function (remove_error) {
                 if (!remove_error) {
+                    req.session.delete_media_flag = true;
                     return res.send('');
                 } else {
                     console.log(remove_error);
@@ -787,16 +792,16 @@ var controllers = {
                 if (district == "Tất Cả Các Quận") { //nếu không có quận
                     console.log("1 nếu không chọn quận (tức là all)");
                     store_query = store_schema.store.find({$or: [
-                        {store_name: {$regex: key, $options: 'xi'}},
-                        {store_name_non_accented: {$regex: key, $options: 'xi'}}
+                        {store_name: {$regex: key, $options: 'i'}},
+                        {store_name_non_accented: {$regex: key, $options: 'i'}}
                     ]});
                 } else { //nếu có quận
                     console.log("1 có chọn quận");
                     store_query = store_schema.store.find({
                         $and: [
                             {$or: [
-                                {store_name: {$regex: key, $options: 'xi'}},
-                                {store_name_non_accented: {$regex: key, $options: 'xi'}}
+                                {$text: {store_name: {$regex: key, $options: 'i'}}},
+                                {store_name_non_accented: {$regex: key, $options: 'i'}}
                             ]},
                             {address: {$elemMatch: {district: district}}}
                         ]
@@ -854,21 +859,27 @@ var controllers = {
             var key = req.body.txtTextSearchProduct;
             var district = req.body.optDistrict;
             var store_query;
+            var product_query;
             if (key) { //có key, all quận
                 console.log("4-1");
                 if (district == "Tất Cả Các Quận") {
-                    product_schema.product.find({$or: [
-                        {product_name: {$regex: key, $options: 'xi'}},
-                        {product_name_non_accented: {$regex: key, $options: 'xi'}}
-                    ]}, function (product_error, product_array) {
-                        if (!product_error && product_array && product_array.length > 0) {
-                            console.log("4-1 có.");
-                            res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                        } else {
-                            console.log("4-1 không có.");
-                            res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-                        }
-                    });
+                    product_query = product_schema.product.find({$or: [
+                        {product_name: {$regex: key, $options: 'i'}},
+                        {product_name_non_accented: {$regex: key, $options: 'i'}}
+                    ]});
+
+                    /*product_schema.product.find({$or: [
+                     {product_name: {$regex: key, $options: 'i'}},
+                     {product_name_non_accented: {$regex: key, $options: 'i'}}
+                     ]}, function (product_error, product_array) {
+                     if (!product_error && product_array && product_array.length > 0) {
+                     console.log("4-1 có.");
+                     res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                     } else {
+                     console.log("4-1 không có.");
+                     res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                     }
+                     });*/
                 } else {
                     store_query = store_schema.store.find({address: {$elemMatch: {district: district}}});
                     store_query.sort({date: -1});
@@ -886,6 +897,7 @@ var controllers = {
                                     product_array_render = product_array_render.concat(product_array);
                                 }
                             });
+                            console.log(ka)
                         });
                         setTimeout(function () {
                             console.log(product_array_render);
@@ -898,8 +910,19 @@ var controllers = {
                         }, 20);
                     });
                 }
+                //exec
+                product_query.sort({date: -1});
+                product_query.exec(function (product_error, product_array) {
+                    if (product_array && product_array.length > 0) {
+                        console.log("1 - có");
+                        res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                    } else if (product_array.length == 0) {
+                        console.log("1 - không có");
+                        res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    }
+                });
             } else { //Có quận.
-                console.log(key + district)
+                console.log(key + district);
                 console.log("4-2");
                 if (district != "Tất Cả Các Quận") {
                     store_query = store_schema.store.find({address: {$elemMatch: {district: district}}});
@@ -913,8 +936,8 @@ var controllers = {
                                 $and: [
                                     {id_store: store._id},
                                     {$or: [
-                                        {product_name: {$regex: key, $options: 'xi'}},
-                                        {product_name_non_accented: {$regex: key, $options: 'xi'}}
+                                        {product_name: {$regex: key, $options: 'i'}},
+                                        {product_name_non_accented: {$regex: key, $options: 'i'}}
                                     ]}
                                 ]
                             });
@@ -947,8 +970,8 @@ var controllers = {
         header_search: function (req, res) {
             var key = req.params.keyword;
             var store_query = store_schema.store.find({$or: [
-                {store_name: {$regex: key, $options: 'xi'}},
-                {store_name_non_accented: {$regex: key, $options: 'xi'}}
+                {store_name: {$regex: key, $options: 'i'}},
+                {store_name_non_accented: {$regex: key, $options: 'i'}}
             ]});
             store_query.sort({date: -1});
             store_query.exec(function (store_error, store_array) {
