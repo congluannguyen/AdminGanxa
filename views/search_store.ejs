@@ -82,9 +82,9 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="example-select2">City</label>
                                         <div class="col-md-6">
-                                            <select id="example-select2" name="example-select2" class="select-select2" style="width: 100%;" data-placeholder="Choose one..">
+                                            <select id="example-select2" name="optDistrict" class="select-select2" style="width: 100%;" data-placeholder="Choose one..">
                                                 <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                                                <option>-- Chọn Quận --</option>
+                                                <option selected>Tất Cả Các Quận</option>
                                                 <% location_array.forEach(function(location){ %>
                                                 <optgroup label="<%= location.city %>">
                                                     <% location.district.forEach(function(district){ %>
@@ -116,7 +116,7 @@
 
                 <!-- END Responsive Full Title -->
                 <% if(typeof store_array != 'undefined'){ %>
-                <% store_array.forEach(function(s){ %>
+                <% store_array.forEach(function(store){ %>
                 <div class="table-responsive">
                     <table class="table table-vcenter table-striped">
                         <thead>
