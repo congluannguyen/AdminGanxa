@@ -60,29 +60,155 @@
                     </ul>
                 </div>
                 <!-- END eCommerce Dashboard Header -->
-                <form action="" method="post" class="form-horizontal form-bordered" onsubmit="return false;">
+                <div class="block">
+                    <form action="" method="post" class="form-horizontal form-bordered" onsubmit="return false;">
 
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <div class="btn-group">
-                                    <a href="javascript:void(0)" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">-- INDUSTRY -- <span class="caret"></span></a>
+
+                                    <a href="javascript:void(0)" style="width: 250px;" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">-- INDUSTRY -- <span class="caret"></span></a>
                                     <ul class="dropdown-menu dropdown-custom text-left">
+
                                         <li class="dropdown-header">All industry of website</li>
+                                        <% industry_array.forEach(function(industry){ %>
                                         <li>
-                                            <a href="javascript:void(0)"><i class="fa fa-plus pull-right"></i>Action</a>
+                                            <a href="industry?type=<%= industry.industry_name %>"><i class="fa fa-plus pull-right"></i><%=
+                                                    industry.industry_name %></a>
 
                                         </li>
+                                        <% }) %>
                                         <li class="divider"></li>
                                         <li>
-                                            <a href="javascript:void(0)"><i class="fa fa-pencil pull-right"></i>Edit</a>
+                                            <a href="" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil pull-right"></i>Add Industry</a>
                                         </li>
                                     </ul>
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                    <h3 class="modal-title" id="myModalLabel">Thêm industry</h3>
+                                                </div>
+
+                                                <form method="post">
+                                                    <div class="modal-body">
+                                                        <input type="text" class="form-control" name="txtIndustryName">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <input type="submit" class="btn btn-primary"></button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
 
-                </form>
+                    </form>
+                </div>
 
+                <!-- Gallery Carousel Block -->
+                <div class="block">
+                    <!-- Gallery Carousel Title -->
+                    <div class="block-title">
+                        <h2><strong>Gallery</strong> Carousel</h2>
+                    </div>
+                    <!-- END Gallery Carousel Title -->
+
+                    <!-- Gallery Carousel Content -->
+                    <div id="example-carousel4" class="carousel slide">
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            <div class="active item gallery">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <a href="#">
+                                            <img src="img/placeholders/photos/photo1.jpg" alt="image">
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="#">
+                                            <img src="img/placeholders/photos/photo1.jpg" alt="image">
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo3.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo24.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo23.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo22.jpg" alt="image">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item gallery">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo4.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo5.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo6.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo21.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo20.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo19.jpg" alt="image">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item gallery">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo7.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo8.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo9.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo18.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo17.jpg" alt="image">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <img src="img/placeholders/photos/photo16.jpg" alt="image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Wrapper for slides -->
+
+                        <!-- Controls -->
+                        <a class="left carousel-control no-hover" href="#example-carousel4" data-slide="prev">
+                            <span><i class="fa fa-chevron-left"></i></span>
+                        </a>
+                        <a class="right carousel-control no-hover" href="#example-carousel4" data-slide="next">
+                            <span><i class="fa fa-chevron-right"></i></span>
+                        </a>
+                        <!-- END Controls -->
+                    </div>
+                    <!-- END Gallery Carousel Content -->
+                </div>
+                <!-- END Gallery Carousel Block -->
                 <!-- END Responsive Full Title -->
 
             </div>
