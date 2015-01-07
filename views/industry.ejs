@@ -17,15 +17,28 @@
 
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="css/plugins.css">
+    <link rel="stylesheet" href="/css/plugins.css">
 
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/css/main.css">
 
-    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="/css/themes.css">
 
-    <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+    <script src="/js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/icon57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="/img/icon72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="/img/icon76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="/img/icon114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="/img/icon120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="/img/icon144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="/img/icon152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="/img/icon180.png" sizes="180x180">
+    <!-- END Icons -->
 </head>
 <body>
 <!-- Alternative Sidebar -->
@@ -63,84 +76,76 @@
                     </ul>
                 </div>
                 <!-- END eCommerce Dashboard Header -->
-
-
-                <!-- Gallery Carousel Block -->
                 <div class="block">
-                    <!-- Gallery Carousel Title -->
-                    <div class="block-title">
-                        <h2><strong>Gallery</strong> Carousel</h2>
-                    </div>
-                    <!-- END Gallery Carousel Title -->
+                    <div class="responsive text-center">
 
-                    <!-- Gallery Carousel Content -->
-                    <div id="example-carousel4" class="carousel slide">
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="active item gallery">
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                        <a href="#">
-                                            <img src="img/placeholders/photos/photo1.jpg" alt="image">
-                                        </a>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <a href="#">
-                                            <img src="img/placeholders/photos/photo1.jpg" alt="image">
-                                        </a>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo3.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo24.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo23.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo22.jpg" alt="image">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item gallery">
-                                <div class="row">
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo4.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo5.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo6.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo21.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo20.jpg" alt="image">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <img src="img/placeholders/photos/photo19.jpg" alt="image">
-                                    </div>
-                                </div>
-                            </div>
-
+                            <% industry_array.forEach(function(industry){ %>
+                        <div>
+                                <a class="btn btn-sm btn-primary" href="industry?type=<%= industry.industry_name %>"><%=industry.industry_name %></a>
                         </div>
-                        <!-- END Wrapper for slides -->
+                            <% }) %>
 
-                        <!-- Controls -->
-                        <a class="left carousel-control no-hover" href="#example-carousel4" data-slide="prev">
-                            <span><i class="fa fa-chevron-left"></i></span>
-                        </a>
-                        <a class="right carousel-control no-hover" href="#example-carousel4" data-slide="next">
-                            <span><i class="fa fa-chevron-right"></i></span>
-                        </a>
-                        <!-- END Controls -->
+
                     </div>
-                    <!-- END Gallery Carousel Content -->
                 </div>
-                <!-- END Gallery Carousel Block -->
+
+                <div class="block">
+                    <div class="table-responsive">
+                        <table class="table table-vcenter table-striped">
+
+                            <thead>
+                            <tr>
+                                <th style="width: 150px;" class="text-center"><i class="gi gi-user"></i></th>
+                                <th>Store Name</th>
+                                <th>Address</th>
+                                <th style="width: 150px;" class="text-center">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <% if(typeof store_array != 'undefined'){ %>
+                            <% store_array.forEach(function(store){ %>
+                            <tbody>
+
+                            <tr>
+                                <td class="text-center"><img style="width: 30px;height: 30px;" src="<%= store.logo %>"
+                                                             alt="avatar"
+                                                             class="img-circle"></td>
+                                <td><a href="store_detail?id=<%= store._id %>"><%= store.store_name.substring(0, 40) %>
+                                        <% if (store.store_name.length > 20){ %>
+                                        ...
+                                        <% } %>
+                                    </a></td>
+                                <td>
+                                    <% store.address.forEach(function (a) { %>
+                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
+                                            href="store_detail?id=<%= store._id %>">more</a>
+                                    <% }) %>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <a href="edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
+                                           class="btn btn-default"><i class="fa fa-pencil"></i></a>
+                                        <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i
+                                                    class="fa fa-times"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                            <% })} else{%>
+                            <tr class="text-center" >
+                                <td class="text-center" colspan="4">
+                                    Không có cửa hàng nào được tìm thấy!
+                                </td>
+
+                            </tr>
+                            <%}%>
+
+                        </table>
+                    </div>
+
+                </div>
+
                 <!-- END Responsive Full Title -->
 
             </div>
@@ -166,14 +171,54 @@
 <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+<!--slick-->
+<link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/slick/slick.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.responsive').slick({
+            dots: true,
+            infinite: false,
+            speed: 300,
+            slidesToShow: 6,
+            slidesToScroll: 6,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 6,
+                        slidesToScroll: 6,
+                        infinite: true,
+                        dots: true
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2
+                    }
+                }
+            ]
+        });
+    });
 
+</script>
 <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
-<script src="js/vendor/bootstrap.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/app.js"></script>
+<script src="/js/vendor/bootstrap.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/app.js"></script>
 
 <!-- Load and execute javascript code used only in this page -->
-<script src="js/pages/formsWizard.js"></script>
+<script src="/js/pages/formsWizard.js"></script>
 <script>$(function () {
         FormsWizard.init();
     });</script>
