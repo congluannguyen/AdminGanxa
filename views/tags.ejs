@@ -1,19 +1,91 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>
+<html class="no-js lt-ie10"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <title>Search Page - Ganxa</title>
+
+    <meta name="description"
+          content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/plugins.css">
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/themes.css">
+
+    <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
 </head>
 <body>
-<% if(typeof product_array != 'undefined'){ %>
-<% product_array.forEach(function(product){ %>
-<ul>
-    <li><p><a href="edit_product?id=<%=product._id%>"><%= product.product_name %></a></p></li>
-    <li><p><%= product.price %></p></li>
-</ul>
-<br>
-<% })}else{ %>
-<p><%= tags_notification %></p>
-<% } %>
+<!-- Alternative Sidebar -->
+
+<div id="page-wrapper">
+
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <% include ./partial/slidebar %>
+        <!-- Main Container -->
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- END Header -->
+
+            <!-- Page content -->
+            <div id="page-content">
+                <!-- Wizard Header -->
+                <% if(typeof product_array != 'undefined'){ %>
+                <% product_array.forEach(function(product){ %>
+                <ul>
+                    <li><p><a href="product_detail?id=<%=product._id%>"><%= product.product_name %></a></p></li>
+                    <li><p><%= product.price %></p></li>
+                </ul>
+                <br>
+                <% })}else{ %>
+                <p><%= tags_notification %></p>
+                <% } %>
+
+            </div>
+            <!-- END Responsive Full Content -->
+            <% include ./partial/footer %>
+        </div>
+        <!-- END Page Content -->
+
+    </div>
+    <!-- END Main Container -->
+
+</div>
+<!-- END Page Container -->
+
+</div>
+<!-- END Page Wrapper -->
+
+
+<!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
+<% include ./partial/settings %>
+<!-- END User Settings -->
+
+<!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+
+<!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Load and execute javascript code used only in this page -->
+<script src="js/pages/formsWizard.js"></script>
+<script>$(function () {
+        FormsWizard.init();
+    });</script>
 </body>
 </html>

@@ -105,7 +105,7 @@
 
                                 <% if(typeof media_array != 'undefined'){ %>
                                 <% media_array.forEach(function(media){ %>
-                                <div class="col-sm-6 col-xs-12 col-md-4 gallery-image" id="<%=media._id%>">
+                                <div class="col-sm-6 col-xs-12 col-md-4 gallery-image" id="<%= media._id %>">
 
                                     <% if (media.media_type == 'Image'){ %>
                                     <div style="height: 200px;overflow-y: hidden;">
@@ -155,13 +155,18 @@
                 </div>
                 <% }) %>
                 <!--END ROW-->
+
             </div>
-            <!-- END Page Content -->
-            <% include ./partial/footer %>
+            <!--<% include ./partial/footer %>-->
+
         </div>
-        <!-- Page content -->
+
     </div>
+    <!-- END Page Content -->
+
+
 </div>
+<!-- Page content -->
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
 </body>
