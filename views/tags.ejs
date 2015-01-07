@@ -77,27 +77,31 @@
                                 <fieldset>
 
 
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label" for="val_storename">Tags <span
-                                                    class="text-danger">*</span></label>
-
-                                        <div class="col-md-6">
-                                            <div class="input-group">
-                                                <input type="text" id="val_storename" name="txtTextSearchTag"
-                                                       class="form-control input-tags" placeholder="Your store name..">
-                                                <span class="input-group-addon"><i class="gi gi-tag"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <!--<div class="form-group">-->
-                                        <!--<label class="col-md-4 control-label" for="example-chosen-multiple">Tags</label>-->
+                                        <!--<label class="col-md-4 control-label" for="val_storename">Tags <span-->
+                                                    <!--class="text-danger">*</span></label>-->
+
                                         <!--<div class="col-md-6">-->
-                                            <!--<select id="example-chosen-multiple" name="example-chosen-multiple" class="select-chosen" data-placeholder="Choose a Country.." style="width: 250px;" multiple>-->
-                                                <!--<option value="United States">United States</option>-->
-                                            <!--</select>-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" id="val_storename" name="txtTextSearchTag"-->
+                                                   <!--class="form-control input-tags" placeholder="Your store name..">-->
+                                            <!--<span class="input-group-addon"><i class="gi gi-tag"></i></span>-->
                                         <!--</div>-->
                                     <!--</div>-->
+                            <!--</div>-->
+
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="example-chosen-multiple">Tags</label>
+                                        <div class="col-md-6">
+                                            <select id="example-chosen-multiple" name="example-chosen-multiple" class="select-chosen" data-placeholder="Choose a Country.." style="width: 250px;" multiple>
+                                                <% if(typeof product_array != 'undefined'){%>
+                                                <% product_array.forEach(function (product) { %>
+                                                <option value="<%=product.tags[0]%>"><%=product.tags[0]%></option>
+                                                <%})};%>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group form-actions text-center" >
                                         <div class="col-md-12 ">
