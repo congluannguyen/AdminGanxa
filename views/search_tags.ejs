@@ -26,6 +26,26 @@
     <link rel="stylesheet" href="css/themes.css">
 
     <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#txt").change(function () {
+                var text = this.val();
+                alert(text);
+                $.ajax({
+                    url: "/search/tags/" + $(this).val(),
+                    type: " POST",
+                    success: function (data_success) {
+                        alert(data_success);
+                        //show new data
+                    },
+                    error: function (data_error) {
+                        alert(data_error);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <!-- Alternative Sidebar -->
@@ -83,6 +103,7 @@
 
                                         <div class="col-md-6">
                                             <div class="input-group">
+                                                <input id="txt" name="txt" class="txt">
                                                 <input type="text" id="val_storename" name="txtTextSearchTag"
                                                        class="form-control" placeholder="Your store name..">
                                                 <span class="input-group-addon"><i class="gi gi-tag"></i></span>
@@ -91,7 +112,7 @@
                                     </div>
 
 
-                                    <div class="form-group form-actions text-center" >
+                                    <div class="form-group form-actions text-center">
                                         <div class="col-md-12 ">
                                             <input type="submit" name="button_s" class="button_ss btn btn-primary"
                                                    tabindex="-1" value="Search">
@@ -103,7 +124,7 @@
 
 
                             </div>
-                            <div class="block text-center"  >
+                            <div class="block text-center">
                                 <a href="""><p class="label label-primary text-center"></p></a>
                             </div>
                             <!-- END Validation Block -->

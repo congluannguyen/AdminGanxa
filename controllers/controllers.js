@@ -448,7 +448,7 @@ var controllers = {
             var string_tags = req.body.txtTags;
             var tags = string_tags.split(",");
             for (i = 0; i < tags.length; i++) {
-                tags[i] = tags[i].trim();
+                tags[i] = tags[i].trim().toLowerCase();
             }
             var description = req.body.txtDescription;
             console.log(description);
@@ -537,7 +537,7 @@ var controllers = {
             var strTags = req.body.txtTags;
             var tags = strTags.split(",");
             for (i = 0; i < tags.length; i++) {
-                tags[i] = tags[i].trim();
+                tags[i] = tags[i].trim().toLowerCase();
             }
             var description = req.body.txtDescription;
             //Product image:
@@ -984,15 +984,33 @@ var controllers = {
         },
 
         post_search_tags: function (req, res) {
-            var tag = req.body.txtTextSearchTag;
+            var tag = req.body.txtTextSearchTag.toLowerCase();
+            var tags = tag.split(",");
+            //tags = JSON.parse(tags);
+            //var tag = ['z', 'x', 'c'];
             console.log(tag);
-            product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
-                console.log(product_array);
+            console.log(tags);
+            product_schema.product.find({tags: {$in: tags}}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
                     res.render('tags', {product_array: product_array});
                 } else {
                     product_schema.product.find(function (product_error, product_array) {
                         res.render('tags', {product_array: product_array, tags_notification: "Không có sản phẩm."});
+                    })
+                }
+            });
+        },
+
+        ajax_post_search_tags: function (req, res) {
+            var tag = req.param.tag.toLowerCase();
+            console.log(tag);
+            product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
+                console.log(product_array);
+                if (product_array && product_array.length > 0) {
+                    res.send(product_array);
+                } else {
+                    product_schema.product.find(function (product_error, product_array) {
+                        res.send("Không có sản phẩm.");
                     })
                 }
             });
@@ -1220,6 +1238,7 @@ module.exports = function (router) {
     //search_tags
     router.get('/search_tags', controllers.get_search_tags);
     router.post('/search_tags', controllers.post_search_tags);
+    router.post('/search/tags/:tag', controllers.ajax_post_search_tags);
     //search_header
     router.post('/header/search/:keyword', controllers.header_search);
 
