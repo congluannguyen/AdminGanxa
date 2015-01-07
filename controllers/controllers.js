@@ -11,6 +11,16 @@ var product_image_when_edit_product;
 
 var controllers = {
 
+        slug_factory: function (str) {
+            var date = new Date();
+            var hour = date.getHours();
+            var minute = date.getMinutes();
+            var day = date.getDate();
+            var month = date.getMonth();
+            var year = date.getYear();
+            return(S(str).slugify().s + "-" + hour + minute + day + month + year);
+        },
+
         get_store_array: function (req, res) {
             var store_query = store_schema.store.find({});
             store_query.sort({date: -1});
@@ -136,6 +146,7 @@ var controllers = {
             var id_user_facebook = "id_user_facebook";
             var store_name = req.body.txtStoreName;
             var store_name_non_accented = S(store_name).latinise().s;
+            var url = controllers.slug_factory(store_name);
             var address = [];
             var city = req.body.txtCity;
             var district = req.body.optDistrict;
@@ -202,6 +213,7 @@ var controllers = {
                 id_user_facebook: id_user_facebook,
                 store_name: store_name,
                 store_name_non_accented: store_name_non_accented,
+                url: url,
                 address: address,
                 latitude: latitude,
                 longitude: longitude,
@@ -897,7 +909,6 @@ var controllers = {
                                     product_array_render = product_array_render.concat(product_array);
                                 }
                             });
-                            console.log(ka)
                         });
                         setTimeout(function () {
                             console.log(product_array_render);
@@ -962,9 +973,29 @@ var controllers = {
                         }, 20);
                     });
                 } else {
+                    //
                     res.render('search_product', {product_array: req.session.product_array_all, industry_array: req.session.industry_array, location_array: req.session.location_array});
                 }
             }
+        },
+
+        get_search_tags: function (req, res) {
+            res.render('search_tags');
+        },
+
+        post_search_tags: function (req, res) {
+            var tag = req.body.txtTextSearchTag;
+            console.log(tag);
+            product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
+                console.log(product_array);
+                if (product_array && product_array.length > 0) {
+                    res.render('tags', {product_array: product_array});
+                } else {
+                    product_schema.product.find(function (product_error, product_array) {
+                        res.render('tags', {product_array: product_array, tags_notification: "Không có sản phẩm."});
+                    })
+                }
+            });
         },
 
         header_search: function (req, res) {
@@ -1100,6 +1131,37 @@ var controllers = {
             res.render('test')
         },
 
+        get_url: function (req, res) {
+
+            var url = req.param("url");
+
+            if (url) {
+                store_schema.store.find({url: url}, function (store_error, store_current) {
+                    req.session.store_current = store_current;
+                    var id;
+                    store_current.forEach(function (store) {
+                        id = store._id;
+                    });
+                    console.log(id);
+                    req.url = "/store_detail?id=" + id;
+                    console.log(req.url);
+                    var product_query = product_schema.product.find({"id_store": id});
+                    product_query.sort({date: -1});
+                    product_query.exec(function (product_error, product_array) {
+                        if (product_array && product_array.length > 0) {
+                            req.session.product_array_curent = product_array;
+                            res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, media_array: req.session.media_array_all});
+                        } else {
+                            console.log("không có product array");
+                            res.render("store_detail", {store_id_recent: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
+                        }
+                    });
+                });
+            } else {
+                res.render('index', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all});
+            }
+        },
+
         get_comming: function (req, res) {
             res.render('comming', {notifications: " Chua lam sao co!"});
         }
@@ -1149,15 +1211,22 @@ module.exports = function (router) {
     //insert industry
     router.post('/industry', controllers.post_insert_industry);
 
-    //search
+    //search_store
     router.get('/search_store', controllers.get_search_store);
     router.post('/search_store', controllers.post_search_store);
+    //search_product
     router.get('/search_product', controllers.get_search_product);
     router.post('/search_product', controllers.post_search_product);
+    //search_tags
+    router.get('/search_tags', controllers.get_search_tags);
+    router.post('/search_tags', controllers.post_search_tags);
+    //search_header
     router.post('/header/search/:keyword', controllers.header_search);
 
     //tags
     router.get('/tags', controllers.get_tag);
+    router.post('/tags', controllers.post_search_tags);
+
 
     //location
     router.get('/location', controllers.get_location);
@@ -1170,6 +1239,6 @@ module.exports = function (router) {
 
     //test
     router.get('/test', controllers.get_test);
-
+    router.get('/store/:url', controllers.get_url);
     return router;
 };

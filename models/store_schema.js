@@ -7,6 +7,7 @@ var store_schema = new schema({
     id_user_facebook: String,
     store_name: String,
     store_name_non_accented: String,
+    url: String,
     address: [],
     phone: String,
     industry: String,

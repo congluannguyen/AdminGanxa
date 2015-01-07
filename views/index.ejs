@@ -72,7 +72,7 @@
                                         <% if (store.store_name.length > 20){ %>
                                         ...
                                         <% } %>
-                                    </a></td>
+                                    </a></td><a href="/store/<%=store.url%>">click</a>
                                 <td>
                                     <% store.address.forEach(function (a) { %>
                                     <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
