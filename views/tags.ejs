@@ -42,16 +42,122 @@
             <!-- Page content -->
             <div id="page-content">
                 <!-- Wizard Header -->
-                <% if(typeof product_array != 'undefined'){ %>
-                <% product_array.forEach(function(product){ %>
-                <ul>
-                    <li><p><a href="product_detail?id=<%=product._id%>"><%= product.product_name %></a></p></li>
-                    <li><p><%= product.price %></p></li>
-                </ul>
-                <br>
-                <% })}else{ %>
-                <p><%= tags_notification %></p>
-                <% } %>
+                <!-- END Wizard Header -->
+
+
+                <!-- eCommerce Dashboard Header -->
+                <div class="content-header">
+                    <ul class="nav-horizontal text-center">
+                        <li>
+                            <a href="search_store"><i class="fa fa-shopping-cart"></i> Store</a>
+                        </li>
+                        <li>
+                            <a href="search_product"><i class="gi gi-oxygen_bottle"></i> Product</a>
+                        </li>
+                        <li>
+                            <a href="industry"><i class="gi gi-tablet"></i> Industry</a>
+                        </li>
+                        <li class="active">
+                            <a href="tags"><i class="gi gi-tags"></i> Tag</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END eCommerce Dashboard Header -->
+
+
+                <!-- Gallery Carousel Block -->
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data"
+                      class="form-horizontal form-bordered">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Form Validation Example Block -->
+                            <div class="block">
+
+
+                                <fieldset>
+
+
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="val_storename">Tags <span
+                                                    class="text-danger">*</span></label>
+
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" id="val_storename" name="txtTextSearch"
+                                                       class="form-control input-tags" placeholder="Your store name..">
+                                                <span class="input-group-addon"><i class="gi gi-tag"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group form-actions text-center" >
+                                        <div class="col-md-12 ">
+                                            <input type="submit" name="button_s" class="button_ss btn btn-primary"
+                                                   tabindex="-1" value="Search">
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <!-- END Form Validation Example Content -->
+
+
+                            </div>
+                            <%if(typeof product_array != 'undefined'){ %>
+                            <% product_array.forEach(function(product){ %>
+                            <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
+                                <div class="widget">
+                                    <div class="widget-simple">
+                                        <button value="<%=product._id%>" title="Del product"
+                                                class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
+                                            <i class="gi gi-remove_2"></i>
+                                        </button>
+                                        <a href="edit_product?id=<%= product._id %>" title="Edit product"
+                                           class="btn btn-xs btn-default pull-right themed-background">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="insert_media?id=<%= product._id %>" title="Add media "
+                                           class="btn btn-xs btn-default  pull-right themed-background">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+
+                                        <h4 class="widget-content">
+                                            <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
+                                            <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
+                                                            class="label label-primary ">
+                                                        <%= product.tags[0] %></p></a></small>
+                                        </h4>
+                                    </div>
+                                    <div class="widget-extra-full themed-background-dark">
+                                        <!-- Carousel -->
+                                        <div id="widget-carousel1" class="carousel slide remove-margin">
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner">
+                                                <div class="active item" style="height:350px; overflow-y:hidden;">
+                                                    <img src="<%= product.product_image %>">
+
+                                                </div>
+                                            </div>
+                                            <!-- END Wrapper for slides -->
+                                        </div>
+                                        <!-- END Carousel -->
+                                    </div>
+                                </div>
+                            </div>
+                            <% })} else{%>
+
+                            <div class="block text-center">
+                                Không có sản phẩm nào!
+                            </div>
+                            <%}%>
+                            <!-- END Validation Block -->
+                        </div>
+
+                    </div>
+                </form>
+
+                <!-- END Gallery Carousel Block -->
+                <!-- END Responsive Full Title -->
 
             </div>
             <!-- END Responsive Full Content -->
