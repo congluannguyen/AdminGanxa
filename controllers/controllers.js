@@ -100,6 +100,7 @@ var controllers = {
             controllers.get_media_array(req, res);
             controllers.get_industry_array(req, res);
             controllers.get_location_array(req, res);
+            controllers.get_tag_array(req, res);
         },
 
         get_store_by_id: function (req, res, id_store) {
@@ -487,7 +488,7 @@ var controllers = {
                                         console.log(insert_tag_error);
                                     }
                                 });
-                        }else{
+                        } else {
                             polymeric = false;
                         }
                     }
@@ -1024,8 +1025,8 @@ var controllers = {
         },
 
         /*get_search_tags: function (req, res) {
-            res.render('search_tags');
-        },*/
+         res.render('search_tags');
+         },*/
 
         post_search_tags: function (req, res) {
             var tag = req.body.txtTextSearchTag;
@@ -1033,16 +1034,19 @@ var controllers = {
             //tags = JSON.parse(tags);
             //var tag = ['z', 'x', 'c'];
             console.log(tag);
-            //console.log(tags);
-            product_schema.product.find({tags: {$in: tag}}, function (product_error, product_array) {
-                if (product_array && product_array.length > 0) {
-                    res.render('tags', {product_array: product_array});
-                } else {
-                    product_schema.product.find(function (product_error, product_array) {
-                        res.render('tags', {product_array: product_array, tags_notification: "Không có sản phẩm."});
-                    })
-                }
-            });
+            if (tag) {
+                product_schema.product.find({tags: {$all: tag}}, function (product_error, product_array) {
+                    if (product_array && product_array.length > 0) {
+                        res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all});
+                    } else {
+                        product_schema.product.find(function (product_error, product_array) {
+                            res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all, tags_notification: "Không có sản phẩm."});
+                        })
+                    }
+                });
+            }else{
+                console.log("banh")
+            }
         },
 
         ajax_post_search_tags: function (req, res) {
@@ -1083,17 +1087,20 @@ var controllers = {
         get_tag: function (req, res) {
             controllers.get_tag_array(req, res);
             var tag = req.param("tag");
+            if (tag) {
+                console.log("có");
 
-            product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
-                if (product_array && product_array.length > 0) {
-                    console.log(req.session.tag_array_all);
-                    res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all});
-                } else {
-                    product_schema.product.find(function (product_error, product_array) {
-                        res.render('tags', {product_array: product_array, tags_notification: "Không có sản phẩm."});
-                    })
-                }
-            });
+                product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
+                    if (product_array && product_array.length > 0) {
+                        res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all});
+                    } else {
+                        res.render('tags', {product_array: req.session.product_array_all, tag_array: req.session.tag_array_all, tags_notification: "Không có sản phẩm."});
+                    }
+                }.sort({date: -1}));
+            } else {
+                res.render('tags', {product_array: req.session.product_array_all, tag_array: req.session.tag_array_all});
+
+            }
         },
 
         get_location: function (req, res) {
@@ -1283,7 +1290,7 @@ module.exports = function (router) {
     router.get('/search_product', controllers.get_search_product);
     router.post('/search_product', controllers.post_search_product);
     //search_tags
-    router.get('/search_tags', controllers.get_search_tags);
+    //router.get('/search_tags', controllers.get_search_tags);
     router.post('/search_tags', controllers.post_search_tags);
     router.post('/search/tags/:tag', controllers.ajax_post_search_tags);
     //search_header
@@ -1292,7 +1299,6 @@ module.exports = function (router) {
     //tags
     router.get('/tags', controllers.get_tag);
     router.post('/tags', controllers.post_search_tags);
-
 
     //location
     router.get('/location', controllers.get_location);

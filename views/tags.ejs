@@ -115,15 +115,13 @@
                                         <label class="col-md-4 control-label" for="example-chosen-multiple">Tags</label>
 
                                         <div class="col-md-6">
-                                            <select id="example-chosen-multiple ttt" name="example-chosen-multiple"
+                                            <select id="example-chosen-multiple" name="txtTextSearchTag"
                                                     class="select-chosen" data-placeholder="Choose a Country.."
                                                     style="width: 250px;" multiple>
-                                                <% if(typeof product_array != 'undefined'){ %>
-                                                <% product_array.forEach(function (product) { %>
-                                                <% for(i = 0; i < product.tags.length; i++){ %>
-                                                <option value="<%= product.tags[i] %>"><%= product.tags[i] %></option>
-                                                <%}%>
-                                                <% })}; %>
+                                                <% if(typeof tag_array != 'undefined'){ %>
+                                                <% tag_array.forEach(function (tag) { %>
+                                                <option value="<%= tag.tag_name %>"><%= tag.tag_name %></option>
+                                                <% })} %>
                                             </select>
                                         </div>
                                     </div>
