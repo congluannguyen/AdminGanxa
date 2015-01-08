@@ -7,6 +7,7 @@ var product_schema = new schema({
     id_store: String,
     product_name: String,
     product_name_non_accented: String,
+    url: String,
     price: String,
     tags: [],
     description: String,

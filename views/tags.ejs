@@ -26,6 +26,26 @@
     <link rel="stylesheet" href="css/themes.css">
 
     <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ttt").change(function () {
+                var text = this.val();
+                alert(text);
+                $.ajax({
+                    url: "/search/tags/" + $(this).val(),
+                    type: " POST",
+                    success: function (data_success) {
+                        alert(data_success);
+                        //show new data
+                    },
+                    error: function (data_error) {
+                        alert(data_error);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <!-- Alternative Sidebar -->
@@ -78,32 +98,37 @@
 
 
                                     <!--<div class="form-group">-->
-                                        <!--<label class="col-md-4 control-label" for="val_storename">Tags <span-->
-                                                    <!--class="text-danger">*</span></label>-->
+                                    <!--<label class="col-md-4 control-label" for="val_storename">Tags <span-->
+                                    <!--class="text-danger">*</span></label>-->
 
-                                        <!--<div class="col-md-6">-->
-                                        <!--<div class="input-group">-->
-                                            <!--<input type="text" id="val_storename" name="txtTextSearchTag"-->
-                                                   <!--class="form-control input-tags" placeholder="Your store name..">-->
-                                            <!--<span class="input-group-addon"><i class="gi gi-tag"></i></span>-->
-                                        <!--</div>-->
+                                    <!--<div class="col-md-6">-->
+                                    <!--<div class="input-group">-->
+                                    <!--<input type="text" id="val_storename" name="txtTextSearchTag"-->
+                                    <!--class="form-control input-tags" placeholder="Your store name..">-->
+                                    <!--<span class="input-group-addon"><i class="gi gi-tag"></i></span>-->
                                     <!--</div>-->
-                            <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
 
 
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="example-chosen-multiple">Tags</label>
+
                                         <div class="col-md-6">
-                                            <select id="example-chosen-multiple" name="example-chosen-multiple" class="select-chosen" data-placeholder="Choose a Country.." style="width: 250px;" multiple>
-                                                <% if(typeof product_array != 'undefined'){%>
+                                            <select id="example-chosen-multiple ttt" name="example-chosen-multiple"
+                                                    class="select-chosen" data-placeholder="Choose a Country.."
+                                                    style="width: 250px;" multiple>
+                                                <% if(typeof product_array != 'undefined'){ %>
                                                 <% product_array.forEach(function (product) { %>
-                                                <option value="<%=product.tags[0]%>"><%=product.tags[0]%></option>
-                                                <%})};%>
+                                                <% for(i = 0; i < product.tags.length; i++){ %>
+                                                <option value="<%= product.tags[i] %>"><%= product.tags[i] %></option>
+                                                <%}%>
+                                                <% })}; %>
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="form-group form-actions text-center" >
+                                    <div class="form-group form-actions text-center">
                                         <div class="col-md-12 ">
                                             <input type="submit" name="button_s" class="button_ss btn btn-primary"
                                                    tabindex="-1" value="Search">
@@ -115,12 +140,12 @@
 
 
                             </div>
-                            <%if(typeof product_array != 'undefined'){ %>
+                            <% if(typeof product_array != 'undefined'){ %>
                             <% product_array.forEach(function(product){ %>
                             <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
                                 <div class="widget">
                                     <div class="widget-simple">
-                                        <button value="<%=product._id%>" title="Del product"
+                                        <button value="<%= product._id %>" title="Del product"
                                                 class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
                                             <i class="gi gi-remove_2"></i>
                                         </button>
@@ -134,7 +159,7 @@
                                         </a>
 
                                         <h4 class="widget-content">
-                                            <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
+                                            <a href="product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
                                             <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
                                                             class="label label-primary ">
                                                         <%= product.tags[0] %></p></a></small>
@@ -156,12 +181,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <% })} else{%>
+                            <% })} else{ %>
 
                             <div class="block text-center">
                                 Không có sản phẩm nào!
                             </div>
-                            <%}%>
+                            <% } %>
                             <!-- END Validation Block -->
                         </div>
 

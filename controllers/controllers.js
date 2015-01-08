@@ -3,6 +3,7 @@ var store_schema = require('../models/store_schema');
 var product_schema = require('../models/product_schema');
 var location_schema = require('../models/location_schema');
 var media_schema = require('../models/media_schema');
+var tag_schema = require('../models/tag_schema');
 
 var S = require('string');
 var im = require('imagemagick');
@@ -78,6 +79,19 @@ var controllers = {
                     console.log(location_error);
                 }
             });
+        },
+
+        get_tag_array: function (req, res) {
+            if (!req.session.tag_array_all) {
+                var tag_query = tag_schema.tag.find({});
+                tag_query.exec(function (tag_error, tag_array) {
+                    if (tag_array && tag_array.length > 0) {
+                        req.session.tag_array_all = tag_array;
+                    } else {
+                        console.log(tag_array);
+                    }
+                });
+            }
         },
 
         get_all: function (req, res) {
@@ -419,6 +433,7 @@ var controllers = {
         },
 
         get_insert_product: function (req, res) {
+            console.log("vô")
             controllers.get_all(req, res);
             var store_id = req.param("id");
             if (!req.param("id")) {
@@ -443,15 +458,43 @@ var controllers = {
             }
             var product_name = req.body.txtProductName;
             var product_name_non_accented = S(product_name).latinise().s;
+            var url = controllers.slug_factory(product_name);
             var price = req.body.txtPrice;
             //Tags:
             var string_tags = req.body.txtTags;
+            string_tags = string_tags.toLowerCase().trim();
             var tags = string_tags.split(",");
-            for (i = 0; i < tags.length; i++) {
-                tags[i] = tags[i].trim().toLowerCase();
-            }
+            var polymeric = false;
+            tag_schema.tag.find(function (tag_error, tag_array) {
+                if (tag_error) {
+                    throw tag_error;
+                } else {
+                    for (i = 0; i < tags.length; i++) {
+                        tags[i] = tags[i].trim();
+                        tag_array.forEach(function (tag) {
+                            if (tag.tag_name == tags[i]) {
+                                polymeric = true;
+                                console.log("trùng thằng " + tags[i]);
+                                return true;
+                            }
+                        });
+                        if (polymeric == false) {
+                            new tag_schema.tag({
+                                _id: null,
+                                tag_name: tags[i]
+                            }).save(function (insert_tag_error) {
+                                    if (insert_tag_error) {
+                                        console.log(insert_tag_error);
+                                    }
+                                });
+                        }else{
+                            polymeric = false;
+                        }
+                    }
+                }
+            });
+
             var description = req.body.txtDescription;
-            console.log(description);
             //Product image:
             var product_image;
             if (!req.files.ulfProductImage) {
@@ -483,6 +526,7 @@ var controllers = {
                 id_store: store_id,
                 product_name: product_name,
                 product_name_non_accented: product_name_non_accented,
+                url: url,
                 price: price,
                 tags: tags,
                 description: description,
@@ -979,18 +1023,18 @@ var controllers = {
             }
         },
 
-        get_search_tags: function (req, res) {
+        /*get_search_tags: function (req, res) {
             res.render('search_tags');
-        },
+        },*/
 
         post_search_tags: function (req, res) {
-            var tag = req.body.txtTextSearchTag.toLowerCase();
-            var tags = tag.split(",");
+            var tag = req.body.txtTextSearchTag;
+            //var tags = tag.split(",");
             //tags = JSON.parse(tags);
             //var tag = ['z', 'x', 'c'];
             console.log(tag);
-            console.log(tags);
-            product_schema.product.find({tags: {$in: tags}}, function (product_error, product_array) {
+            //console.log(tags);
+            product_schema.product.find({tags: {$in: tag}}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
                     res.render('tags', {product_array: product_array});
                 } else {
@@ -1037,11 +1081,13 @@ var controllers = {
         },
 
         get_tag: function (req, res) {
-            controllers.get_all(req, res);
+            controllers.get_tag_array(req, res);
             var tag = req.param("tag");
+
             product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
                 if (product_array && product_array.length > 0) {
-                    res.render('tags', {product_array: product_array});
+                    console.log(req.session.tag_array_all);
+                    res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all});
                 } else {
                     product_schema.product.find(function (product_error, product_array) {
                         res.render('tags', {product_array: product_array, tags_notification: "Không có sản phẩm."});
@@ -1208,6 +1254,7 @@ module.exports = function (router) {
     router.get('/product_detail', controllers.get_product_detail);
     //product insert
     router.get('/insert_product', controllers.get_insert_product);
+    /*router.get('/store/insert_product', controllers.get_insert_product);*/
     router.post('/insert_product', controllers.post_insert_product);
     //product delete
     router.delete('/delete/product/:id', controllers.delete_product);
