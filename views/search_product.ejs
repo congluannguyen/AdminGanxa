@@ -26,6 +26,19 @@
     <link rel="stylesheet" href="css/themes.css">
 
     <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/icon57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="/img/icon72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="/img/icon76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="/img/icon114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="/img/icon120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="/img/icon144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="/img/icon152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="/img/icon180.png" sizes="180x180">
+    <!-- END Icons -->
 </head>
 <body>
 <!-- Alternative Sidebar -->
@@ -129,11 +142,13 @@
                                                 <i class="fa fa-plus"></i>
                                             </a>
 
-                                            <h4 class="widget-content">
+                                            <h4 class="widget-content" style="height: 100px;">
                                                 <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
-                                                <small>Tag <a href="tags?tag=<%= product.tags[0] %>"><p
-                                                                class="label label-primary ">
-                                                            <%= product.tags[0] %></p></a></small>
+                                                <small>Tag <% for(i = 0; i < product.tags.length; i++){ %>
+                                                    <a href="tags?tag=<%= product.tags[i] %>"><p class="label label-primary ">
+                                                            <%= product.tags[i] %>
+                                                        </p></a>&nbsp;
+                                                    <%}%></small>
                                             </h4>
                                         </div>
                                         <div class="widget-extra-full themed-background-dark">
