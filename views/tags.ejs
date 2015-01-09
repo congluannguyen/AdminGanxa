@@ -36,7 +36,7 @@
                 });
                 $.ajax({
                     url: "/search/tags/" + tags,
-                    type: "POST",
+                    type: "GET",
                     success: function (data_success) {
                         alert(JSON.stringify(data_success));
                     },

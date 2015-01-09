@@ -1036,50 +1036,27 @@ var controllers = {
             }
         },
 
-        ajax_post_search_tags: function (req, res) {
+        ajax_get_search_tags: function (req, res) {
             var tag = req.params.tag;
-            console.log("nguyên khúc: " + tag);
+            //console.log("nguyên khúc: " + tag);
             tag = tag.split(",");
             var product_array_render;
             var product_query = product_schema.product.find();
 
             if (tag) {
                 for (i = 0; i < tag.length; i++) {
-                    console.log("từng cục: " + tag[i]);
-
+                    //console.log("từng cục: " + tag[i]);
                     product_query.find({tags: {$all: [tag[i]]}});
                     product_query.sort({date: -1});
                     product_query.exec(function (product_error, product_array) {
                         if (product_array && product_array.length > 0) {
-                            console.log("product_array: " + product_array);
+                            //console.log("product_array: " + product_array);
                             if (product_array_render == null) {
                                 product_array_render = product_array;
-                                console.log("chưa có gì: " + product_array_render);
+                                //console.log("chưa có gì: " + product_array_render);
                             } else {
-                                //xóa cái trùng ở đây
-                                /*var polymeric = false;
-                                 product_array_render.forEach(function (product_render) {
-                                 product_array.forEach(function (product) {
-                                 if (product_render._id.equals(product._id)) {
-                                 console.log(product_render._id);
-                                 console.log(product._id);
-                                 console.log("trùng cái: " + product.product_name);
-                                 polymeric = true;
-                                 } else {
-                                 console.log(product_render._id);
-                                 console.log(product._id);
-                                 }
-                                 });
-                                 if (polymeric == false) {
-                                 //chưa concat được
-                                 product_array_render = product_array_render.concat(product_array);
-                                 console.log("concat nè: " + product_array_render);
-                                 } else {
-                                 polymeric = false;
-                                 }
-                                 });*/
                                 product_array_render = product_array_render.concat(product_array);
-                                console.log("concat nè: " + product_array_render);
+                                //console.log("concat nè: " + product_array_render);
                             }
                         } else {
                             /*product_schema.product.find(function (product_error, product_array) {
@@ -1089,14 +1066,15 @@ var controllers = {
                     });
                 }
                 setTimeout(function () {
-                    product_array_render.forEach(function (product) {
-                            for (i = 0; i < product_array_render.length; i++) {
-
+                    if (product_array_render.length > 1) {
+                        for (i = 0; i < product_array_render.length; i++) {
+                            for (j = i + 1; j < product_array_render.length; j++) {
+                                if (product_array_render[i].equals(product_array_render[j])) {
+                                    product_array_render.splice(i, 1);
+                                }
                             }
-
-                        });
-
-
+                        }
+                    }
                     console.log("hết hàng: " + product_array_render);
                     console.log(product_array_render.length);
                     res.send(product_array_render);
@@ -1105,6 +1083,10 @@ var controllers = {
             else {
                 console.log("Bên tags.ejs không có chọn gì cả.")
             }
+        },
+
+        ajax_get_search_tags_nothing: function (req, res) {
+            //nothing to do hrere
         },
 
         header_search: function (req, res) {
@@ -1336,7 +1318,8 @@ module.exports = function (router) {
     //search_tags
     //router.get('/search_tags', controllers.get_search_tags);
     router.post('/search_tags', controllers.post_search_tags);
-    router.post('/search/tags/:tag', controllers.ajax_post_search_tags);
+    router.get('/search/tags/:tag', controllers.ajax_get_search_tags);
+    router.get('/search/tags/', controllers.ajax_get_search_tags_nothing);
     //search_header
     router.post('/header/search/:keyword', controllers.header_search);
 
