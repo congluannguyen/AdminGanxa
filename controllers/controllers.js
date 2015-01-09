@@ -1080,7 +1080,7 @@ var controllers = {
                         }
                     }
                     /*console.log("hết hàng: " + product_array_render);
-                    console.log(product_array_render.length);*/
+                     console.log(product_array_render.length);*/
                     res.send(product_array_render);
                 }, 20);
             }
@@ -1116,8 +1116,6 @@ var controllers = {
         get_tag: function (req, res) {
             controllers.get_all(req, res);
             setTimeout(function () {
-
-
                 var tag = req.param("tag");
                 if (tag) {
                     product_schema.product.find({tags: {$all: [tag]}}, function (product_error, product_array) {

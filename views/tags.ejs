@@ -119,12 +119,11 @@
                                             <select id="example-chosen-multiple ttt" name="example-chosen-multiple"
                                                     class="select-chosen" data-placeholder="Choose a Country.."
                                                     style="width: 250px;" multiple>
-                                                <% if(typeof product_array != 'undefined'){ %>
-                                                <% product_array.forEach(function (product) { %>
-                                                <% for(i = 0; i < product.tags.length; i++){ %>
-                                                <option value="<%= product.tags[i] %>"><%= product.tags[i] %></option>
-                                                <%}%>
-                                                <% })}; %>
+                                                <% if(typeof tag_array != 'undefined'){ %>
+                                                <% tag_array.forEach(function(tag){ %>
+                                                <option value="<%= tag.tag_name %>"><%= tag.tag_name %></option>
+                                                <% }) %>
+                                                <% } %>
                                             </select>
                                         </div>
                                     </div>
@@ -161,10 +160,12 @@
 
                                         <h4 class="widget-content" style="height: 100px;">
                                             <a href="product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
-                                            <small>Tag <% for(i = 0; i < product.tags.length; i++){ %>
+                                            <small>Tag
+                                                <% for(i = 0; i < product.tags.length; i++){ %>
                                                 <a href="tags?tag=<%= product.tags[i] %>"><p
                                                             class="label label-primary "> <%= product.tags[i] %></p></a>
-                                                <%}%></small>
+                                                <% } %>
+                                            </small>
                                         </h4>
                                     </div>
                                     <div class="widget-extra-full themed-background-dark">
