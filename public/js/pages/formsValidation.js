@@ -29,7 +29,7 @@ var FormsValidation = function() {
                     e.closest('.help-block').remove();
                 },
                 rules: {
-                    val_username: {
+                    val_storename: {
                         required: true,
                         minlength: 3
                     },
@@ -56,7 +56,7 @@ var FormsValidation = function() {
                         required: true,
                         url: true
                     },
-                    val_credit_card: {
+                    val_txtRoom: {
                         required: true,
                         creditcard: true
                     },
@@ -77,7 +77,7 @@ var FormsValidation = function() {
                     }
                 },
                 messages: {
-                    val_username: {
+                    val_storename: {
                         required: 'Please enter a username',
                         minlength: 'Your username must consist of at least 3 characters'
                     },
@@ -96,7 +96,7 @@ var FormsValidation = function() {
                     val_website: 'Please enter your website!',
                     val_credit_card: 'Please enter a valid credit card! Try 446-667-651!',
                     val_digits: 'Please enter only digits!',
-                    val_number: 'Please enter a number!',
+                    val_txtRoom: 'Please enter a number!',
                     val_range: 'Please enter a number between 1 and 1000!',
                     val_terms: 'You must agree to the service terms!'
                 }

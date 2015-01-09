@@ -43,8 +43,10 @@
                     <li><a href="">Add store</a></li>
                 </ul>
                 <!-- END Validation Header -->
-                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
-                    <div class="row">
+                <div class="row">
+
+                    <form id="form-validation" action="" method="post" enctype="multipart/form-data"
+                          class="form-horizontal form-bordered">
                         <div class="col-md-6">
                             <!-- Form Validation Example Block -->
                             <div class="block">
@@ -79,7 +81,8 @@
 
                                         <div class="form-group">
                                             <div class="col-md-6">
-                                                <textarea id="textarea-wysiwyg" name="txtDescription" rows="10" class="form-control textarea-editor"></textarea>
+                                                <textarea id="textarea-wysiwyg" name="txtDescription" rows="10"
+                                                          class="form-control textarea-editor"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -142,16 +145,16 @@
                                             <span class="text-danger">*</span></label>
 
                                         <div class="col-md-6">
-                                            <select name="slcIndustry"  class="size-selcter form-control size-selcter ">
+                                            <select name="slcIndustry" class="size-selcter form-control size-selcter ">
                                                 <% if(typeof industry_array != "undefined"){
                                                         industry_array.forEach(function(industry){ %>
-                                                <option  value="<%= industry.industry_name %>"><%= industry.industry_name %></option>
+                                                <option value="<%= industry.industry_name %>"><%= industry.industry_name %></option>
                                                 <% })} %>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-11 control-label" >
+                                        <label class="col-md-11 control-label">
 
                                         </label>
 
@@ -163,6 +166,7 @@
 
 
                                 </fieldset>
+
 
                                 <!-- END Form Validation Example Content -->
 
@@ -183,7 +187,8 @@
 
                                     <div class="col-md-7">
                                         <div class="input-group">
-                                            <input type="file" required name="ulfCover" ONCHANGE="show_cover(this)" accept="image/*"
+                                            <input type="file" required name="ulfCover" ONCHANGE="show_cover(this)"
+                                                   accept="image/*"
                                                    alt="Cover image"
                                                    class="form-control">
                                             <span class="input-group-addon"><i class="gi gi-picture"></i></span>
@@ -196,7 +201,8 @@
                                     <div class="col-md-2">
                                     </div>
                                     <div class="col-md-8 ">
-                                        <a href="#" data-toggle="modal" data-target="#myModal"><img class="cover-addstore" id="thumbnil" src="" alt="Cover image"></a>
+                                        <a href="#" data-toggle="modal" data-target="#myModal"><img
+                                                    class="cover-addstore" id="thumbnil" src="" alt="Cover image"></a>
                                     </div>
                                 </div>
                                 <!--Model-->
@@ -214,9 +220,10 @@
 
                                     <div class="col-md-7">
                                         <div class="input-group">
-                                            <input type="file" required name="ulfLogo" ONCHANGE="show_logo(this)" accept="image/*"
+                                            <input type="file" required name="ulfLogo" ONCHANGE="show_logo(this)"
+                                                   accept="image/*"
                                                    alt="Cover image"
-                                                   class="form-control">
+                                                   class="form-control" >
                                             <span class="input-group-addon"><i class="gi gi-picture"></i></span>
 
                                         </div>
@@ -233,14 +240,13 @@
                                 </fieldset>
 
 
-
-
                                 <!-- END Form Validation Example Content -->
 
 
                             </div>
                             <!-- END Validation Block -->
                         </div>
+
                         <div class="col-md-6">
                             <!-- Form Validation Example Block -->
                             <div class="block">
@@ -267,7 +273,7 @@
                                         <input type="hidden" id="o" name="txtLongitude"
                                                class="form-control  ">
                                     </div>
-                                    <input id="pac-button" type="button" value="Location"  onclick="codeAddress()">
+                                    <input id="pac-button" type="button" value="Location" onclick="codeAddress()">
                                     <!--<input type="button" value="Location"  onclick="codeAddress()">-->
 
                                 </fieldset>
@@ -276,9 +282,10 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">Address<span
                                                     class="text-danger">*</span></label>
+
                                         <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="text" id="txtRoom" name="txtRoom"
+                                                <input type="text" id="val_txtRoom" name="txtRoom"
                                                        class="form-control" placeholder="Room number..">
                                                 <span class="input-group-addon"><i class="gi gi-kiosk_food"></i></span>
                                             </div>
@@ -287,6 +294,7 @@
 
                                     <div class="form-group">
                                         <label class="col-md-4 "></label>
+
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="txtStreet" name="txtStreet"
@@ -297,13 +305,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label"></label>
+
                                         <div class="col-md-6">
                                             <select name="optDistrict" class="form-control">
                                                 <option>-- Chọn Quận --</option>
                                                 <% location_array.forEach(function(location){ %>
                                                 <optgroup label="<%= location.city %>">
                                                     <% location.district.forEach(function(district){ %>
-                                                    <option value="<%=district%>"><%=district%></option>
+                                                    <option value="<%= district %>"><%= district %></option>
                                                     <% }) %>
                                                 </optgroup>
                                                 <% }) %>
@@ -312,6 +321,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 "></label>
+
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="txtCity" name="txtCity"
@@ -322,12 +332,15 @@
                                     </div>
                                     <div class="form-group form-actions">
                                         <div class="col-md-9 col-md-offset-3">
-                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> Submit</button>
-                                            <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-repeat"></i> Reset</button>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i
+                                                        class="fa fa-angle-right"></i> Submit
+                                            </button>
+                                            <button type="reset" class="btn btn-sm btn-warning"><i
+                                                        class="fa fa-repeat"></i> Reset
+                                            </button>
                                         </div>
                                     </div>
                                 </fieldset>
-
 
 
                                 <!-- END Form Validation Example Content -->
@@ -336,9 +349,10 @@
                             </div>
                             <!-- END Validation Block -->
                         </div>
+                    </form>
 
-                    </div>
-                </form>
+                </div>
+
             </div>
             <!-- END Page Content -->
             <% include ./partial/footer %>
@@ -350,6 +364,9 @@
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
-
+<script src="../js/pages/formsValidation.js"></script>
+<script>$(function () {
+        FormsValidation.init();
+    });</script>
 </body>
 </html>

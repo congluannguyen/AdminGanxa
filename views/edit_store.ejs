@@ -417,9 +417,9 @@
 
                                     <div class="col-md-7">
                                         <div class="input-group">
-                                            <input type="file" required name="ulfCover" ONCHANGE="show_cover(this)" accept="image/*"
+                                            <input type="file"  name="ulfCover" ONCHANGE="show_cover(this)" accept="image/*"
                                                    alt="Cover image"
-                                                   class="form-control">
+                                                   class="form-control" value="<%store.cover%>">
                                             <span class="input-group-addon"><i class="gi gi-picture"></i></span>
 
                                         </div>
@@ -450,7 +450,7 @@
                                         <div class="input-group">
                                             <input type="file" required name="ulfLogo" ONCHANGE="show_logo(this)" accept="image/*"
                                                    alt="Cover image"
-                                                   class="form-control">
+                                                   class="form-control" value="<%store.logo%>">
                                             <span class="input-group-addon"><i class="gi gi-picture"></i></span>
 
                                         </div>

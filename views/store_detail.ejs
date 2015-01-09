@@ -4,6 +4,8 @@
     <title>Store Detail</title>
     <% include ./partial/head %>
     <script src="../js/map.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
     <script>
         var geocoder;
         var map;
@@ -233,33 +235,22 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deleteproductbutton").click(function () {
+
                 $.ajax({
-                    url: "/delete/product/" + $(this).val(),
+                    url: "/delete/product/"+$(this).val(),
                     type: "DELETE",
                     success: function (data, textStatus, jqXHR) {
-                        window.location.href = "../store_detail";
+                        window.location.href = "";
                     }
                 });
             });
         });
     </script>
-    <style>
-        #map-canvas {
-            float: left;
-            height: 400px;
-            width: 100%;
-        }
-    </style>
 </head>
 <body>
 <!-- Preloader -->
-<div class="modal fade" id="popup-map" role="dialog">
-    <div class="modal-content">
-        <div id="map-canvas" class="map"></div>
-    </div>
-</div>
 <div class="preloader themed-background">
-    <h1 class="push-top-bottom text-light text-center"><strong>Softer</strong>Source</h1>
+    <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
 
     <div class="inner">
         <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
@@ -281,7 +272,15 @@
             <div class="row">
 
                 <!--popup-->
-
+                <div class="modal fade" id="popup-map" tabindex="-1" role="dialog"
+                     aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <!--<div class="modal-dialog">-->
+                    <!--<div class="modal-body">-->
+                    <div id="map-canvas" class="map"></div>
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
                 <!--end popup-->
                 <% store_array.forEach(function (store) { %>
                 <div class="col-md-2"></div>
@@ -290,11 +289,19 @@
                     <div class="widget">
                         <div class="widget-advanced">
                             <!-- Widget Header -->
-                            <div class="widget-header-store text-center ">
+                            <div class="widget-header-store text-center themed-background-dark"
+                                 style="background-image: url('<%= store.cover %>') ">
+
+                                <h2 class="widget-content-light position-store">
+                                    <strong><%= store.store_name %></strong><br>
+                                </h2>
 
                                 <img style="width: 100%;height: 100%;" src="<%= store.cover %>">
+
+
                             </div>
                             <!-- END Widget Header -->
+
                             <!-- Widget Main -->
                             <div class="widget-main">
                                 <a href="javascript:void(0)" class="widget-image-container animation-bigEntrance">
@@ -304,11 +311,6 @@
                                 </a>
                                 <table class="table table-borderless table-striped table-vcenter">
                                     <tbody>
-                                    <tr>
-                                        <td class="text-center" colspan="2">
-                                            <strong style="font-size: xx-large;"><%= store.store_name %> </strong>
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <td class="text-right"><strong>Website</strong></td>
                                         <td><%= store.website %></td>
@@ -345,7 +347,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-right"><strong>Industry</strong></td>
-                                        <td><a href="../industry?type=<%= store.industry %>"><%= store.industry %></a>
+                                        <td><a href="industry?type=<%= store.industry %>"><%= store.industry %></a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -356,10 +358,10 @@
                                     <tr>
                                         <td colspan="2">
                                             <center>
-                                                <a href="../edit_store?id=<%= store._id %>"
+                                                <a href="edit_store?id=<%= store._id %>"
                                                    class="btn btn-sm btn-primary"><i
                                                             class="fa fa-angle-right"></i> Edit store</a>
-                                                <a href="../insert_product?id=<%= store._id %>"
+                                                <a href="insert_product?id=<%= store._id %>"
                                                    class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i>
                                                     Add
                                                     Product</a>
@@ -376,30 +378,30 @@
                     <!-- END Advanced Active Theme Color Widget -->
                 </div>
                 <% }) %>
-                <% if(typeof product_array != 'undefined'){ %>
+                <% if(typeof product_array != 'undefined'){%>
                 <% product_array.forEach(function (product) { %>
                 <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
                     <div class="widget">
                         <div class="widget-simple">
-                            <button value="<%= product._id %>" title="Del product"
+                            <button value="<%=product._id%>" title="Del product"
                                     class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
                                 <i class="gi gi-remove_2"></i>
                             </button>
-                            <a href="../edit_product?id=<%= product._id %>" title="Edit product"
+                            <a href="edit_product?id=<%= product._id %>" title="Edit product"
                                class="btn btn-xs btn-default pull-right themed-background">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a href="../insert_media?id=<%= product._id %>" title="Add media "
+                            <a href="insert_media?id=<%= product._id %>" title="Add media "
                                class="btn btn-xs btn-default  pull-right themed-background">
                                 <i class="fa fa-plus"></i>
                             </a>
 
-                            <h4 class="widget-content" style="height: 100px;">
-                                <a href="../product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
+                            <h4 class="widget-content">
+                                <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
                                 <small>Tag <% for(i = 0; i < product.tags.length; i++){ %>
-                                        <a href="../tags?tag=<%= product.tags[i] %>"><p
-                                                    class="label label-primary "> <%= product.tags[i] %></p></a>
-                                        <%}%></small>
+                                    <a href="../tags?tag=<%= product.tags[i] %>"><p
+                                                class="label label-primary "> <%= product.tags[i] %></p></a>
+                                    <%}%></small>
                             </h4>
                         </div>
                         <div class="widget-extra-full themed-background-dark">
@@ -419,10 +421,7 @@
                     </div>
                 </div>
                 <% })}else{ %>
-                <div class="block text-center">
-                    <p>Không có sản phẩm nào trong cửa hàng này !</p>
-                </div>
-
+                <p><%=product_notification%></p>
                 <% } %>
             </div>
             <!--END ROW-->
