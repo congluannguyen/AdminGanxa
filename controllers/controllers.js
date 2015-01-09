@@ -1066,17 +1066,21 @@ var controllers = {
                     });
                 }
                 setTimeout(function () {
+                    console.log(" hiện tại nó như này: " + product_array_render + " có " + product_array_render.length + " thằng");
                     if (product_array_render.length > 1) {
                         for (i = 0; i < product_array_render.length; i++) {
                             for (j = i + 1; j < product_array_render.length; j++) {
                                 if (product_array_render[i].equals(product_array_render[j])) {
-                                    product_array_render.splice(i, 1);
+                                    console.log("thịt thằng: " + product_array_render[j].product_name + " số " + j);
+                                    product_array_render.splice(j, 1);
+                                    i = 0;
+                                    j = 0;
                                 }
                             }
                         }
                     }
-                    console.log("hết hàng: " + product_array_render);
-                    console.log(product_array_render.length);
+                    /*console.log("hết hàng: " + product_array_render);
+                    console.log(product_array_render.length);*/
                     res.send(product_array_render);
                 }, 20);
             }
