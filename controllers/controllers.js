@@ -23,15 +23,17 @@ var controllers = {
         },
 
         get_store_array: function (req, res) {
-            var store_query = store_schema.store.find({});
-            store_query.sort({date: -1});
-            store_query.exec(function (store_error, store_array) {
-                if (store_array && store_array.length > 0) {
-                    req.session.store_array_all = store_array;
-                } else {
-                    console.log(store_error);
-                }
-            });
+            if (!req.session.store_array_all) {
+                var store_query = store_schema.store.find({});
+                store_query.sort({date: -1});
+                store_query.exec(function (store_error, store_array) {
+                    if (store_array && store_array.length > 0) {
+                        req.session.store_array_all = store_array;
+                    } else {
+                        console.log(store_error);
+                    }
+                });
+            }
         },
 
         get_product_array: function (req, res) {
@@ -84,6 +86,7 @@ var controllers = {
         get_tag_array: function (req, res) {
             if (!req.session.tag_array_all) {
                 var tag_query = tag_schema.tag.find({});
+                tag_query.sort({tag_name: 1});
                 tag_query.exec(function (tag_error, tag_array) {
                     if (tag_array && tag_array.length > 0) {
                         req.session.tag_array_all = tag_array;
@@ -924,19 +927,6 @@ var controllers = {
                         {product_name: {$regex: key, $options: 'i'}},
                         {product_name_non_accented: {$regex: key, $options: 'i'}}
                     ]});
-
-                    /*product_schema.product.find({$or: [
-                     {product_name: {$regex: key, $options: 'i'}},
-                     {product_name_non_accented: {$regex: key, $options: 'i'}}
-                     ]}, function (product_error, product_array) {
-                     if (!product_error && product_array && product_array.length > 0) {
-                     console.log("4-1 có.");
-                     res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                     } else {
-                     console.log("4-1 không có.");
-                     res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-                     }
-                     });*/
                 } else {
                     store_query = store_schema.store.find({address: {$elemMatch: {district: district}}});
                     store_query.sort({date: -1});
@@ -1030,9 +1020,6 @@ var controllers = {
 
         post_search_tags: function (req, res) {
             var tag = req.body.txtTextSearchTag;
-            //var tags = tag.split(",");
-            //tags = JSON.parse(tags);
-            //var tag = ['z', 'x', 'c'];
             console.log(tag);
             if (tag) {
                 product_schema.product.find({tags: {$all: tag}}, function (product_error, product_array) {
@@ -1044,24 +1031,80 @@ var controllers = {
                         })
                     }
                 });
-            }else{
+            } else {
                 console.log("banh")
             }
         },
 
         ajax_post_search_tags: function (req, res) {
-            var tag = req.param.tag.toLowerCase();
-            console.log(tag);
-            product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
-                console.log(product_array);
-                if (product_array && product_array.length > 0) {
-                    res.send(product_array);
-                } else {
-                    product_schema.product.find(function (product_error, product_array) {
-                        res.send("Không có sản phẩm.");
-                    })
+            var tag = req.params.tag;
+            console.log("nguyên khúc: " + tag);
+            tag = tag.split(",");
+            var product_array_render;
+            var product_query = product_schema.product.find();
+
+            if (tag) {
+                for (i = 0; i < tag.length; i++) {
+                    console.log("từng cục: " + tag[i]);
+
+                    product_query.find({tags: {$all: [tag[i]]}});
+                    product_query.sort({date: -1});
+                    product_query.exec(function (product_error, product_array) {
+                        if (product_array && product_array.length > 0) {
+                            console.log("product_array: " + product_array);
+                            if (product_array_render == null) {
+                                product_array_render = product_array;
+                                console.log("chưa có gì: " + product_array_render);
+                            } else {
+                                //xóa cái trùng ở đây
+                                /*var polymeric = false;
+                                 product_array_render.forEach(function (product_render) {
+                                 product_array.forEach(function (product) {
+                                 if (product_render._id.equals(product._id)) {
+                                 console.log(product_render._id);
+                                 console.log(product._id);
+                                 console.log("trùng cái: " + product.product_name);
+                                 polymeric = true;
+                                 } else {
+                                 console.log(product_render._id);
+                                 console.log(product._id);
+                                 }
+                                 });
+                                 if (polymeric == false) {
+                                 //chưa concat được
+                                 product_array_render = product_array_render.concat(product_array);
+                                 console.log("concat nè: " + product_array_render);
+                                 } else {
+                                 polymeric = false;
+                                 }
+                                 });*/
+                                product_array_render = product_array_render.concat(product_array);
+                                console.log("concat nè: " + product_array_render);
+                            }
+                        } else {
+                            /*product_schema.product.find(function (product_error, product_array) {
+                             res.send("Không có sản phẩm.");
+                             })*/
+                        }
+                    });
                 }
-            });
+                setTimeout(function () {
+                    product_array_render.forEach(function (product) {
+                            for (i = 0; i < product_array_render.length; i++) {
+
+                            }
+
+                        });
+
+
+                    console.log("hết hàng: " + product_array_render);
+                    console.log(product_array_render.length);
+                    res.send(product_array_render);
+                }, 20);
+            }
+            else {
+                console.log("Bên tags.ejs không có chọn gì cả.")
+            }
         },
 
         header_search: function (req, res) {
@@ -1085,22 +1128,23 @@ var controllers = {
         },
 
         get_tag: function (req, res) {
-            controllers.get_tag_array(req, res);
-            var tag = req.param("tag");
-            if (tag) {
-                console.log("có");
+            controllers.get_all(req, res);
+            setTimeout(function () {
 
-                product_schema.product.find({tags: {$in: [tag]}}, function (product_error, product_array) {
-                    if (product_array && product_array.length > 0) {
-                        res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all});
-                    } else {
-                        res.render('tags', {product_array: req.session.product_array_all, tag_array: req.session.tag_array_all, tags_notification: "Không có sản phẩm."});
-                    }
-                }.sort({date: -1}));
-            } else {
-                res.render('tags', {product_array: req.session.product_array_all, tag_array: req.session.tag_array_all});
 
-            }
+                var tag = req.param("tag");
+                if (tag) {
+                    product_schema.product.find({tags: {$all: [tag]}}, function (product_error, product_array) {
+                        if (product_array && product_array.length > 0) {
+                            res.render('tags', {product_array: product_array, tag_array: req.session.tag_array_all});
+                        } else {
+                            res.render('tags', {product_array: req.session.product_array_all, tag_array: req.session.tag_array_all, tags_notification: "Không có sản phẩm."});
+                        }
+                    });
+                } else {
+                    res.render('tags', {product_array: req.session.product_array_all, tag_array: req.session.tag_array_all});
+                }
+            }, 200);
         },
 
         get_location: function (req, res) {

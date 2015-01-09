@@ -29,18 +29,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#ttt").change(function () {
-                var text = this.val();
-                alert(text);
+            $("select").on("change", function () {
+                var tags = [];
+                $("select :selected").each(function (i, selected) {
+                    tags[i] = $(selected).text();
+                });
                 $.ajax({
-                    url: "/search/tags/" + $(this).val(),
-                    type: " POST",
+                    url: "/search/tags/" + tags,
+                    type: "POST",
                     success: function (data_success) {
-                        alert(data_success);
-                        //show new data
+                        alert(JSON.stringify(data_success));
                     },
                     error: function (data_error) {
-                        alert(data_error);
+
                     }
                 });
             });
@@ -140,7 +141,7 @@
                             </div>
                             <% if(typeof product_array != 'undefined'){ %>
                             <% product_array.forEach(function(product){ %>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
+                            <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" id="newdata">
                                 <div class="widget">
                                     <div class="widget-simple">
                                         <button value="<%= product._id %>" title="Del product"
@@ -180,7 +181,6 @@
                                 </div>
                             </div>
                             <% })} else{ %>
-
                             <div class="block text-center">
                                 Không có sản phẩm nào!
                             </div>

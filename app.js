@@ -28,10 +28,10 @@ app.use(multer({dest: './public/images/'}));
 //rewrite
 app.use(function (req, res, next) {
     var url = req.url;
-    if (req.url.substr(-1) == '/' && req.url.length > 1) {
+    /*if (req.url.substr(-1) == '/' && req.url.length > 1) {
         console.log("vào");
         res.redirect(301, req.url.slice(0, -1));
-    }
+    }*/
     if (req.url === '/diadiem') {
         req.url = '/location';
     }
