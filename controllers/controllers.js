@@ -135,10 +135,9 @@ var controllers = {
     },
 
     get_store_detail_url: function (req, res) {
-        console.log("vào");
         var url = req.params.url;
-        console.log(url);
         if (url) {
+            req.session.store_url_current = url;
             store_schema.store.find({url: url}, function (store_error, store_current) {
                 req.session.store_current = store_current;
                 var id;
@@ -150,7 +149,7 @@ var controllers = {
                 product_query.exec(function (product_error, product_array) {
                     if (product_array && product_array.length > 0) {
                         req.session.product_array_curent = product_array;
-                        res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, media_array: req.session.media_array_all});
+                        res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array});
                     } else {
                         console.log("không có product array");
                         res.render("store_detail", {store_id_recent: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
@@ -158,7 +157,7 @@ var controllers = {
                 });
             });
         } else {
-            res.render('index', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all});
+            res.render('store_detail', {store_array: req.session.store_current, industry_array: req.session.industry_array_all, product_array: req.session.product_array_curent});
         }
     },
 
@@ -442,22 +441,15 @@ var controllers = {
                 product_schema.product.find({id_store: req.params.id_store}, function (product_error, product_array) {
                     product_array.forEach(function (product) {
                         media_schema.media.remove({product_id: product._id}, function (remove_error) {
-                            if(!remove_error){
+                            if (!remove_error) {
                                 console.log("xóa media thành công");
                             }
-                            /*media_array.remove(function (remove_error) {
-                                if (!remove_error) {
-                                    console.log("xóa media thành công"); //ongoing
-                                }else{
-                                    console.log(remove_error);
-                                }
-                            });*/
                         });
                     });
                     //product_array.remove();
                     //return res.end('Ok k k k ');
                 });
-                return res.send('Store và các thứ liên quan đến store đã xóa (product, media).');
+                return res.send(req.session.store_url_current);
             } else {
                 console.log(remove_error);
             }
@@ -523,7 +515,6 @@ var controllers = {
     },
 
     get_insert_product: function (req, res) {
-        console.log("vô")
         controllers.get_all(req, res);
         var store_id = req.param("id");
         if (!req.param("id")) {
@@ -1307,20 +1298,20 @@ var controllers = {
     },
 
     delete_product: function (req, res) {
-        product_schema.product.findByIdAndRemove(req.params.id_product, function (remove_error) {
-            if (!remove_error) {
+        console.log(req.params.id_product);
+        product_schema.product.findByIdAndRemove(req.params.id_product, function (remove_product_error) {
+            if (!remove_product_error) {
                 //Xóa luôn media của product đó.
-                media_schema.media.find({product_id: req.params.id_product}, function (media_error, media_array) {
-
-                    /*media_array.remove(function (remove_error) {
-                        if (!remove_error) {
-                            console.log("xóa media thành công");
-                            return res.send('');
-                        }
-                    });*/
-                }).remove();
+                media_schema.media.remove({product_id: req.params.id_product}, function (remove_media_error) {
+                    if (!remove_media_error) {
+                        console.log("xóa media thành công");
+                        return res.send(req.session.current_store_url);
+                    } else {
+                        console.log(remove_media_error);
+                    }
+                });
             } else {
-                console.log(remove_error);
+                console.log(remove_product_error);
             }
         });
     },
@@ -1345,6 +1336,7 @@ module.exports = function (router) {
     //store detail
     //router.get('/store_detail', controllers.get_store_detail);// hết dùng
     router.get('/store/:url', controllers.get_store_detail_url);
+    router.get('/store/', controllers.get_store_detail_url);
     //store insert
     router.get('/insert_store', controllers.get_insert_store);
     router.post('/insert_store', controllers.post_insert_store);
