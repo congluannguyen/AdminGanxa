@@ -110,7 +110,7 @@
                                 <td class="text-center"><img style="width: 30px;height: 30px;" src="<%= store.logo %>"
                                                              alt="avatar"
                                                              class="img-circle"></td>
-                                <td><a href="store_detail?id=<%= store._id %>"><%= store.store_name.substring(0, 40) %>
+                                <td><a href="/store/<%= store.url %>"><%= store.store_name.substring(0, 40) %>
                                         <% if (store.store_name.length > 20){ %>
                                         ...
                                         <% } %>
@@ -118,7 +118,7 @@
                                 <td>
                                     <% store.address.forEach(function (a) { %>
                                     <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
-                                            href="store_detail?id=<%= store._id %>">more</a>
+                                            href="/store/<%= store.url %>">more</a>
                                     <% }) %>
                                 </td>
                                 <td class="text-center">

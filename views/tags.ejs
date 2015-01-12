@@ -25,6 +25,18 @@
 
     <link rel="stylesheet" href="css/themes.css">
 
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/icon57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="/img/icon72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="/img/icon76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="/img/icon114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="/img/icon120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="/img/icon144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="/img/icon152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="/img/icon180.png" sizes="180x180">
+    <!-- END Icons -->
     <script src="js/vendor/modernizr-2.7.1-respond-1.4.2.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript">
@@ -44,6 +56,23 @@
 
                     }
                 });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deleteproductbutton").click(function () {
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    var x = $(this).val();
+                $.ajax({
+                    url: "/delete/product/"+$(this).val(),
+                    type: "DELETE",
+                    success: function (data, textStatus, jqXHR) {
+//                        window.location.href = "";
+                        $('#' + x).slideUp();
+                    }
+                });}
             });
         });
     </script>
@@ -142,7 +171,7 @@
                             </div>
                             <% if(typeof product_array != 'undefined'){ %>
                             <% product_array.forEach(function(product){ %>
-                            <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" id="newdata">
+                            <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" id="<%= product._id%>">
                                 <div class="widget">
                                     <div class="widget-simple">
                                         <button value="<%= product._id %>" title="Del product"

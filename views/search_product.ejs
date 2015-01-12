@@ -39,6 +39,25 @@
     <link rel="apple-touch-icon" href="/img/icon152.png" sizes="152x152">
     <link rel="apple-touch-icon" href="/img/icon180.png" sizes="180x180">
     <!-- END Icons -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deleteproductbutton").click(function () {
+alert(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+)
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    $.ajax({
+                        url: "/delete/product/"+$(this).val(),
+                        type: "DELETE",
+                        success: function (data, textStatus, jqXHR) {
+                            window.location.href = "";
+                        }
+                    });}
+            });
+        });
+    </script>
 </head>
 <body>
 <!-- Alternative Sidebar -->
