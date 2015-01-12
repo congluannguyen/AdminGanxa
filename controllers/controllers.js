@@ -5,6 +5,7 @@ var location_schema = require('../models/location_schema');
 var media_schema = require('../models/media_schema');
 var tag_schema = require('../models/tag_schema');
 
+var mongoose = require('mongoose');
 var S = require('string');
 var im = require('imagemagick');
 
@@ -118,6 +119,14 @@ var controllers = {
         });
     },
 
+    get_id_by_url: function (req, res, url, type) {
+        if (type == "Store") {
+            //get id
+        } else if (type == "Product") {
+//get id
+        }
+    },
+
     get_index: function (req, res) {
         controllers.get_all(req, res);
         setTimeout(function () {
@@ -126,7 +135,9 @@ var controllers = {
     },
 
     get_store_detail_url: function (req, res) {
-        var url = req.param("url");
+        console.log("vào");
+        var url = req.params.url;
+        console.log(url);
         if (url) {
             store_schema.store.find({url: url}, function (store_error, store_current) {
                 req.session.store_current = store_current;
@@ -134,9 +145,6 @@ var controllers = {
                 store_current.forEach(function (store) {
                     id = store._id;
                 });
-                console.log(id);
-                req.url = "/store_detail?id=" + id;
-                console.log(req.url);
                 var product_query = product_schema.product.find({"id_store": id});
                 product_query.sort({date: -1});
                 product_query.exec(function (product_error, product_array) {
@@ -427,9 +435,11 @@ var controllers = {
     },
 
     delete_store: function (req, res) {
-        store_schema.store.findByIdAndRemove(req.params.id_store, function (remove_error) {
+        //Convert to ObjectId:
+        var id = mongoose.Types.ObjectId(req.params.id_store);
+        store_schema.store.findByIdAndRemove({_id: id}, function (remove_error) {
             if (!remove_error) {
-                product_schema.product.find({id_store: req.params.id_store}, function (product_error, product_array) {
+                /*product_schema.product.find({id_store: req.params.id_store}, function (product_error, product_array) {
                     product_array.forEach(function (product) {
                         media_schema.media.find({product_id: product._id}, function (media_error, media_array) {
                             media_array.remove(function (remove_error) {
@@ -441,7 +451,8 @@ var controllers = {
                     });
                     product_array.remove();
                     return res.send('');
-                });
+                });*/
+                return res.send('');
             } else {
                 console.log(remove_error);
             }
@@ -521,6 +532,10 @@ var controllers = {
         } else {
             res.render('index', {industry_array: req.session.industry_array});
         }
+    },
+
+    get_insert_product_url: function (req, res) {
+        //chỗ này
     },
 
     post_insert_product: function (req, res) {
@@ -1290,15 +1305,15 @@ var controllers = {
         product_schema.product.findByIdAndRemove(req.params.id_product, function (remove_error) {
             if (!remove_error) {
                 //Xóa luôn media của product đó.
-                /*media_schema.media.find({product_id: req.params.id_product}, function (media_error, media_array) {
-                    media_array.remove(function (remove_error) {
+                media_schema.media.find({product_id: req.params.id_product}, function (media_error, media_array) {
+
+                    /*media_array.remove(function (remove_error) {
                         if (!remove_error) {
                             console.log("xóa media thành công");
                             return res.send('');
                         }
-                    });
-                });*/
-                return res.send('');
+                    });*/
+                }).remove();
             } else {
                 console.log(remove_error);
             }
@@ -1323,7 +1338,7 @@ module.exports = function (router) {
     router.get('/', controllers.get_index);
 
     //store detail
-    router.get('/store_detail', controllers.get_store_detail);// hết dùng
+    //router.get('/store_detail', controllers.get_store_detail);// hết dùng
     router.get('/store/:url', controllers.get_store_detail_url);
     //store insert
     router.get('/insert_store', controllers.get_insert_store);
@@ -1339,6 +1354,7 @@ module.exports = function (router) {
     router.get('/product/:url', controllers.get_product_detail_url);
     //product insert
     router.get('/insert_product', controllers.get_insert_product);
+    router.get('/store/:store_url/add_product', controllers.get_insert_product_url);
     /*router.get('/store/insert_product', controllers.get_insert_product);*/
     router.post('/insert_product', controllers.post_insert_product);
     //product delete

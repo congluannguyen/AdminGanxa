@@ -6,15 +6,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+
             $(".deletestorebutton").click(function () {
-                $.ajax({
-                    url: "/delete/store/" + $(this).val(),
-                    type: "DELETE",
-                    success: function (data, textStatus, jqXHR) {
-                        window.location.href = "/";
-                    }
-                });
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    var x = $(this).val();
+                    $.ajax({
+                        url: "/delete/store/" + $(this).val(),
+                        type: "DELETE",
+                        success: function (data, textStatus, jqXHR) {
+                            alert("ok");
+                            //window.location.href = "/";
+                            $('#' + x).slideUp("slow");
+                        }
+                    });
+                }
             });
+
         });
     </script>
 </head>
@@ -65,17 +73,18 @@
 
                             <tbody>
                             <% store_array.forEach(function(store){ %>
-                            <tr>
+                            <tr id="<%= store._id %>">
                                 <td class="text-center"><img src="<%= store.logo %>" alt="avatar"
                                                              class="img-circle img-store"></td>
-                                <td><a href="/store/<%=store.url%>"><%= store.store_name.substring(0, 40) %>
+                                <td><a href="/store/<%= store.url %>"><%= store.store_name.substring(0, 40) %>
                                         <% if (store.store_name.length > 20){ %>
                                         ...
                                         <% } %>
                                     </a></td>
                                 <td>
                                     <% store.address.forEach(function (a) { %>
-                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a href="/store/<%=store.url%>">more</a>
+                                    <%= (a.street + ", " + a.district + ", " + a.city).substring(0, 40) %>... <a
+                                            href="/store/<%= store.url %>">more</a>
                                     <% }) %>
                                 </td>
                                 <td class="text-center">
