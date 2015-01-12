@@ -128,9 +128,9 @@ var controllers = {
     },
 
     get_index: function (req, res) {
-        controllers.get_all(req, res);
+        controllers.get_store_array(req, res);
         setTimeout(function () {
-            res.render('index', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all});
+            res.render('index', {store_array: req.session.store_array_all});
         }, 20);
     },
 
@@ -439,20 +439,25 @@ var controllers = {
         var id = mongoose.Types.ObjectId(req.params.id_store);
         store_schema.store.findByIdAndRemove({_id: id}, function (remove_error) {
             if (!remove_error) {
-                /*product_schema.product.find({id_store: req.params.id_store}, function (product_error, product_array) {
+                product_schema.product.find({id_store: req.params.id_store}, function (product_error, product_array) {
                     product_array.forEach(function (product) {
-                        media_schema.media.find({product_id: product._id}, function (media_error, media_array) {
-                            media_array.remove(function (remove_error) {
+                        media_schema.media.remove({product_id: product._id}, function (remove_error) {
+                            if(!remove_error){
+                                console.log("xóa media thành công");
+                            }
+                            /*media_array.remove(function (remove_error) {
                                 if (!remove_error) {
-                                    console.log("xóa media thành công");
+                                    console.log("xóa media thành công"); //ongoing
+                                }else{
+                                    console.log(remove_error);
                                 }
-                            });
+                            });*/
                         });
                     });
-                    product_array.remove();
-                    return res.send('');
-                });*/
-                return res.send('');
+                    //product_array.remove();
+                    //return res.end('Ok k k k ');
+                });
+                return res.send('Store và các thứ liên quan đến store đã xóa (product, media).');
             } else {
                 console.log(remove_error);
             }

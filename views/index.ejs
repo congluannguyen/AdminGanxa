@@ -15,7 +15,7 @@
                         url: "/delete/store/" + $(this).val(),
                         type: "DELETE",
                         success: function (data, textStatus, jqXHR) {
-                            alert("ok");
+                            alert(data);
                             //window.location.href = "/";
                             $('#' + x).slideUp("slow");
                         }
