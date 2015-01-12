@@ -93,7 +93,11 @@
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="val_storename" name="txtTextSearch"
-                                                       class="form-control" placeholder="Your store name..">
+                                                       class="form-control" placeholder="Your store name.."
+                                                        <% if(typeof search_contain != 'undefined'){ %>
+                                                            value="<%=search_contain%>"
+                                                        <%}%>
+                                                        >
                                                 <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
                                             </div>
                                         </div>
@@ -111,7 +115,11 @@
                                                 <% location_array.forEach(function(location){ %>
                                                 <optgroup label="<%= location.city %>">
                                                     <% location.district.forEach(function(district){ %>
-                                                    <option value="<%= district %>"><%= district %></option>
+                                                    <option value="<%= district %>"
+                                                            <% if(typeof search_district != 'undefined' && search_district == district){ %>
+                                                            selected
+                                                            <%}%>
+                                                            ><%= district %></option>
                                                     <% }) %>
                                                 </optgroup>
                                                 <% }) %>

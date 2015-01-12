@@ -145,7 +145,8 @@ var controllers = {
                 var product_query = product_schema.product.find({"id_store": id});
                 product_query.sort({date: -1});
                 product_query.exec(function (product_error, product_array) {
-                    if (product_array && product_array.length > 0) {
+                    if (!product_error && product_array/*&& product_array.length > 0*/) {
+                        console.log("hgereasdasdas");
                         req.session.product_array_curent = product_array;
                         res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array});
                     } else {
@@ -897,12 +898,12 @@ var controllers = {
     },
 
     get_search_store: function (req, res) {
-        controllers.get_all(req, res);
+        /*controllers.get_all(req, res);
         if (req.session.header == true) {
             res.render('search_store', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array});
         } else if (req.session.header == false) {
             res.render('search_store', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-        }
+        }*/
         location_schema.location.find(function (location_error, location_array) {
             if (!location_error && location_array.length > 0) {
                 req.session.location_array = location_array;
@@ -938,7 +939,7 @@ var controllers = {
                 store_query = store_schema.store.find({
                     $and: [
                         {$or: [
-                            {$text: {store_name: {$regex: key, $options: 'i'}}},
+                            {store_name: {$regex: key, $options: 'i'}},
                             {store_name_non_accented: {$regex: key, $options: 'i'}}
                         ]},
                         {address: {$elemMatch: {district: district}}}
@@ -949,10 +950,10 @@ var controllers = {
             store_query.exec(function (store_error, store_array) {
                 if (store_array && store_array.length > 0) {
                     console.log("1 - có");
-                    res.render('search_store', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                } else if (store_array.length == 0) {
+                    res.render('search_store', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_contain: key, search_district: district});
+                } else {
                     console.log("1 - không có");
-                    res.render('search_store', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    res.render('search_store', {store_array: store_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_contain: key, search_district: district, search_notification: "Không có cửa hàng nào cả. :("});
                 }
             });
         } else { //tìm store, không có keyword
@@ -1317,6 +1318,10 @@ var controllers = {
         res.render('test')
     },
 
+    upload_image_ajax: function (req, res) {
+        var save_path = ".." + req.files.txtImageBrowse.path.replace("public", "");
+        res.send(save_path);
+    },
 
     get_comming: function (req, res) {
         res.render('comming', {notifications: " Chua lam sao co!"});
@@ -1331,12 +1336,13 @@ module.exports = function (router) {
     router.get('/', controllers.get_index);
 
     //store detail
-    //router.get('/store_detail', controllers.get_store_detail);// hết dùng
-    router.get('/store/:url', controllers.get_store_detail_url);
-    router.get('/store/', controllers.get_store_detail_url);
+    //router.get('/store_detail', controllers.get_store_detail); // hết dùng
+    router.get('/store/:url', controllers.get_store_detail_url); //vào với friendly url
+    router.get('/store/', controllers.get_store_detail_url); //phòng khi vào mà không có url
     //store insert
-    router.get('/insert_store', controllers.get_insert_store);
-    router.post('/insert_store', controllers.post_insert_store);
+    router.get('/insert_store', controllers.get_insert_store); //insert store
+    router.get('/add_store', controllers.get_insert_store); //tương tư cái ở trên
+    router.post('/insert_store', controllers.post_insert_store); //
     //store delete
     router.delete('/delete/store/:id_store', controllers.delete_store);
     //store edit
@@ -1400,6 +1406,6 @@ module.exports = function (router) {
 
     //test
     router.get('/test', controllers.get_test);
-
+    router.post('/upload_image_ajax', controllers.upload_image_ajax);
     return router;
 };
