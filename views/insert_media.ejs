@@ -43,7 +43,8 @@
                     <li><a href="">Add media</a></li>
                 </ul>
                 <!-- END Validation Header -->
-                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                <form id="registration-form" action="" method="post" enctype="multipart/form-data"
+                      class="form-horizontal form-bordered">
                     <div class="row">
                         <!--<div class="col-md-2"></div>-->
                         <div class="col-md-12">
@@ -66,7 +67,10 @@
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="val_medianame" name="txtMediaName"
-                                                       class="form-control" placeholder="Your media name..">
+                                                       class="form-control" placeholder="Your media name.."
+                                                       data-validation="length alphanumeric"
+                                                       data-validation-length="3-12"
+                                                       data-validation-error-msg="The media name has to be an alphanumeric value between 3-12 characters">
                                                 <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
                                             </div>
                                         </div>
@@ -74,12 +78,13 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">Media type<span
                                                     class="text-danger">*</span></label>
+
                                         <div class="col-md-6">
                                             <label class="radio-inline" for="example-inline-radio1">
                                                 <input type="radio" name="grpType" value="Image" checked> Image
                                             </label>
                                             <label class="radio-inline" for="example-inline-radio2">
-                                                <input type="radio" name="grpType" value="Video" > Video
+                                                <input type="radio" name="grpType" value="Video"> Video
                                             </label>
                                         </div>
                                     </div>
@@ -89,7 +94,7 @@
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="val_mediaurl" name="txtMediaUrl"
-                                                       class="form-control" placeholder="Your media url..">
+                                                       class="form-control" placeholder="Your media url.."><!--data-validation="url"-->
                                                 <span class="input-group-addon"><i class="fa fa-gears"></i></span>
                                             </div>
                                         </div>
@@ -102,13 +107,13 @@
                                             <div class="input-group">
                                                 <input type="file" name="ulfMediaUrl" placeholder="E"
                                                        accept="image/*" alt="Product Image"
-                                                       class="form-control  input_insertstore">
+                                                       class="form-control  input_insertstore" >
                                                 <span class="input-group-addon"><i class="fa fa-file"></i></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group form-actions">
-                                        <div class="col-md-9 col-md-offset-3">
+                                    <div class="form-group text-center form-actions">
+                                        <div class="col-md-12">
                                             <input type="submit" class="btn btn-sm btn-primary" value="Save">
                                         </div>
                                     </div>
@@ -140,6 +145,6 @@
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
-
+<script src="../js/jquery.form-validator.min.js"></script>
 </body>
 </html>

@@ -1,255 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Store Detail</title>
-<% include ./partial/head %>
-<script src="../js/map.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
-<script>
-var geocoder;
-var map;
-var lat;
-var long;
-var marker;
-function initialize() {
-    geocoder = new google.maps.Geocoder();
-    var mapOptions = {
-        zoom: 20
-    };
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            <% store_array.forEach(function(s){ %>
-            var pos = new google.maps.LatLng(<%=s.latitude%>, <%=s.longitude%>);
+    <title>Store Detail</title>
+    <% include ./partial/head %>
+    <script src="../js/map.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script>
+        var geocoder;
+        var map;
+        var lat;
+        var long;
+        var marker;
+        function initialize() {
+            geocoder = new google.maps.Geocoder();
+            var mapOptions = {
+                zoom: 20
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    <% store_array.forEach(function(s){ %>
+                    var pos = new google.maps.LatLng(<%=s.latitude%>, <%=s.longitude%>);
 
-            //Set vào 2 bi?n này.
-            lat = <%=s.latitude%>;
-            long = <%=s.longitude%>;
-            var elem = document.getElementById("a");
-            elem.value = lat.toFixed(7);
-            var elem = document.getElementById("o");
-            elem.value = long.toFixed(7);
-            <%})%>
-            marker = new google.maps.Marker({
-                draggable: true,
-                position: pos,
-                map: map,
-                title: 'B?n dang ? dây?',
-                animation: google.maps.Animation.DROP,
-                anchor: new google.maps.Point(0, 49)
+                    //Set vào 2 bi?n này.
+                    lat = <%=s.latitude%>;
+                    long = <%=s.longitude%>;
+                    var elem = document.getElementById("a");
+                    elem.value = lat.toFixed(7);
+                    var elem = document.getElementById("o");
+                    elem.value = long.toFixed(7);
+                    <%})%>
+                    marker = new google.maps.Marker({
+                        draggable: true,
+                        position: pos,
+                        map: map,
+                        title: 'B?n dang ? dây?',
+                        animation: google.maps.Animation.DROP,
+                        anchor: new google.maps.Point(0, 49)
 
-            });
-            google.maps.event.addListener(marker, 'drag', function (a) {
+                    });
+                    google.maps.event.addListener(marker, 'drag', function (a) {
+                        var elem = document.getElementById("a");
+                        elem.value = a.latLng.lat().toFixed(7);
+                        var elem = document.getElementById("o");
+                        elem.value = a.latLng.lng().toFixed(7);
+                    });
+
+                    map.setCenter(pos);
+                }, function () {
+                    handleNoGeolocation(true);
+                });
+            } else {
+                handleNoGeolocation(false);
+            }
+            getLatLong();
+
+            google.maps.event.addListener(map, "click", function (event) {
+                var lat = event.latLng.lat();
+                var lng = event.latLng.lng();
+
+                marker.setMap(null);
+
+                var pos = new google.maps.LatLng(lat, lng);
+
+                marker = new google.maps.Marker({
+                    draggable: true,
+                    position: pos,
+                    map: map,
+                    title: "B?n ? dây?",
+                    raiseOnDrag: false,
+                    animation: google.maps.Animation.DROP
+                });
+
+                google.maps.event.addListener(marker, 'drag', function (a) {
+                    var elem = document.getElementById("a");
+                    elem.value = a.latLng.lat().toFixed(7);
+                    var elem = document.getElementById("o");
+                    elem.value = a.latLng.lng().toFixed(7);
+                });
+
                 var elem = document.getElementById("a");
-                elem.value = a.latLng.lat().toFixed(7);
+                elem.value = lat.toFixed(7);
                 var elem = document.getElementById("o");
-                elem.value = a.latLng.lng().toFixed(7);
+                elem.value = lng.toFixed(7);
             });
 
-            map.setCenter(pos);
-        }, function () {
-            handleNoGeolocation(true);
-        });
-    } else {
-        handleNoGeolocation(false);
-    }
-    getLatLong();
-
-    google.maps.event.addListener(map, "click", function (event) {
-        var lat = event.latLng.lat();
-        var lng = event.latLng.lng();
-
-        marker.setMap(null);
-
-        var pos = new google.maps.LatLng(lat, lng);
-
-        marker = new google.maps.Marker({
-            draggable: true,
-            position: pos,
-            map: map,
-            title: "B?n ? dây?",
-            raiseOnDrag: false,
-            animation: google.maps.Animation.DROP
-        });
-
-        google.maps.event.addListener(marker, 'drag', function (a) {
-            var elem = document.getElementById("a");
-            elem.value = a.latLng.lat().toFixed(7);
-            var elem = document.getElementById("o");
-            elem.value = a.latLng.lng().toFixed(7);
-        });
-
-        var elem = document.getElementById("a");
-        elem.value = lat.toFixed(7);
-        var elem = document.getElementById("o");
-        elem.value = lng.toFixed(7);
-    });
-
-    var input = (document.getElementById('pac-input'));
-    var click = (document.getElementById('search'));
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(click);
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
-    var autocomplete = new google.maps.places.Autocomplete(input);
-    autocomplete.bindTo('bounds', map);
-    var infowindow = new google.maps.InfoWindow();
-    marker = new google.maps.Marker({
-        map: map,
-        /*anchorPoint: new google.maps.Point(0, -29),*/
-        draggable: true,
-        position: pos,
-        title: "B?n ? dây?",
-        raiseOnDrag: false,
-        animation: google.maps.Animation.DROP
-    });
-
-    //Event place_changed cho textbox autocomplete
-    google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        alert("her");
-        infowindow.close();
-        marker.setVisible(false);
-        var place = autocomplete.getPlace();
-        if (!place.geometry) {
-            return;
-        }
-
-        // If the place has a geometry, then present it on a map.
-        if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-        } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(20);  // Why 17? Because it looks good.
-        }
-
-        marker = new google.maps.Marker({
-            draggable: true,
-            position: pos,
-            map: map,
-            title: "B?n ? dây?",
-            raiseOnDrag: false,
-            animation: google.maps.Animation.DROP
-        });
-
-        /*google.maps.event.addListener(marker, 'drag', function(a) {
-         var elem = document.getElementById("a");
-         elem.value = a.latLng.lat().toFixed(7);
-         var elem = document.getElementById("o");
-         elem.value = a.latLng.lng().toFixed(7);
-         });*/
-
-        marker.setPosition(place.geometry.location);
-        var elem = document.getElementById("a");
-        elem.value = place.geometry.location.lat().toFixed(7);
-        var elem = document.getElementById("o");
-        elem.value = place.geometry.location.lng().toFixed(7);
-        marker.setVisible(true);
-
-        var address = '';
-        if (place.address_components) {
-            address = [
-                (place.address_components[0] && place.address_components[0].short_name || ''),
-                (place.address_components[1] && place.address_components[1].short_name || ''),
-                (place.address_components[2] && place.address_components[2].short_name || '')
-            ].join(' ');
-        }
-
-        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-        infowindow.open(map, marker);
-    });
-} //H?t init
-function toggleBounce() {
-
-    if (marker.getAnimation() != null) {
-        marker.setAnimation(null);
-    } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-}
-//Ki?m tra xem trình duy?t có h? tr? geolocation không?
-function handleNoGeolocation(errorFlag) {
-    if (errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-    } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
-    }
-    var options = {
-        map: map,
-        position: new google.maps.LatLng(60, 105),
-        content: content
-    };
-    map.setCenter(options.position);
-}
-
-//L?y lat, lng.
-function getLatLong() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
-function showPosition(position) {
-    //Set lat và long xu?ng textbox.
-    /*var elem = document.getElementById("a");
-     elem.value = position.coords.latitude;
-     var elem = document.getElementById("o");
-     elem.value = position.coords.longitude;*/
-}
-
-function codeAddress() {
-    var address = document.getElementById('pac-input').value;
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var elem = document.getElementById("a");
-            elem.value = results[0].geometry.location.lat().toFixed(7);
-            var elem = document.getElementById("o");
-            elem.value = results[0].geometry.location.lng().toFixed(7);
-
-            pos = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-
-            map.setCenter(results[0].geometry.location);
-            marker.setVisible(false);
+            var input = (document.getElementById('pac-input'));
+            var click = (document.getElementById('search'));
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(click);
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+            var infowindow = new google.maps.InfoWindow();
             marker = new google.maps.Marker({
+                map: map,
+                /*anchorPoint: new google.maps.Point(0, -29),*/
                 draggable: true,
                 position: pos,
-                map: map,
                 title: "B?n ? dây?",
                 raiseOnDrag: false,
                 animation: google.maps.Animation.DROP
             });
 
-            google.maps.event.addListener(marker, 'drag', function (a) {
-                var elem = document.getElementById("a");
-                elem.value = a.latLng.lat().toFixed(7);
-                var elem = document.getElementById("o");
-                elem.value = a.latLng.lng().toFixed(7);
-            });
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-}
-google.maps.event.addDomListener(window, 'load', initialize);
-</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".deleteproductbutton").click(function () {
-            var answer = confirm("Xóa thiệt hả, mất luôn đó?");
-            if (answer) {
-                var url = window.location.pathname;
-                $.ajax({
-                    url: "/delete/product/" + $(this).val(),
-                    type: "DELETE",
-                    success: function (data) {
-                        alert(data);
-                        window.location.href = "../store/" + data +"";
-                    }
+            //Event place_changed cho textbox autocomplete
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                alert("her");
+                infowindow.close();
+                marker.setVisible(false);
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    return;
+                }
+
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(20);  // Why 17? Because it looks good.
+                }
+
+                marker = new google.maps.Marker({
+                    draggable: true,
+                    position: pos,
+                    map: map,
+                    title: "B?n ? dây?",
+                    raiseOnDrag: false,
+                    animation: google.maps.Animation.DROP
                 });
+
+                /*google.maps.event.addListener(marker, 'drag', function(a) {
+                 var elem = document.getElementById("a");
+                 elem.value = a.latLng.lat().toFixed(7);
+                 var elem = document.getElementById("o");
+                 elem.value = a.latLng.lng().toFixed(7);
+                 });*/
+
+                marker.setPosition(place.geometry.location);
+                var elem = document.getElementById("a");
+                elem.value = place.geometry.location.lat().toFixed(7);
+                var elem = document.getElementById("o");
+                elem.value = place.geometry.location.lng().toFixed(7);
+                marker.setVisible(true);
+
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+
+                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                infowindow.open(map, marker);
+            });
+        } //H?t init
+        function toggleBounce() {
+
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
             }
+        }
+        //Ki?m tra xem trình duy?t có h? tr? geolocation không?
+        function handleNoGeolocation(errorFlag) {
+            if (errorFlag) {
+                var content = 'Error: The Geolocation service failed.';
+            } else {
+                var content = 'Error: Your browser doesn\'t support geolocation.';
+            }
+            var options = {
+                map: map,
+                position: new google.maps.LatLng(60, 105),
+                content: content
+            };
+            map.setCenter(options.position);
+        }
+
+        //L?y lat, lng.
+        function getLatLong() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            //Set lat và long xu?ng textbox.
+            /*var elem = document.getElementById("a");
+             elem.value = position.coords.latitude;
+             var elem = document.getElementById("o");
+             elem.value = position.coords.longitude;*/
+        }
+
+        function codeAddress() {
+            var address = document.getElementById('pac-input').value;
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var elem = document.getElementById("a");
+                    elem.value = results[0].geometry.location.lat().toFixed(7);
+                    var elem = document.getElementById("o");
+                    elem.value = results[0].geometry.location.lng().toFixed(7);
+
+                    pos = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+
+                    map.setCenter(results[0].geometry.location);
+                    marker.setVisible(false);
+                    marker = new google.maps.Marker({
+                        draggable: true,
+                        position: pos,
+                        map: map,
+                        title: "B?n ? dây?",
+                        raiseOnDrag: false,
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    google.maps.event.addListener(marker, 'drag', function (a) {
+                        var elem = document.getElementById("a");
+                        elem.value = a.latLng.lat().toFixed(7);
+                        var elem = document.getElementById("o");
+                        elem.value = a.latLng.lng().toFixed(7);
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deleteproductbutton").click(function () {
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    var url = window.location.pathname;
+                    $.ajax({
+                        url: "/delete/product/" + $(this).val(),
+                        type: "DELETE",
+                        success: function (data) {
+                            alert(data);
+                            window.location.href = "../store/" + data + "";
+                        }
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#backtoid").click(function () {
+                $('html, body').animate({
+                    scrollTop: $("#dich").offset().top
+                }, 700);
+            });
+        });
+    </script>
 </head>
 <body>
 <!-- Preloader -->
@@ -276,16 +285,13 @@ google.maps.event.addDomListener(window, 'load', initialize);
             <div class="row">
 
                 <!--popup-->
-                <div class="modal fade" id="popup-map" tabindex="-1" role="dialog"
-                     aria-labelledby="myModalLabel"
-                     aria-hidden="true">
-                    <!--<div id="map-canvas" class="map"></div>-->
-                    <center><span id="map-canvas" class="map"></span></center>
-                </div>
+                <!--<div class="modal fade" id="popup-map" tabindex="1" role="dialog">-->
+                <!--<center><div id="map-canvas" class="map"></div></center>-->
+                <!--</div>-->
                 <!--end popup-->
                 <% store_array.forEach(function (store) { %>
                 <div class="col-md-2"></div>
-                <div class="col-md-8 col-sm-8 col-xs-12 col-lg-8">
+                <div class="col-md-8 col-sm-12 col-xs-12 col-lg-8">
                     <!-- Advanced Active Theme Color Widget -->
                     <div class="widget">
                         <div class="widget-advanced">
@@ -331,7 +337,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                     <tr>
                                         <td class="text-right"><strong>Address</strong></td>
                                         <td style="white-space: pre-line;">
-                                            <a href="" data-toggle="modal" data-target="#popup-map">
+                                            <a href="#"  id="backtoid">
 
                                                 <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
                                                 <% if(store.address[0].room){ %>
@@ -431,10 +437,23 @@ google.maps.event.addDomListener(window, 'load', initialize);
                     <p>Không có sản phẩm nào trong cửa hàng này !</p>
                 </div>
                 <% } %>
+
+                <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" id="dich">
+                    <div class="block">
+                        <div class="block-title">
+                            <h2><strong>This is my store address!</strong></h2>
+                        </div>
+                        <fieldset>
+                            <div id="map-canvas" style="margin-bottom: 3%;" class="map"></div>
+                        </fieldset>
+                    </div>
+                </div>
+
             </div>
             <!--END ROW-->
         </div>
         <!-- END Page Content -->
+
         <% include ./partial/footer %>
     </div>
     <!-- Page content -->

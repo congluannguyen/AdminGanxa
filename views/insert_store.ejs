@@ -223,7 +223,7 @@
                                             <input type="file" required name="ulfLogo" ONCHANGE="show_logo(this)"
                                                    accept="image/*"
                                                    alt="Cover image"
-                                                   class="form-control" >
+                                                   class="form-control">
                                             <span class="input-group-addon"><i class="gi gi-picture"></i></span>
 
                                         </div>
@@ -364,9 +364,6 @@
 </div>
 <!--END PAGE WRAPPER-->
 <% include ./partial/settings %>
-<script src="../js/pages/formsValidation.js"></script>
-<script>$(function () {
-        FormsValidation.init();
-    });</script>
+<script src="../js/jquery.form-validator.min.js"></script>
 </body>
 </html>
