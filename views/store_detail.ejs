@@ -5,6 +5,7 @@
     <% include ./partial/head %>
     <script src="../js/map.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/map.css"/>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
     <script>
         var geocoder;
@@ -23,11 +24,11 @@
                     <% store_array.forEach(function(s){ %>
                     var pos = new google.maps.LatLng(<%=s.latitude%>, <%=s.longitude%>);
 
-                    //Set vào 2 bi?n này.
+                    //Set vào 2 biến này.
                     lat = <%=s.latitude%>;
                     long = <%=s.longitude%>;
                     var elem = document.getElementById("a");
-                    elem.value = lat.toFixed(7);
+                    elem.value =lat.toFixed(7);
                     var elem = document.getElementById("o");
                     elem.value = long.toFixed(7);
                     <%})%>
@@ -35,10 +36,10 @@
                         draggable: true,
                         position: pos,
                         map: map,
-                        title: 'B?n dang ? dây?',
+                        title: 'Bạn đang ở đây?',
                         animation: google.maps.Animation.DROP,
-                        anchor: new google.maps.Point(0, 49)
-
+                        anchor: new google.maps.Point(0, 49),
+center:pos
                     });
                     google.maps.event.addListener(marker, 'drag', function (a) {
                         var elem = document.getElementById("a");
@@ -68,7 +69,7 @@
                     draggable: true,
                     position: pos,
                     map: map,
-                    title: "B?n ? dây?",
+                    title: "Bạn ở đây?",
                     raiseOnDrag: false,
                     animation: google.maps.Animation.DROP
                 });
@@ -98,7 +99,7 @@
                 /*anchorPoint: new google.maps.Point(0, -29),*/
                 draggable: true,
                 position: pos,
-                title: "B?n ? dây?",
+                title: "Bạn ở đây?",
                 raiseOnDrag: false,
                 animation: google.maps.Animation.DROP
             });
@@ -125,7 +126,7 @@
                     draggable: true,
                     position: pos,
                     map: map,
-                    title: "B?n ? dây?",
+                    title: "Bạn ở đây?",
                     raiseOnDrag: false,
                     animation: google.maps.Animation.DROP
                 });
@@ -156,7 +157,7 @@
                 infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
                 infowindow.open(map, marker);
             });
-        } //H?t init
+        } //Hết init
         function toggleBounce() {
 
             if (marker.getAnimation() != null) {
@@ -165,7 +166,7 @@
                 marker.setAnimation(google.maps.Animation.BOUNCE);
             }
         }
-        //Ki?m tra xem trình duy?t có h? tr? geolocation không?
+        //Kiểm tra xem trình duyệt có hỗ trợ geolocation không?
         function handleNoGeolocation(errorFlag) {
             if (errorFlag) {
                 var content = 'Error: The Geolocation service failed.';
@@ -180,7 +181,7 @@
             map.setCenter(options.position);
         }
 
-        //L?y lat, lng.
+        //Lấy lat, lng.
         function getLatLong() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
@@ -190,7 +191,7 @@
         }
 
         function showPosition(position) {
-            //Set lat và long xu?ng textbox.
+            //Set lat và long xuống textbox.
             /*var elem = document.getElementById("a");
              elem.value = position.coords.latitude;
              var elem = document.getElementById("o");
@@ -199,7 +200,7 @@
 
         function codeAddress() {
             var address = document.getElementById('pac-input').value;
-            geocoder.geocode({'address': address}, function (results, status) {
+            geocoder.geocode({ 'address': address}, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     var elem = document.getElementById("a");
                     elem.value = results[0].geometry.location.lat().toFixed(7);
@@ -214,10 +215,13 @@
                         draggable: true,
                         position: pos,
                         map: map,
-                        title: "B?n ? dây?",
+                        title: "Bạn ở đây?",
                         raiseOnDrag: false,
                         animation: google.maps.Animation.DROP
                     });
+
+
+
 
                     google.maps.event.addListener(marker, 'drag', function (a) {
                         var elem = document.getElementById("a");
@@ -230,6 +234,7 @@
                 }
             });
         }
+
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
     <script type="text/javascript">
@@ -283,7 +288,14 @@
         <div id="page-content">
             <!--ROW-->
             <div class="row">
-
+                <div class="col-md-6 input_insertstore">
+                    <input type="hidden" id="a" name="txtLatitude"
+                           class="form-control">
+                </div>
+                <div class="col-md-6 input_insertstore">
+                    <input type="hidden" id="o" name="txtLongitude"
+                           class="form-control  ">
+                </div>
                 <!--popup-->
                 <!--<div class="modal fade" id="popup-map" tabindex="1" role="dialog">-->
                 <!--<center><div id="map-canvas" class="map"></div></center>-->
