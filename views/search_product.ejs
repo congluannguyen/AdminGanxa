@@ -39,23 +39,50 @@
     <link rel="apple-touch-icon" href="/img/icon152.png" sizes="152x152">
     <link rel="apple-touch-icon" href="/img/icon180.png" sizes="180x180">
     <!-- END Icons -->
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deleteproductbutton").click(function () {
-alert(
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-)
+                alert("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 var answer = confirm("Xóa thiệt hả, mất luôn đó?");
                 if (answer) {
                     $.ajax({
-                        url: "/delete/product/"+$(this).val(),
+                        url: "/delete/product/" + $(this).val(),
                         type: "DELETE",
                         success: function (data, textStatus, jqXHR) {
                             window.location.href = "";
                         }
-                    });}
+                    });
+                }
             });
+
+            $("form").on("keyup change", "#val_productname", "#example-select2"), function(){
+                var keyword = $("#val_productname").val();
+                var district = $("#example-select2").text();
+
+                alert(keyword + " " + district);
+                //$("#btnSearch").attr("value", keyword + " " + district);
+            };
+
+            /*$("#val_productname").keyup("#example-select2").change(function () {
+                var keyword = $("#val_productname").val();
+                var district = $("#example-select2 option:selected").text();
+
+                $("#btnSearch").attr("value", keyword + " " + district);
+                *//*var text = this.val();
+                 alert(text);
+                 $.ajax({
+                 url: "/search/tags/" + $(this).val(),
+                 type: " POST",
+                 success: function (data_success) {
+                 alert(data_success);
+                 //show new data
+                 },
+                 error: function (data_error) {
+                 alert(data_error);
+                 }
+                 });*//*
+            });*/
         });
     </script>
 </head>
@@ -95,7 +122,8 @@ alert(
                     </ul>
                 </div>
                 <!-- END eCommerce Dashboard Header -->
-                <form id="form-validation" action="" method="post" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                <form id="form-validation" action="" method="post" enctype="multipart/form-data"
+                      class="form-horizontal form-bordered">
                     <div class="row">
                         <div class="col-md-12">
                             <!-- Form Validation Example Block -->
@@ -112,7 +140,11 @@ alert(
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input type="text" id="val_productname" name="txtTextSearchProduct"
-                                                       class="form-control" placeholder="Your product name..">
+                                                       class="form-control" placeholder="Your product name.."
+                                                        <% if(typeof search_contain != 'undefined'){ %>
+                                                       value="<%= search_contain %>"
+                                                        <% } %>
+                                                        >
                                                 <span class="input-group-addon"><i class="gi gi-user_add"></i></span>
                                             </div>
                                         </div>
@@ -121,14 +153,22 @@ alert(
 
                                     <div class="form-group">
                                         <label class="col-md-4 control-label" for="example-select2">City</label>
+
                                         <div class="col-md-6">
-                                            <select id="example-select2" name="optDistrict" class="select-select2" style="width: 100%;" data-placeholder="Choose one..">
-                                                <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                                            <select id="example-select2" name="optDistrict" class="select-select2"
+                                                    style="width: 100%;" data-placeholder="Choose one..">
+                                                <option></option>
+                                                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                                                 <option selected>Tất Cả Các Quận</option>
                                                 <% location_array.forEach(function(location){ %>
                                                 <optgroup label="<%= location.city %>">
                                                     <% location.district.forEach(function(district){ %>
-                                                    <option value="<%=district%>"><%=district%></option>
+                                                    <option value="<%= district %>"
+                                                            <% if(typeof search_district != 'undefined' && search_district == district){ %>
+                                                            selected
+                                                            <% } %>
+                                                            ><%= district %></option>
+
                                                     <% }) %>
                                                 </optgroup>
                                                 <% }) %>
@@ -137,89 +177,93 @@ alert(
                                     </div>
                                     <div class="form-group form-actions text-center">
                                         <div class="col-md-12 ">
-                                            <input type="submit" name="button_s" class="button_ss btn btn-primary" tabindex="-1" value="Search">
+                                            <input type="submit" name="button_s" class="button_ss btn btn-primary"
+                                                   tabindex="-1" value="Search" id="btnSearch">
                                         </div>
                                     </div>
                                 </fieldset>
                             </div>
-                                <!-- END Form Validation Example Content -->
-                                <%if(typeof product_array != 'undefined'){ %>
-                                <% product_array.forEach(function(product){ %>
-                                <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
-                                    <div class="widget">
-                                        <div class="widget-simple">
-                                            <button value="<%=product._id%>" title="Del product"
-                                                    class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
-                                                <i class="gi gi-remove_2"></i>
-                                            </button>
-                                            <a href="edit_product?id=<%= product._id %>" title="Edit product"
-                                               class="btn btn-xs btn-default pull-right themed-background">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a href="insert_media?id=<%= product._id %>" title="Add media "
-                                               class="btn btn-xs btn-default  pull-right themed-background">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
+                            <!-- END Form Validation Example Content -->
+                            <% if(typeof product_array != 'undefined'){ %>
+                            <% product_array.forEach(function(product){ %>
+                            <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
+                                <div class="widget">
+                                    <div class="widget-simple">
+                                        <button value="<%= product._id %>" title="Del product"
+                                                class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
+                                            <i class="gi gi-remove_2"></i>
+                                        </button>
+                                        <a href="edit_product?id=<%= product._id %>" title="Edit product"
+                                           class="btn btn-xs btn-default pull-right themed-background">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="insert_media?id=<%= product._id %>" title="Add media "
+                                           class="btn btn-xs btn-default  pull-right themed-background">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
 
-                                            <h4 class="widget-content" style="height: 100px;">
-                                                <a href="product_detail?id=<%= product._id%>"><strong><%= product.product_name %></strong></a>
-                                                <small>Tag <% for(i = 0; i < product.tags.length; i++){ %>
-                                                    <a href="tags?tag=<%= product.tags[i] %>"><p class="label label-primary ">
-                                                            <%= product.tags[i] %>
-                                                        </p></a>&nbsp;
-                                                    <%}%></small>
-                                            </h4>
-                                        </div>
-                                        <div class="widget-extra-full themed-background-dark">
-                                            <!-- Carousel -->
-                                            <div id="widget-carousel1" class="carousel slide remove-margin">
-                                                <!-- Wrapper for slides -->
-                                                <div class="carousel-inner">
-                                                    <div class="active item" style="height:350px; overflow-y:hidden;">
-                                                        <img src="<%= product.product_image %>">
+                                        <h4 class="widget-content" style="height: 100px;">
+                                            <a href="product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
+                                            <small>Tag
+                                                <% for(i = 0; i < product.tags.length; i++){ %>
+                                                <a href="tags?tag=<%= product.tags[i] %>"><p
+                                                            class="label label-primary ">
+                                                        <%= product.tags[i] %>
+                                                    </p></a>&nbsp;
+                                                <% } %>
+                                            </small>
+                                        </h4>
+                                    </div>
+                                    <div class="widget-extra-full themed-background-dark">
+                                        <!-- Carousel -->
+                                        <div id="widget-carousel1" class="carousel slide remove-margin">
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner">
+                                                <div class="active item" style="height:350px; overflow-y:hidden;">
+                                                    <img src="<%= product.product_image %>">
 
-                                                    </div>
                                                 </div>
-                                                <!-- END Wrapper for slides -->
                                             </div>
-                                            <!-- END Carousel -->
+                                            <!-- END Wrapper for slides -->
                                         </div>
+                                        <!-- END Carousel -->
                                     </div>
                                 </div>
-                                 <% })} else{%>
+                            </div>
+                            <% })} else{ %>
 
                             <div class="block text-center">
                                 Không có sản phẩm nào!
-                                </div>
-                            <%}%>
-                                </div>
                             </div>
+                            <% } %>
+                        </div>
+                    </div>
 
-                            <!-- END Validation Block -->
+                    <!-- END Validation Block -->
 
 
                 </form>
 
                 <!-- END Responsive Full Title -->
 
-                </div>
-                <!-- END Responsive Full Content -->
-                <% include ./partial/footer %>
             </div>
-            <!-- END Page Content -->
-
+            <!-- END Responsive Full Content -->
+            <% include ./partial/footer %>
         </div>
-        <!-- END Main Container -->
+        <!-- END Page Content -->
 
     </div>
-    <!-- END Page Container -->
+    <!-- END Main Container -->
+
+</div>
+<!-- END Page Container -->
 
 </div>
 <!-- END Page Wrapper -->
 
 
 <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
-<% include ./partial/settings    %>
+<% include ./partial/settings %>
 <!-- END User Settings -->
 
 <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->

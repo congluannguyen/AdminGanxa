@@ -899,11 +899,11 @@ var controllers = {
 
     get_search_store: function (req, res) {
         /*controllers.get_all(req, res);
-        if (req.session.header == true) {
-            res.render('search_store', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array});
-        } else if (req.session.header == false) {
-            res.render('search_store', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-        }*/
+         if (req.session.header == true) {
+         res.render('search_store', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array});
+         } else if (req.session.header == false) {
+         res.render('search_store', {store_array: req.session.store_array_header_search, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+         }*/
         location_schema.location.find(function (location_error, location_array) {
             if (!location_error && location_array.length > 0) {
                 req.session.location_array = location_array;
@@ -977,6 +977,7 @@ var controllers = {
     },
 
     get_search_product: function (req, res) {
+        controllers.get_product_array(req, res);
         location_schema.location.find(function (location_error, location_array) {
             if (!location_error && location_array.length > 0) {
                 req.session.location_array = location_array;
@@ -999,54 +1000,61 @@ var controllers = {
         var district = req.body.optDistrict;
         var store_query;
         var product_query;
-        if (key) { //có key, all quận
-            console.log("4-1");
+        if (key) { //có key
+            console.log("Có key.");
             if (district == "Tất Cả Các Quận") {
                 product_query = product_schema.product.find({$or: [
                     {product_name: {$regex: key, $options: 'i'}},
                     {product_name_non_accented: {$regex: key, $options: 'i'}}
                 ]});
+                //Query này ok.
+                product_query.sort({date: -1});
+                product_query.exec(function (product_error, product_array) {
+                    if (product_array && product_array.length > 0) {
+                        console.log("1 - có");
+                        res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_contain: key, search_district: district});
+                    } else if (product_array.length == 0) {
+                        console.log("1 - không có");
+                        res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                    }
+                });
             } else {
-                store_query = store_schema.store.find({address: {$elemMatch: {district: district}}});
-                store_query.sort({date: -1});
-                store_query.exec(function (store_error, store_array) {
-                    var product_array_render;
-                    var count_store = 0;
+                var product_array_render;
+                store_query = store_schema.store.find({address: {$elemMatch: {district: district}}}); //Tìm store có district giống với lựa chọn.
+                store_query.sort({date: -1}); //Sort.
+                store_query.exec(function (store_error, store_array) { //Exec.
+                    console.log("các store chứa product đó là " + store_array);
                     store_array.forEach(function (store) {
-                        count_store++;
-                        var product_query = product_schema.product.find({id_store: store._id});
-                        product_query.sort({date: -1});
-                        product_query.exec(function (product_error, product_array) {
+                        console.log(store._id)
+                        var product_query1 = product_schema.product.find({
+                            $or: [
+                                {product_name: {$regex: key, $options: "i"}},
+                                {product_name_non_accented: {$regex: key, $options: "i"}}
+                            ]});
+                        //product_query1.sort({date: -1});
+                        product_query1.exec(function (product_error, product_array) {
                             if (product_array_render == null) {
                                 product_array_render = product_array;
                             } else {
                                 product_array_render = product_array_render.concat(product_array);
                             }
                         });
+                        console.log(product_array_render)
                     });
+                    console.log("chạy xong luôn nha");
                     setTimeout(function () {
-                        console.log(product_array_render);
+                        console.log("time out");
                         if (product_array_render && product_array_render.length > 0) {
-                            res.render('search_product', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                            res.render('search_product', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array, search_contain: key, search_district: district});
                         } else {
                             console.log("4-2 Không có.");
-                            res.render('search_product', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                            res.render('search_product', {product_array: req.session.product_array_all, industry_array: req.session.industry_array, location_array: req.session.location_array, search_contain: key, search_district: district, search_notification: "Không có cửa hàng nào cả. :("});
                         }
-                    }, 20);
+
+                    }, 50);
                 });
             }
-            //exec
-            product_query.sort({date: -1});
-            product_query.exec(function (product_error, product_array) {
-                if (product_array && product_array.length > 0) {
-                    console.log("1 - có");
-                    res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array});
-                } else if (product_array.length == 0) {
-                    console.log("1 - không có");
-                    res.render('search_product', {product_array: product_array, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
-                }
-            });
-        } else { //Có quận.
+        } else { //Không có key.
             console.log(key + district);
             console.log("4-2");
             if (district != "Tất Cả Các Quận") {
@@ -1079,23 +1087,41 @@ var controllers = {
                     setTimeout(function () {
                         console.log(product_array_render);
                         if (product_array_render && product_array_render.length > 0) {
-                            res.render('search_product', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array});
+                            res.render('search_product', {product_array: product_array_render, location_array: req.session.location_array});
                         } else {
                             console.log("4-2 Không có.");
-                            res.render('search_product', {product_array: product_array_render, industry_array: req.session.industry_array, location_array: req.session.location_array, search_notification: "Không có cửa hàng nào cả. :("});
+                            res.render('search_product', {product_array: product_array_render, location_array: req.session.location_array, search_notification: "Không có mặt hàng nào cả. :("});
                         }
                     }, 20);
                 });
             } else {
-                //
-                res.render('search_product', {product_array: req.session.product_array_all, industry_array: req.session.industry_array, location_array: req.session.location_array});
+
+                console.log("Đây nè.");
+                res.render('search_product', {product_array: req.session.product_array_all, location_array: req.session.location_array});
             }
         }
     },
 
-    /*get_search_tags: function (req, res) {
-     res.render('search_tags');
-     },*/
+    post_search_product_ajax: function(req, res){
+        var key = req.body.txtTextSearchProduct;
+        var district = req.body.optDistrict;
+
+        if(district == "Tất Cả Các Quận"){
+            if(key){
+
+            }else if(!key){
+
+            }
+        }else if(district != "Tất Cả Các Quận"){
+            if(key){
+
+            }else if(!key){
+
+            }
+        }
+
+
+    },
 
     post_search_tags: function (req, res) {
         var tag = req.body.txtTextSearchTag;
@@ -1383,6 +1409,7 @@ module.exports = function (router) {
     //search_product
     router.get('/search_product', controllers.get_search_product);
     router.post('/search_product', controllers.post_search_product);
+    router.get('/search/product/:district/', controllers.post_search_product_ajax);
     //search_tags
     //router.get('/search_tags', controllers.get_search_tags);
     router.post('/search_tags', controllers.post_search_tags);
