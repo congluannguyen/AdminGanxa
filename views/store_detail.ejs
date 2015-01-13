@@ -51,17 +51,8 @@ function initialize() {
         handleNoGeolocation(false);
     }
     getLatLong();
-
 } //Hết init
-function toggleBounce() {
-
-    if (marker.getAnimation() != null) {
-        marker.setAnimation(null);
-    } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-}
-//Kiểm tra xem trình duyệt có hỗ trợ geolocation không?
+//Browser has support geo?
 function handleNoGeolocation(errorFlag) {
     if (errorFlag) {
         var content = 'Error: The Geolocation service failed.';
@@ -75,16 +66,6 @@ function handleNoGeolocation(errorFlag) {
     };
     map.setCenter(options.position);
 }
-
-//Lấy lat, lng.
-function getLatLong() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 <script type="text/javascript">
