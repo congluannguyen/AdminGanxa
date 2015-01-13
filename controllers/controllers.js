@@ -146,7 +146,6 @@ var controllers = {
                 product_query.sort({date: -1});
                 product_query.exec(function (product_error, product_array) {
                     if (!product_error && product_array/*&& product_array.length > 0*/) {
-                        console.log("hgereasdasdas");
                         req.session.product_array_curent = product_array;
                         res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array});
                     } else {
