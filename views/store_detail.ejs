@@ -231,7 +231,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
                     <!-- END Advanced Active Theme Color Widget -->
                 </div>
                 <% }) %>
-                <% if(typeof product_array != 'undefined'){ %>
+                <% if(product_array.length > 0){ %>
                 <% product_array.forEach(function (product) { %>
                 <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 ">
                     <div class="widget">
@@ -275,9 +275,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
                         </div>
                     </div>
                 </div>
-                <% })}else{ %>
+                <% })}else if(product_notification){ %>
                 <div class="block text-center">
-                    <p>Không có sản phẩm nào trong cửa hàng này !</p>
+                    <p><%=product_notification%></p>
                 </div>
                 <% } %>
 

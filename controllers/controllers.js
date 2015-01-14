@@ -145,10 +145,12 @@ var controllers = {
                 var product_query = product_schema.product.find({"id_store": id});
                 product_query.sort({date: -1});
                 product_query.exec(function (product_error, product_array) {
-                    if (!product_error && product_array/*&& product_array.length > 0*/) {
+                    if (!product_error && product_array.length > 0) {
+                        console.log(product_array)
                         req.session.product_array_curent = product_array;
                         res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array});
                     } else {
+
                         console.log("không có product array");
                         res.render("store_detail", {store_id_recent: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
                     }
@@ -288,6 +290,7 @@ var controllers = {
                             if (store_current && store_current.length > 0) {
                                 req.session.store_array_current = store_current;
                                 var id_store = store_current[0]._id;
+                                req.location = "store_detail";
                                 res.render("store_detail", {store_id_current: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
                             }
                             else {
