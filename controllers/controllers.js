@@ -1416,7 +1416,7 @@ module.exports = function (router) {
     router.get('/search/product/:district/', controllers.post_search_product_ajax);
     //search_tags
     //router.get('/search_tags', controllers.get_search_tags);
-    router.post('/search_tags', controllers.post_search_tags);
+    //router.post('/search_tags', controllers.post_search_tags); //Hết dùng.
     router.get('/search/tags/:tag', controllers.ajax_get_search_tags);
     router.get('/search/tags/', controllers.ajax_get_search_tags_nothing);
     //search_header
