@@ -1104,20 +1104,20 @@ var controllers = {
         }
     },
 
-    post_search_product_ajax: function(req, res){
+    post_search_product_ajax: function (req, res) {
         var key = req.body.txtTextSearchProduct;
         var district = req.body.optDistrict;
 
-        if(district == "Tất Cả Các Quận"){
-            if(key){
+        if (district == "Tất Cả Các Quận") {
+            if (key) {
 
-            }else if(!key){
+            } else if (!key) {
 
             }
-        }else if(district != "Tất Cả Các Quận"){
-            if(key){
+        } else if (district != "Tất Cả Các Quận") {
+            if (key) {
 
-            }else if(!key){
+            } else if (!key) {
 
             }
         }
@@ -1173,22 +1173,24 @@ var controllers = {
                 });
             }
             setTimeout(function () {
-                console.log(" hiện tại nó như này: " + product_array_render + " có " + product_array_render.length + " thằng");
-                if (product_array_render.length > 1) {
-                    for (i = 0; i < product_array_render.length; i++) {
-                        for (j = i + 1; j < product_array_render.length; j++) {
-                            if (product_array_render[i].equals(product_array_render[j])) {
-                                console.log("thịt thằng: " + product_array_render[j].product_name + " số " + j);
-                                product_array_render.splice(j, 1);
-                                i = 0;
-                                j = 0;
+                if (product_array_render != null) {
+                    console.log(" hiện tại nó như này: " + product_array_render + " có " + product_array_render.length + " thằng");
+                    if (product_array_render.length > 1) {
+                        for (i = 0; i < product_array_render.length; i++) {
+                            for (j = i + 1; j < product_array_render.length; j++) {
+                                if (product_array_render[i].equals(product_array_render[j])) {
+                                    console.log("thịt thằng: " + product_array_render[j].product_name + " số " + j);
+                                    product_array_render.splice(j, 1);
+                                    i = 0;
+                                    j = 0;
+                                }
                             }
                         }
                     }
+                    res.send(product_array_render);
+                }else{
+                    res.send("không có")
                 }
-                /*console.log("hết hàng: " + product_array_render);
-                 console.log(product_array_render.length);*/
-                res.send(product_array_render);
             }, 20);
         }
         else {
