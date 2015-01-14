@@ -4,9 +4,8 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 
-<script src="/js/nicEdit.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 <!--font awesome-->
 <link rel="stylesheet" href="/css/font-awesome.css"/>
 <link rel="stylesheet" href="/css/font-awesome.min.css"/>
@@ -15,10 +14,6 @@
 <!--<link rel="stylesheet" href="./libs/Bootflat/bootflat/css/bootflat.min.css">-->
 <!--style-->
 <link rel="stylesheet" href="/css/style.css"/>
-<link rel="stylesheet" href="/css/map.css"/>
-<!--map-->
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
-
 
 <!-- Icons -->
 <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
@@ -60,26 +55,8 @@
 <script src="/js/vendor/bootstrap.min.js"></script>
 <script src="/js/plugins.js"></script>
 <script src="/js/app.js"></script>
+<script src="/js/vendor/jquery-1.11.1.min.js"></script>
 
-<!-- Google Maps API + Gmaps Plugin, must be loaded in the page you would like to use maps (Remove 'http:' if you have SSL) -->
-<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-<!--<script src="/js/helpers/gmaps.min.js"></script>-->
 
 <!-- Load and execute javascript code used only in this page -->
 <script>$(function(){ Index.init(); });</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".deletemediabutton").click(function () {
-            $.ajax({
-
-                url: "/delete/media/"+$(this).val(),
-                type: "DELETE",
-                success: function (data, textStatus, jqXHR) {
-                    window.location.href = "";
-                }
-            });
-        });
-    });
-</script>

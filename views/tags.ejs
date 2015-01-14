@@ -66,14 +66,14 @@
                 var answer = confirm("Xóa thiệt hả, mất luôn đó?");
                 if (answer) {
                     var x = $(this).val();
-                $.ajax({
-                    url: "/delete/product/"+$(this).val(),
-                    type: "DELETE",
-                    success: function (data, textStatus, jqXHR) {
+                    $.ajax({
+                        url: "/delete/product/"+$(this).val(),
+                        type: "DELETE",
+                        success: function (data, textStatus, jqXHR) {
 //                        window.location.href = "";
-                        $('#' + x).slideUp();
-                    }
-                });}
+                            $('#' + x).slideUp();
+                        }
+                    });}
             });
         });
     </script>
@@ -158,12 +158,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group form-actions text-center">
-                                        <div class="col-md-12 ">
-                                            <input type="submit" name="button_s" class="button_ss btn btn-primary"
-                                                   tabindex="-1" value="Search">
-                                        </div>
-                                    </div>
                                 </fieldset>
 
                                 <!-- END Form Validation Example Content -->
