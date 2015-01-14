@@ -73,8 +73,29 @@
 
 
     <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".deletestorebutton").click(function () {
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    var x = $(this).val();
+                    $.ajax({
+                        url: "/delete/store/" + $(this).val(),
+                        type: "DELETE",
+                        success: function (data, textStatus, jqXHR) {
+                            alert(data);
+                            //window.location.href = "/";
+                            $('#' + x).slideUp();
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
     <!--slick-->
     <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>

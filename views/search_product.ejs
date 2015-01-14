@@ -66,14 +66,14 @@
     <script src="/js/vendor/bootstrap.min.js"></script>
     <script src="/js/plugins.js"></script>
     <script src="/js/app.js"></script>
-    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
+
 
 
     <!-- Load and execute javascript code used only in this page -->
     <script>$(function(){ Index.init(); });</script>
 
 
-
+    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deleteproductbutton").click(function () {
@@ -224,23 +224,23 @@
                                 <div class="widget">
                                     <div class="widget-simple">
                                         <button value="<%= product._id %>" title="Del product"
-                                                class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
+                                                class="btn btn-xs btn-default pull-right themed-background deleteproductbutton">
                                             <i class="gi gi-remove_2"></i>
                                         </button>
-                                        <a href="edit_product?id=<%= product._id %>" title="Edit product"
+                                        <a href="../edit_product?id=<%= product._id %>" title="Edit product"
                                            class="btn btn-xs btn-default pull-right themed-background">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="insert_media?id=<%= product._id %>" title="Add media "
+                                        <a href="../insert_media?id=<%= product._id %>" title="Add media "
                                            class="btn btn-xs btn-default  pull-right themed-background">
                                             <i class="fa fa-plus"></i>
                                         </a>
 
                                         <h4 class="widget-content" style="height: 100px;">
-                                            <a href="product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
+                                            <a href="../product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
                                             <small>Tag
                                                 <% for(i = 0; i < product.tags.length; i++){ %>
-                                                <a href="tags?tag=<%= product.tags[i] %>"><p
+                                                <a href="../tags?tag=<%= product.tags[i] %>"><p
                                                             class="label label-primary ">
                                                         <%= product.tags[i] %>
                                                     </p></a>&nbsp;

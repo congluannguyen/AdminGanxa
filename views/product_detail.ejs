@@ -3,9 +3,6 @@
 <head>
     <title>Ganxa Home Page</title>
     <meta charset="utf-8">
-    <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
-    <meta name="author" content="pixelcave">
-    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
 
 
@@ -117,7 +114,7 @@
                             <!-- Lightbox Gallery with Options Title -->
                             <div class="block-title">
 
-                                <a href="edit_product?id=<%= product._id %>" title="Edit product"
+                                <a href="../edit_product?id=<%= product._id %>" title="Edit product"
                                    class="btn btn-lg btn-default pull-right themed-background"
                                    style="margin-top: 10px;margin-right: 10px;">
                                     <i class="fa fa-pencil"></i>
@@ -149,7 +146,7 @@
                                         <td width="30%;">
 
                                             <h2>Tag <% for(i = 0; i < product.tags.length; i++){ %>
-                                                <a href="tags?tag=<%= product.tags[i] %>"><p
+                                                <a href="../tags?tag=<%= product.tags[i] %>"><p
                                                             class="label label-primary ">
                                                         <%= product.tags[i] %>
                                                     </p></a>&nbsp;
@@ -184,7 +181,7 @@
                                                 <a href="<%= media.media_url %>"
                                                    class="gallery-link btn btn-sm btn-alt btn-default"
                                                    title="<%= media.media_name %>">View</a>
-                                                <a href="edit_media?id=<%= media._id %>"
+                                                <a href="../edit_media?id=<%= media._id %>"
                                                    class="btn btn-sm btn-alt btn-default"
                                                    data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
                                                 <button value="<%= media._id %>"
@@ -202,7 +199,7 @@
                                         </div>
                                         <div class="text-center edit">
                                             <div class="btn-group btn-group-sm">
-                                                <a href="edit_media?id=<%= media._id %>"
+                                                <a href="../edit_media?id=<%= media._id %>"
                                                    class="btn btn-sm btn-alt btn-default"
                                                    data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
                                                 <button value="<%= media._id %>"

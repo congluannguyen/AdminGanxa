@@ -53,9 +53,11 @@
     <!-- Remember to include excanvas for IE8 chart support -->
     <!--[if IE 8]><script src="/js/helpers/excanvas.min.js"></script><![endif]-->
 
-    <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
+    <!--<script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>-->
 
     <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
+
+
     <script src="/js/vendor/bootstrap.min.js"></script>
     <script src="/js/plugins.js"></script>
     <script src="/js/app.js"></script>
@@ -137,25 +139,29 @@ function handleNoGeolocation(errorFlag) {
 }
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
+    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $(".deleteproductbutton").click(function () {
             var answer = confirm("Xóa thiệt hả, mất luôn đó?");
             if (answer) {
-                var url = window.location.pathname;
+                var x = $(this).val();
+//                var url = window.location.pathname;
                 $.ajax({
                     url: "/delete/product/" + $(this).val(),
                     type: "DELETE",
                     success: function (data) {
                         alert(data);
-                        window.location.href = "../store/" + data + "";
+//                        window.location.href = "../store/" + data + "";
+                        $('#' + x).slideUp();
                     }
                 });
             }
         });
     });
 </script>
-    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("#backtoid").click(function () {
@@ -169,7 +175,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 <body>
 <!-- Preloader -->
 <div class="preloader themed-background">
-    <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+    <h1 class="push-top-bottom text-light text-center"><strong>Softer Source</strong>UI</h1>
 
     <div class="inner">
         <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
@@ -270,7 +276,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                     </tr>
                                     <tr>
                                         <td class="text-right"><strong>Industry</strong></td>
-                                        <td><a href="industry?type=<%= store.industry %>"><%= store.industry %></a>
+                                        <td><a href="../industry?type=<%= store.industry %>"><%= store.industry %></a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -307,7 +313,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
                     <div class="widget">
                         <div class="widget-simple">
                             <button value="<%= product._id %>" title="Del product"
-                                    class="btn btn-xs btn-default  dele pull-right themed-background deleteproductbutton">
+                                    class="btn btn-xs btn-default pull-right themed-background deleteproductbutton">
                                 <i class="gi gi-remove_2"></i>
                             </button>
                             <a href="../edit_product?id=<%= product._id %>" title="Edit product"
@@ -320,7 +326,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
                             </a>
 
                             <h4 class="widget-content">
-                                <a href="../product_detail?id=<%= product._id %>"><strong><%= product.product_name %></strong></a>
+                                <a href="../product/<%=product.url%>"><strong><%= product.product_name %></strong></a>
                                 <small>Tag
                                     <% for(i = 0; i < product.tags.length; i++){ %>
                                     <a href="../tags?tag=<%= product.tags[i] %>"><p
