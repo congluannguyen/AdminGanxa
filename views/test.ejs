@@ -1,52 +1,243 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <% include ./partial/head %>
-    <title>Ajax Upload Image</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function (e) {
-            $('#imageUploadForm').on('submit', (function (e) {
-                e.preventDefault();
-                var formData = new FormData(this);
-                $.ajax({
-                    type: 'POST',
-                    url: "/upload_image_ajax",
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        console.log("success");
-                        $("#thumbnail").attr("src", data)
-                    },
-                    error: function (data) {
-                        console.log("error");
-                        console.log(data);
-                    }
-                });
-            }));
-        });
-    </script>
+    <title>Ganxa Home Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+
+
+
+    <!--font awesome-->
+    <link rel="stylesheet" href="/css/font-awesome.css"/>
+    <link rel="stylesheet" href="/css/font-awesome.min.css"/>
+    <!--bootflat-->
+
+    <!--<link rel="stylesheet" href="./libs/Bootflat/bootflat/css/bootflat.min.css">-->
+    <!--style-->
+    <link rel="stylesheet" href="/css/style.css"/>
+
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <link rel="shortcut icon" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/icon57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="/img/icon72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="/img/icon76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="/img/icon114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="/img/icon120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="/img/icon144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="/img/icon152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="/img/icon180.png" sizes="180x180">
+    <!-- END Icons -->
+
+    <!-- Stylesheets -->
+    <!-- Bootstrap is included in its original form, unaltered -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Related styles of various icon packs and plugins -->
+    <link rel="stylesheet" href="/css/plugins.css">
+
+    <!-- The main stylesheet of this template. All Bootstrap overwrites are defined in here -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Include a specific file here from css/themes/ folder to alter the default theme of the template -->
+
+    <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
+    <link rel="stylesheet" href="/css/themes.css">
+    <!-- END Stylesheets -->
+
+
+
+    <!-- Remember to include excanvas for IE8 chart support -->
+    <!--[if IE 8]><script src="/js/helpers/excanvas.min.js"></script><![endif]-->
+
     <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
 
     <!-- Bootstrap.js, Jquery plugins and Custom JS code -->
-    <script src="js/vendor/bootstrap.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/app.js"></script>
+    <script src="/js/vendor/bootstrap.min.js"></script>
+    <script src="/js/plugins.js"></script>
+    <script src="/js/app.js"></script>
 
-    <!-- ckeditor.js, load it only in the page you would like to use CKEditor (it's a heavy plugin to include it with the others!) -->
-    <script src="js/ckeditor/ckeditor.js"></script>
+
+
+    <!-- Load and execute javascript code used only in this page -->
+    <script>$(function(){ Index.init(); });</script>
+
+
+
+    <script src="/js/vendor/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".deletemediabutton").click(function () {
+                var answer = confirm("Xóa thiệt hả, mất luôn đó?");
+                if (answer) {
+                    var x = $(this).val();
+                    $.ajax({
+                        url: "/delete/media/" + $(this).val(),
+                        type: "DELETE",
+                        success: function (data, textStatus, jqXHR) {
+                            //window.location.href = "/product_detail";
+                            $('#' + x).slideUp();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-<form name="photo" id="imageUploadForm" enctype="multipart/form-data" method="post">
-    <input type="file" id="ImageBrowse" name="txtImageBrowse"/>
-    <br>
-    <input type="submit" name="upload" value="Upload" id="Submit"/>
-    <br>
-    <img width="100" style="border:#000; z-index:1;position: relative; border-width:2px; float:left" height="100px"
-         id="thumbnail" src=""/>
-</form>
-<br>
+<div id="page-wrapper">
+    <!-- Preloader -->
+    <div class="preloader themed-background">
+        <h1 class="push-top-bottom text-light text-center"><strong>Pro</strong>UI</h1>
+
+        <div class="inner">
+            <h3 class="text-light visible-lt-ie9 visible-lt-ie10"><strong>Loading..</strong></h3>
+
+            <div class="preloader-spinner hidden-lt-ie9 hidden-lt-ie10"></div>
+        </div>
+    </div>
+    <!-- END Preloader -->
+    <!-- Page Container -->
+    <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+        <!-- Alternative Sidebar -->
+        <% include ./partial/slidebar %>
+        <div id="main-container">
+            <% include ./partial/header %>
+            <!-- Page content -->
+            <div id="page-content">
+                <!--ROW-->
+                <div class="row">
+                    <% product_array.forEach(function(product){ %>
+                    <div class="col-md-12">
+                        <!-- Lightbox Gallery with Options Block -->
+                        <div class="block">
+                            <!-- Lightbox Gallery with Options Title -->
+                            <div class="block-title">
+
+                                <a href="../edit_product?id=<%= product._id %>" title="Edit product"
+                                   class="btn btn-lg btn-default pull-right themed-background"
+                                   style="margin-top: 10px;margin-right: 10px;">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="../insert_media" title="Add media"
+                                   class="btn btn-lg btn-default  pull-right themed-background"
+                                   style="margin-top: 10px;margin-right: 10px;">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td width="30%;">
+                                            <h2><strong>Media </strong>in  <%= product.product_name %></h2>
+                                        </td>
+                                        <td rowspan="3" width="10%;" style="padding-right: 5%;white-space: pre-line;">
+                                            <h2><strong>Description</strong></h2>
+                                        </td>
+                                        <td rowspan="3" width="60%;" style="white-space: pre-line;">
+                                            <%- product.description %>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%;">
+                                            <h2><strong>Price </strong>  <%= product.price %> VND</h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%;">
+
+                                            <h2>Tag <% for(i = 0; i < product.tags.length; i++){ %>
+                                                <a href="../tags?tag=<%= product.tags[i] %>"><p
+                                                            class="label label-primary ">
+                                                        <%= product.tags[i] %>
+                                                    </p></a>&nbsp;
+                                                <%}%></h2>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <br>
+
+
+                                <br>
+
+                            </div>
+                            <!-- END Lightbox Gallery with Options Title -->
+
+                            <!-- Lightbox Gallery with Options Content -->
+                            <div class="gallery" data-toggle="lightbox-gallery">
+                                <div class="row">
+
+                                    <% if(typeof media_array != 'undefined'){ %>
+                                    <% media_array.forEach(function(media){ %>
+                                    <div class="col-sm-6 col-xs-12 col-md-4 gallery-image" id="<%= media._id %>">
+
+                                        <% if (media.media_type == 'Image'){ %>
+                                        <div style="height: 200px;overflow-y: hidden;">
+                                            <img src="<%= media.media_url %>" alt="image">
+                                        </div>
+                                        <div class="gallery-image-options text-center">
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="<%= media.media_url %>"
+                                                   class="gallery-link btn btn-sm btn-alt btn-default"
+                                                   title="<%= media.media_name %>">View</a>
+                                                <a href="../edit_media?id=<%= media._id %>"
+                                                   class="btn btn-sm btn-alt btn-default"
+                                                   data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                <button value="<%= media._id %>"
+                                                        class="btn-sm btn btn-danger deletemediabutton"
+                                                        data-toggle="tooltip" title="Delete"><i
+                                                            class="gi gi-remove_2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <% }else{ %>
+                                        <div style="height: 200px;overflow-y: hidden;">
+                                            <iframe WIDTH="100%" HEIGHT="100%" src="<%= media.media_url %>"
+                                                    frameborder="0"
+                                                    allowfullscreen></iframe>
+                                        </div>
+                                        <div class="text-center edit">
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="../edit_media?id=<%= media._id %>"
+                                                   class="btn btn-sm btn-alt btn-default"
+                                                   data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                <button value="<%= media._id %>"
+                                                        class="btn-sm btn btn-danger deletemediabutton"
+                                                        data-toggle="tooltip" title="Delete"><i
+                                                            class="gi gi-remove_2"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <% } %>
+
+                                    </div>
+                                    <% })}else{ %>
+                                    <p><%= media_notification %></p>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <!-- END Lightbox Gallery with Options Content -->
+                        </div>
+                        <!-- END Lightbox Gallery with Options Block -->
+                    </div>
+                    <% }) %>
+                </div>
+
+                <!--END ROW-->
+
+            </div>
+            <!--<% include ./partial/footer %>-->
+
+        </div>
+
+    </div>
+    <!-- END Page Content -->
+
+
+</div>
+<!-- Page content -->
+<!--END PAGE WRAPPER-->
+<% include ./partial/settings %>
 </body>
 </html>
