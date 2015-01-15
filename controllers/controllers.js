@@ -110,36 +110,39 @@ var controllers = {
 
     get_store_by_id: function (req, res, id_store) {
         var store_query = store_schema.store.find({_id: id_store});
-        store_query.sort({date: -1});
         store_query.exec(function (store_error, store) {
             if (store && store.length > 0) {
-                req.session.store = store;
+                req.session.store_array = store;
             } else {
-                console.log(store_error);
+                console.log("get_store_by_id error: " + store_error);
             }
         });
     },
 
-    get_id_by_url: function (req, res, url, type) {
+    find_something_from_something: function (req, res, input, result) {
 
-        if (type == "Store") {
-            store_schema.store.find({url: url}, function (store_error, store) {
+        if (result == "Store._id") {
+            store_schema.store.find({url: input}, function (store_error, store) {
                 if (!store_error) {
-                    req.session.store_id = store[0]._id;
-                    /*console.log("ok, kq: " + store[0]._id);
-                     result = d;*/
+                    req.session.find_result = store[0]._id;
                 } else {
                     console.log(store_error);
-                    return false;
                 }
             });
-        } else if (type == "Product") {
-            product_schema.product.find({url: url}, function (product_error, product) {
+        } else if (result == "Product._id") {
+            product_schema.product.find({url: input}, function (product_error, product) {
                 if (!product_error) {
-                    return product[0]._id
+                    req.session.find_result = product[0]._id;
                 } else {
                     console.log(product_error);
-                    return false;
+                }
+            });
+        } else if (result == "Product._id => Product.id_store") {
+            product_schema.product.find({_id: input}, function (product_error, product) {
+                if (!product_error) {
+                    req.session.find_result = product[0].id_store;
+                } else {
+                    console.log(product_error);
                 }
             });
         }
@@ -149,7 +152,7 @@ var controllers = {
         controllers.get_store_array(req, res);
         setTimeout(function () {
             res.render('index', {store_array: req.session.store_array_all});
-        }, 20);
+        });
     },
 
     get_store_detail_url: function (req, res) {
@@ -181,16 +184,18 @@ var controllers = {
                 }
             });
         } else {
+            console.log("186")
             res.render('store_detail', {store_array: req.session.store_current, industry_array: req.session.industry_array_all, product_array: req.session.product_array_curent});
         }
     },
 
-    get_store_detail_url_nothing: function (req, res) {
+    /*get_store_detail_url_nothing: function (req, res) {
         controllers.get_store_array(req, res);
         setTimeout(function () {
+            console.log("bị")
             res.render('index', {store_array: req.session.store_array_all});
         })
-    },
+    },*/
 
     /*get_store_detail: function (req, res) {
      controllers.get_all(req, res);
@@ -562,14 +567,14 @@ var controllers = {
     },
 
     get_insert_product_url: function (req, res) {
-        var x = controllers.get_id_by_url(req, res, req.params.store_url, "Store");
+        var x = controllers.find_something_from_something(req, res, req.params.store_url, "Store._id");
         setTimeout(function () {
             console.log(req.session.store_id);
         })
     },
 
     post_insert_product_url: function (req, res) {
-        var x = controllers.get_id_by_url(req, res, req.params.store_url, "Store");
+        var x = controllers.find_something_from_something(req, res, req.params.store_url, "Store._id");
         setTimeout(function () {
             console.log(req.session.store_id);
         })
@@ -743,20 +748,24 @@ var controllers = {
         }
         product_schema.product.findByIdAndUpdate({_id: product_id}, {$set: {product_name: product_name, product_name_non_accented: product_name_non_accented, price: price, description: description, product_image: product_image, tags: tags}}, function (error, result) {
             if (!error && result) {
-                var product_query = product_schema.product.find({id_store: req.session.store_id_current});
-                product_query.sort({date: -1});
-                product_query.exec(function (product_error, product_array) {
-                    if (product_array && product_array.length > 0) {
-                        console.log(req.session.store_id_current);
-                        controllers.get_store_by_id(req, res, req.session.store_id_current);
-                        req.session.product_array = product_array;
-                        setTimeout(function () {
-                            res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_current, store_array: req.session.store});
-                        }, 200)
-                    } else {
-                        console.log("post_edit_product: " + product_error);
-                        res.render('index');
-                    }
+                controllers.find_something_from_something(req, res, product_id, "Product._id => Product.id_store");
+                setTimeout(function () {
+                    controllers.get_store_by_id(req, res, req.session.find_result);
+                    console.log("store_id nè : " + req.session.find_result);
+                    var product_query = product_schema.product.find({id_store: req.session.find_result});
+                    product_query.sort({date: -1});
+                    product_query.exec(function (product_error, product_array) {
+                        if (product_array && product_array.length > 0) {
+                            req.session.product_array = product_array;
+                            setTimeout(function () {
+                                //console.log("store array" + req.session.store_array);
+                                res.render('store_detail', {product_array: product_array, industry_array: req.session.industry_array, store_id: req.session.store_id_current, store_array: req.session.store_array});
+                            })
+                        } else {
+                            console.log("post_edit_product: " + product_error);
+                            res.render('index');
+                        }
+                    });
                 });
             } else {
                 console.log(error);
@@ -1413,10 +1422,10 @@ module.exports = function (router) {
     //index
     router.get('/', controllers.get_index);
 
-    //store detail
+    //--------------------STORE--------------------
     //router.get('/store_detail', controllers.get_store_detail); // hết dùng
     router.get('/store/:url', controllers.get_store_detail_url); //vào với friendly url
-    router.get('/store/', controllers.get_store_detail_url_nothing); //phòng khi vào mà không có url
+    router.get('/store/', controllers.get_index); //phòng khi vào mà không có url
     //store insert
     router.get('/insert_store', controllers.get_insert_store); //insert store
     router.get('/add_store', controllers.get_insert_store); //tương tư cái ở trên
@@ -1427,7 +1436,7 @@ module.exports = function (router) {
     router.get('/edit_store', controllers.get_edit_store);
     router.post('/edit_store', controllers.post_edit_store);
 
-    //product detail
+    //--------------------PRODUCT--------------------
     router.get('/product_detail', controllers.get_product_detail);
     router.get('/product/:url', controllers.get_product_detail_url);
     //product insert
@@ -1440,8 +1449,11 @@ module.exports = function (router) {
     router.delete('/delete/product/:id_product', controllers.delete_product);
     //product edit
     router.get('/edit_product', controllers.get_edit_product);
+    //router.get('/product/:product_url/edit', controllers.get_edit_product_url);
     router.post('/edit_product', controllers.post_edit_product);
+    //router.post('/product/:product_url/edit', controllers.post_edit_product_url);
 
+    //--------------------MEDIA--------------------
     //insert media in product
     router.get('/insert_media', controllers.get_insert_media);
     router.post('/insert_media', controllers.post_insert_media);
@@ -1456,7 +1468,7 @@ module.exports = function (router) {
     //insert industry
     router.post('/industry', controllers.post_insert_industry);
 
-    //search_store
+    //--------------------SEARCH--------------------
     router.get('/search_store', controllers.get_search_store);
     router.post('/search_store', controllers.post_search_store);
     //search_product
