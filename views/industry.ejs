@@ -11,7 +11,8 @@
     <title>Search Page - Ganxa</title>
 
     <meta charset="utf-8">
-    <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+    <meta name="description"
+          content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
     <meta name="author" content="pixelcave">
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
@@ -55,9 +56,9 @@
     <!-- END Stylesheets -->
 
 
-
     <!-- Remember to include excanvas for IE8 chart support -->
-    <!--[if IE 8]><script src="/js/helpers/excanvas.min.js"></script><![endif]-->
+    <!--[if IE 8]>
+    <script src="/js/helpers/excanvas.min.js"></script><![endif]-->
 
     <script>!window.jQuery && document.write(decodeURI('%3Cscript src="js/vendor/jquery-1.11.1.min.js"%3E%3C/script%3E'));</script>
 
@@ -67,9 +68,9 @@
     <script src="/js/app.js"></script>
     <script src="/js/map.js"></script>
     <!-- Load and execute javascript code used only in this page -->
-    <script>$(function(){ Index.init(); });</script>
-
-
+    <script>$(function () {
+            Index.init();
+        });</script>
 
 
     <!-- Include Jquery library from Google's CDN but if something goes wrong get Jquery from local file (Remove 'http:' if you have SSL) -->
@@ -141,7 +142,21 @@
 </head>
 <body>
 <!-- Alternative Sidebar -->
-
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="post">
+                    <input class="form-control" type="text" placeholder="Industry name..."
+                           data-validation="length"
+                           data-validation-length="3-50"
+                           data-validation-error-msg="The media name has to be an alphanumeric value between 3-50 characters">
+                    <input class="btn btn-primary" type="submit" value="Thêm">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="page-wrapper">
 
     <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
@@ -178,12 +193,17 @@
                 <div class="block">
                     <div class="responsive text-center">
 
-                            <% industry_array.forEach(function(industry){ %>
                         <div>
-                                <a class="btn btn-sm btn-primary" href="industry?type=<%= industry.industry_name %>"><%=industry.industry_name %></a>
+                            <a class="btn btn-sm btn-danger colorChooser" href="#" data-toggle="modal"
+                               data-target="#myModal">Add industry</a>
                         </div>
-                            <% }) %>
+                        <% industry_array.forEach(function(industry){ %>
+                        <div>
 
+                            <a class="btn btn-sm btn-primary"
+                               href="industry?type=<%= industry.industry_name %>"><%= industry.industry_name %></a>
+                        </div>
+                        <% }) %>
 
                     </div>
                 </div>
@@ -231,14 +251,14 @@
                             </tr>
 
                             </tbody>
-                            <% })} else{%>
-                            <tr class="text-center" >
+                            <% })} else{ %>
+                            <tr class="text-center">
                                 <td class="text-center" colspan="4">
                                     Không có cửa hàng nào được tìm thấy!
                                 </td>
 
                             </tr>
-                            <%}%>
+                            <% } %>
 
                         </table>
                     </div>
@@ -266,6 +286,6 @@
 <!-- User Settings, modal which opens from Settings link (found in top right user menu) and the Cog link (found in sidebar user info) -->
 <% include ./partial/settings %>
 <!-- END User Settings -->
-
+<script src="../js/jquery.form-validator.min.js"></script>
 </body>
 </html>
