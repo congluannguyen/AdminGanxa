@@ -258,9 +258,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                         <td style="white-space: pre-line;">
                                             <a href="#" id="backtoid">
 
-                                                <%= store.address[0].street + ", " + store.address[0].district + ", " + store.address[0].city %>
+                                                <%= store.address[0].street %>, <%= store.address[0].district %>, <%= store.address[0].city %>
                                                 <% if(store.address[0].room){ %>
-                                                <%= store.address[0].room %>
+                                                Phòng <%= store.address[0].room %>
                                                 <% } %>
                                             </a>
                                         </td>

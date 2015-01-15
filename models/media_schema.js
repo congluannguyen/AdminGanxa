@@ -6,6 +6,7 @@ var media_schema = new schema({
     _id: object_id,
     product_id: String,
     media_name: String,
+    url: String,
     media_type: String,
     media_url: String,
     media_date: Date

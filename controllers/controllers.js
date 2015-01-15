@@ -83,17 +83,15 @@ var controllers = {
     },
 
     get_tag_array: function (req, res) {
-        if (!req.session.tag_array_all) {
-            var tag_query = tag_schema.tag.find({});
-            tag_query.sort({tag_name: 1});
-            tag_query.exec(function (tag_error, tag_array) {
-                if (tag_array && tag_array.length > 0) {
-                    req.session.tag_array_all = tag_array;
-                } else {
-                    console.log(tag_array);
-                }
-            });
-        }
+        var tag_query = tag_schema.tag.find({});
+        tag_query.sort({tag_name: 1});
+        tag_query.exec(function (tag_error, tag_array) {
+            if (tag_array && tag_array.length > 0) {
+                req.session.tag_array_all = tag_array;
+            } else {
+                console.log(tag_array);
+            }
+        });
     },
 
     get_all: function (req, res) {
@@ -103,6 +101,11 @@ var controllers = {
         controllers.get_industry_array(req, res);
         controllers.get_location_array(req, res);
         controllers.get_tag_array(req, res);
+    },
+
+    render_404: function (req, res) {
+        controllers.get_all(req, res);
+        res.render("404");
     },
 
     get_store_by_id: function (req, res, id_store) {
@@ -118,10 +121,27 @@ var controllers = {
     },
 
     get_id_by_url: function (req, res, url, type) {
+
         if (type == "Store") {
-            //get id
+            store_schema.store.find({url: url}, function (store_error, store) {
+                if (!store_error) {
+                    req.session.store_id = store[0]._id;
+                    /*console.log("ok, kq: " + store[0]._id);
+                     result = d;*/
+                } else {
+                    console.log(store_error);
+                    return false;
+                }
+            });
         } else if (type == "Product") {
-//get id
+            product_schema.product.find({url: url}, function (product_error, product) {
+                if (!product_error) {
+                    return product[0]._id
+                } else {
+                    console.log(product_error);
+                    return false;
+                }
+            });
         }
     },
 
@@ -142,52 +162,63 @@ var controllers = {
                 store_current.forEach(function (store) {
                     id = store._id;
                 });
-                var product_query = product_schema.product.find({"id_store": id});
-                product_query.sort({date: -1});
-                product_query.exec(function (product_error, product_array) {
-                    if (!product_error && product_array.length > 0) {
-                        console.log(product_array)
-                        req.session.product_array_curent = product_array;
-                        res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array});
-                    } else {
-
-                        console.log("không có product array");
-                        res.render("store_detail", {store_id_recent: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
-                    }
-                });
+                if (id) {
+                    var product_query = product_schema.product.find({"id_store": id});
+                    product_query.sort({date: -1});
+                    product_query.exec(function (product_error, product_array) {
+                        if (product_array.length > 0) {
+                            console.log("vô đây");
+                            req.session.product_array_curent = product_array;
+                            res.render('store_detail', {store_id_current: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array});
+                        } else {
+                            console.log("không có product array");
+                            res.render("store_detail", {store_id_recent: url, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
+                        }
+                    });
+                } else {
+                    console.log("hahha")
+                    controllers.render_404(req, res);
+                }
             });
         } else {
             res.render('store_detail', {store_array: req.session.store_current, industry_array: req.session.industry_array_all, product_array: req.session.product_array_curent});
         }
     },
 
-    get_store_detail: function (req, res) {
-        controllers.get_all(req, res);
-        var id_store;
-        if (req.param("id")) {
-            id_store = req.param("id");
-        } else {
-            id_store = req.session.store_id_current;
-        }
-        req.session.store_id_current = id_store;
-        if (id_store) {
-            store_schema.store.find({_id: id_store}, function (store_error, store_current) {
-                req.session.store_current = store_current;
-                var product_query = product_schema.product.find({"id_store": id_store});
-                product_query.sort({date: -1});
-                product_query.exec(function (product_error, product_array) {
-                    if (product_array && product_array.length > 0) {
-                        req.session.product_array_curent = product_array;
-                        res.render('store_detail', {store_id_current: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, media_array: req.session.media_array_all});
-                    } else {
-                        res.render("store_detail", {store_id_recent: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
-                    }
-                });
-            });
-        } else {
-            res.render('index', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all});
-        }
+    get_store_detail_url_nothing: function (req, res) {
+        controllers.get_store_array(req, res);
+        setTimeout(function () {
+            res.render('index', {store_array: req.session.store_array_all});
+        })
     },
+
+    /*get_store_detail: function (req, res) {
+     controllers.get_all(req, res);
+     var id_store;
+     if (req.param("id")) {
+     id_store = req.param("id");
+     } else {
+     id_store = req.session.store_id_current;
+     }
+     req.session.store_id_current = id_store;
+     if (id_store) {
+     store_schema.store.find({_id: id_store}, function (store_error, store_current) {
+     req.session.store_current = store_current;
+     var product_query = product_schema.product.find({"id_store": id_store});
+     product_query.sort({date: -1});
+     product_query.exec(function (product_error, product_array) {
+     if (product_array && product_array.length > 0) {
+     req.session.product_array_curent = product_array;
+     res.render('store_detail', {store_id_current: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, media_array: req.session.media_array_all});
+     } else {
+     res.render("store_detail", {store_id_recent: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_array: product_array, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
+     }
+     });
+     });
+     } else {
+     res.render('index', {store_array: req.session.store_array_all, industry_array: req.session.industry_array_all});
+     }
+     },*/
 
     get_insert_store: function (req, res) {
         controllers.get_all(req, res);
@@ -290,7 +321,7 @@ var controllers = {
                             if (store_current && store_current.length > 0) {
                                 req.session.store_array_current = store_current;
                                 var id_store = store_current[0]._id;
-                                req.location = "store_detail";
+                                console.log(store_current);
                                 res.render("store_detail", {store_id_current: id_store, store_array: store_current, industry_array: req.session.industry_array_all, product_notification: "Cửa hàng này chưa có sản phẩm nào cả, vui lòng trở lại sau. :)"});
                             }
                             else {
@@ -531,7 +562,17 @@ var controllers = {
     },
 
     get_insert_product_url: function (req, res) {
-        //chỗ này
+        var x = controllers.get_id_by_url(req, res, req.params.store_url, "Store");
+        setTimeout(function () {
+            console.log(req.session.store_id);
+        })
+    },
+
+    post_insert_product_url: function (req, res) {
+        var x = controllers.get_id_by_url(req, res, req.params.store_url, "Store");
+        setTimeout(function () {
+            console.log(req.session.store_id);
+        })
     },
 
     post_insert_product: function (req, res) {
@@ -547,8 +588,14 @@ var controllers = {
         var price = req.body.txtPrice;
         //Tags:
         var string_tags = req.body.txtTags;
-        string_tags = string_tags.toLowerCase().trim();
+        string_tags = string_tags.toLowerCase();
+        console.log(string_tags);
         var tags = string_tags.split(",");
+        for (i = 0; i < tags.length; i++) {
+            tags[i] = tags[i].trim();
+            console.log(tags[i]);
+        }
+        console.log(tags);
         var polymeric = false;
         tag_schema.tag.find(function (tag_error, tag_array) {
             if (tag_error) {
@@ -625,9 +672,10 @@ var controllers = {
                     product_media.sort({date: -1});
                     product_media.exec(function (product_error, product_array) {
                         if (product_array && product_array.length > 0) {
-                            setTimeout(function () {
-                                res.render("store_detail", {store_id: store_id, store_array: req.session.store_current, product_array: product_array, industry_array: req.session.industry_array});
-                            }, 500);
+                            /*setTimeout(function () {*/
+                            console.log(req.session.store_current);
+                            res.render("store_detail", {store_id: store_id, store_array: req.session.store_current, product_array: product_array, industry_array: req.session.industry_array});
+                            /*}, 500);*/
                         } else {
                             console.log(product_error);
                         }
@@ -1139,7 +1187,7 @@ var controllers = {
                 }
             });
         } else {
-            console.log("banh")
+            console.log("Kaboom! Không có tag từ txtTextSearchTag nên lỗi.")
         }
     },
 
@@ -1188,7 +1236,7 @@ var controllers = {
                         }
                     }
                     res.send(product_array_render);
-                }else{
+                } else {
                     res.send("không có")
                 }
             }, 20);
@@ -1368,7 +1416,7 @@ module.exports = function (router) {
     //store detail
     //router.get('/store_detail', controllers.get_store_detail); // hết dùng
     router.get('/store/:url', controllers.get_store_detail_url); //vào với friendly url
-    router.get('/store/', controllers.get_store_detail_url); //phòng khi vào mà không có url
+    router.get('/store/', controllers.get_store_detail_url_nothing); //phòng khi vào mà không có url
     //store insert
     router.get('/insert_store', controllers.get_insert_store); //insert store
     router.get('/add_store', controllers.get_insert_store); //tương tư cái ở trên
@@ -1385,6 +1433,7 @@ module.exports = function (router) {
     //product insert
     router.get('/insert_product', controllers.get_insert_product);
     router.get('/store/:store_url/add_product', controllers.get_insert_product_url);
+    router.post('/store/:store_url/add_product', controllers.post_insert_product_url);
     /*router.get('/store/insert_product', controllers.get_insert_product);*/
     router.post('/insert_product', controllers.post_insert_product);
     //product delete
