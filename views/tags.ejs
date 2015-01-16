@@ -60,6 +60,7 @@
             });
         });
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $(".deleteproductbutton").click(function () {
@@ -71,7 +72,7 @@
                         type: "DELETE",
                         success: function (data, textStatus, jqXHR) {
 //                        window.location.href = "";
-                            $('#' + x).slideUp();
+                            $('#' + x).slideDown();
                         }
                     });}
             });

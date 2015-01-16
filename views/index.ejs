@@ -70,16 +70,18 @@
         $(document).ready(function () {
 
             $(".deletestorebutton").click(function () {
+                var x = $(this).val();
+
                 var answer = confirm("Xóa thiệt hả, mất luôn đó?");
                 if (answer) {
-                    var x = $(this).val();
+//                    var x = $(this).val();
+
                     $.ajax({
                         url: "/delete/store/" + $(this).val(),
                         type: "DELETE",
+
                         success: function (data, textStatus, jqXHR) {
-                            alert(data);
-                            //window.location.href = "/";
-                            $('#' + x).slideUp();
+                            $('.'+ x).slideDown(400);
                         }
                     });
                 }
@@ -134,7 +136,7 @@
 
                             <tbody>
                             <% store_array.forEach(function(store){ %>
-                            <tr id="<%= store._id %>">
+                            <tr id="<%= store._id %>" class="<%= store._id %>">
                                 <td class="text-center"><img src="<%= store.logo %>" alt="avatar"
                                                              class="img-circle img-store"></td>
                                 <td><a href="/store/<%= store.url %>"><%= store.store_name.substring(0, 40) %>
@@ -152,7 +154,7 @@
                                     <div class="btn-group btn-group-xs">
                                         <a href="../edit_store?id=<%= store._id %>" data-toggle="tooltip" title="Edit"
                                            class="btn btn-default"><i class="fa fa-pencil"></i></a>
-                                        <button value="<%= store._id %>" class="btn btn-danger deletestorebutton"><i
+                                        <button value="<%= store._id %>"  class="btn btn-danger deletestorebutton"><i
                                                     class="fa fa-times"></i></button>
                                     </div>
                                 </td>
